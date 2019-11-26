@@ -54,7 +54,7 @@ const routes = [
       {
         path:'needDo',
         name:"NeedDo",
-        component: () => import('../views/NeedDo.vue'),
+        component: () => import('../views/NeedDo.vue'),//代办
         meta: {
           auth: true
         }
@@ -62,7 +62,7 @@ const routes = [
       {
         path:'hadDo',
         name:"HadDo",
-        component: () => import('../views/HadDo.vue'),
+        component: () => import('../views/HadDo.vue'),//已办
         meta: {
           auth: true
         }
@@ -70,7 +70,7 @@ const routes = [
       {
         path:'fix',
         name:"Fix",
-        component: () => import('../views/Fix.vue'),
+        component: () => import('../views/Fix.vue'),//维修
         meta: {
           auth: true
         }
