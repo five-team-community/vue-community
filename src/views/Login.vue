@@ -2,7 +2,7 @@
   <div id="Login">
     <div class="login-box">
       <div class="title">
-        <img src="" alt="">
+        登录
       </div>
     </div>
   </div>
