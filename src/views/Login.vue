@@ -14,5 +14,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import '../assets/less/base.less';
+
+#Login{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url(../assets/img/login-bg.png);
+}
 
 </style>
