@@ -166,10 +166,7 @@ export default {
     color: white;
   }
 }
-// .main {
-//   margin-left: 200px;
-//   transition: 0.4s;
-// }
+
 .main-open {
   margin-left: 65px;
 }
