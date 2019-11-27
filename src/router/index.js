@@ -20,8 +20,8 @@ const routes = [
     component: Home,
     children:[
       {
-        path:'',
-        name:'home',
+        path:'a',
+        name:'Dash',
         component:Dash,
         meta: {
           auth: true
