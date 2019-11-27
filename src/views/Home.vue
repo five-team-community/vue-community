@@ -9,8 +9,8 @@
         background-color="#2F4050"
         active-text-color="#fff"
         text-color="#fff"
-        unique-opened=true
-        router=true
+        :unique-opened="true"
+        :router="true"
       >
         <div class="nav-header">
           <div class="nav-header-l" v-show="!isCollapse">
@@ -33,7 +33,7 @@
           </el-menu-item-group>
           <!-- <el-menu-item-group>
             <el-menu-item index="1-3">服务人员管理</el-menu-item>
-          </el-menu-item-group> -->
+          </el-menu-item-group>-->
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">
@@ -63,7 +63,7 @@
             <el-menu-item index="/home/recycleMsg">回收信息</el-menu-item>
             <el-menu-item index="/home/recycleMoney">收费订单</el-menu-item>
           </el-submenu>
-          <el-submenu index="1-4">
+          <el-submenu index="1-5">
             <span slot="title">开锁服务</span>
             <el-menu-item index="/home/lockPeople">人员管理</el-menu-item>
             <el-menu-item index="/home/lockMsg">开锁信息</el-menu-item>
@@ -117,21 +117,23 @@
         </el-submenu>
       </el-menu>
     </div>
-    <div class="main" :class="{'main-open':isCollapse}">
-      <div class="top">
-        <div class="top-left">
-          <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-            <button
-              type="button"
-              @click="change"
-              class="open-btn"
-              :class="{'el-icon-s-fold': !isCollapse, 'el-icon-s-unfold':isCollapse}"
-            ></button>
-          </el-radio-group>
+    <div class="right">
+      <div class="main" :class="{'main-open':isCollapse}">
+        <div class="top">
+          <div class="top-left">
+            <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+              <button
+                type="button"
+                @click="change"
+                class="open-btn"
+                :class="{'el-icon-s-fold': !isCollapse, 'el-icon-s-unfold':isCollapse}"
+              ></button>
+            </el-radio-group>
+          </div>
+          <div class="top-right"></div>
         </div>
-        <div class="top-right"></div>
+        <router-view />
       </div>
-      <router-view />
     </div>
   </div>
 </template>
@@ -141,7 +143,7 @@ export default {
   name: "home",
   data() {
     return {
-      isCollapse: false,
+      isCollapse: false
     };
   },
   methods: {
@@ -172,9 +174,12 @@ export default {
     color: white;
   }
 }
-.main{
+.right {
+  background: #2F4050;
+}
+.main {
   margin-left: 200px;
-  transition: .3s ease-in-out
+  transition: 0.3s ease-in-out;
 }
 .main-open {
   margin-left: 65px;
@@ -214,13 +219,14 @@ export default {
   background-color: @navChoose;
 }
 .top {
+  background: white;
   height: 30px;
   padding: 15px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e7eaec;
   .top-left {
     float: left;
     height: 100%;
-    margin-left: 20px;
+    margin-left: 10px;
   }
 }
 </style>
