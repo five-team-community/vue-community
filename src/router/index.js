@@ -74,8 +74,31 @@ const routes = [
         meta: {
           auth: true
         }
+      },
+      {
+        path:'worker',
+        name:"worker",
+        component: () => import('../views/worker.vue'),//维修
+        meta: {
+          auth: true
+        }
       }
     ]
+  },
+  {
+    path: '/worker',
+    name: 'worker',
+    component: () => import('../views/worker.vue')
+  },
+  {
+    path: '/tablenote',
+    name: 'tablenote',
+    component: () => import('../views/note.vue')
+  },
+  {
+    path: '/fixdetail',
+    name: 'tablenote',
+    component: () => import('../views/fixdetail.vue')
   }
 ]
 

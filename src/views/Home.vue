@@ -1,19 +1,20 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-       <router-view/>
+    <el-page-header @back="goBack" content="详情页面">
+</el-page-header>
   </div>
 </template>
 
 <script>
-
-
-export default {
-  name: 'home',
+  export default {
+    name: 'home',
   components: {
 
+  },
+    methods: {
+      goBack() {
+        console.log('go back');
+      }
+    }
   }
-}
 </script>
