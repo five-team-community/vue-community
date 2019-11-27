@@ -252,6 +252,7 @@ export default {
   width: 96%;
   height:850px;
   background: #fff;
+  font-size: 13px;
 }
 .el-divider--horizontal {
   margin: 0;
