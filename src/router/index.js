@@ -70,7 +70,23 @@ const routes = [
       {
         path:'fix',
         name:"Fix",
-        component: () => import('../views/Fix.vue'),//维修
+        component: () => import('../views/Fix.vue'),//维修部件
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'fixmsg',
+        name:"FixMsg",
+        component: () => import('../views/FixMsg.vue'),//维修信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'fixorder',
+        name:"FixOrder",
+        component: () => import('../views/FixOrder.vue'),//维修订单
         meta: {
           auth: true
         }
