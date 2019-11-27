@@ -78,6 +78,8 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination background layout="prev, pager, next" :total="100">
+    </el-pagination>
   </div>
 </template>
 <script>
@@ -157,42 +159,21 @@ export default {
 
 <style lang="less" scoped>
 #mynote{
-  margin-left: 20%;
+  margin: 15px;
+  h1{
+    margin-bottom: 15px;
+    text-align: center;
+  }
 }
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
+.el-pagination{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
 }
-
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-  line-height: 300px;
-}
-
-.el-main {
+.el-table {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
-  h1 {
-    margin-bottom: 15px;
-  }
-}
-
-body > .el-container {
-  margin-bottom: 40px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
 }
 </style>

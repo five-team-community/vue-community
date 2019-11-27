@@ -188,9 +188,9 @@ const routes = [
         }
       },
       {
-        path:'notice',
-        name:"Notice",
-        component: () => import('../views/Notice.vue'),//社区公告
+        path:'note',
+        name:"Note",
+        component: () => import('../views/note.vue'),//社区公告
         meta: {
           auth: true
         }

@@ -166,7 +166,7 @@ export default {
 }
 .nav {
   float: left;
-  height: 100%;
+  height: 600px;
   background: @navColor;
   i {
     color: white;
