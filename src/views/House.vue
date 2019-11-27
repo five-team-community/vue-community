@@ -277,5 +277,6 @@ export default {
 .page{
   float: right;
   margin-top: 20px;
+  
 }
 </style>
