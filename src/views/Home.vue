@@ -26,14 +26,14 @@
             <span slot="title">基础档案</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1">房产管理</el-menu-item>
+            <el-menu-item index="/home/house">房产管理</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <el-menu-item index="1-2">业主管理</el-menu-item>
+            <el-menu-item index="/home/host">业主管理</el-menu-item>
           </el-menu-item-group>
-          <el-menu-item-group>
+          <!-- <el-menu-item-group>
             <el-menu-item index="1-3">服务人员管理</el-menu-item>
-          </el-menu-item-group>
+          </el-menu-item-group> -->
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">
@@ -47,21 +47,27 @@
           </el-submenu>
           <el-submenu index="1-2">
             <span slot="title">报修管理</span>
-            <el-menu-item index="1-2-1">报修部位</el-menu-item>
-            <el-menu-item index="1-2-2">报修信息</el-menu-item>
-            <el-menu-item index="1-2-3">收费订单</el-menu-item>
+            <el-menu-item index="/home/fix">报修部位</el-menu-item>
+            <el-menu-item index="/home/fixMsg">报修信息</el-menu-item>
+            <el-menu-item index="/home/fixMoney">收费订单</el-menu-item>
           </el-submenu>
           <el-submenu index="1-3">
             <span slot="title">家政管理</span>
-            <el-menu-item index="1-3-1">人员管理</el-menu-item>
-            <el-menu-item index="1-3-2">家政信息</el-menu-item>
-            <el-menu-item index="1-3-3">收费订单</el-menu-item>
+            <el-menu-item index="/home/cleanPeople">人员管理</el-menu-item>
+            <el-menu-item index="/home/cleanMsg">家政信息</el-menu-item>
+            <el-menu-item index="/home/cleanMoney">收费订单</el-menu-item>
           </el-submenu>
           <el-submenu index="1-4">
             <span slot="title">回收管理</span>
-            <el-menu-item index="1-4-1">回收物品</el-menu-item>
-            <el-menu-item index="1-4-2">回收信息</el-menu-item>
-            <el-menu-item index="1-4-3">收费订单</el-menu-item>
+            <!-- <el-menu-item index="1-4-1">回收物品</el-menu-item> -->
+            <el-menu-item index="/home/recycleMsg">回收信息</el-menu-item>
+            <el-menu-item index="/home/recycleMoney">收费订单</el-menu-item>
+          </el-submenu>
+          <el-submenu index="1-4">
+            <span slot="title">开锁服务</span>
+            <el-menu-item index="/home/lockPeople">人员管理</el-menu-item>
+            <el-menu-item index="/home/lockMsg">开锁信息</el-menu-item>
+            <el-menu-item index="/home/lockMoney">收费订单</el-menu-item>
           </el-submenu>
         </el-submenu>
         <el-submenu index="3">
@@ -70,16 +76,16 @@
             <span slot="title">收费管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1">水费账单</el-menu-item>
+            <el-menu-item index="/home/waterMoney">水费账单</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <el-menu-item index="1-1">电费账单</el-menu-item>
+            <el-menu-item index="/home/energyMoney">电费账单</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <el-menu-item index="1-1">气费账单</el-menu-item>
+            <el-menu-item index="/home/gasMoney">气费账单</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <el-menu-item index="1-1">物业费账单</el-menu-item>
+            <el-menu-item index="/home/serveMoney">物业费账单</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="4">
@@ -88,13 +94,13 @@
             <span slot="title">社区运营</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1">社区公告</el-menu-item>
+            <el-menu-item index="/home/hotic">社区公告</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <el-menu-item index="1-1">社区活动</el-menu-item>
+            <el-menu-item index="/home/activity">社区活动</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <el-menu-item index="1-1">社区资讯</el-menu-item>
+            <el-menu-item index="/home/info">社区资讯</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-submenu index="5">
@@ -103,15 +109,15 @@
             <span slot="title">平台管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1">用户管理</el-menu-item>
+            <el-menu-item index="/home/user">用户管理</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
-            <el-menu-item index="1-1">角色管理</el-menu-item>
+            <el-menu-item index="/home/role">角色管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
     </div>
-    <div class="main">
+    <div class="main" :class="{'main-open':isCollapse}">
       <div class="top">
         <div class="top-left">
           <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
@@ -166,7 +172,10 @@ export default {
     color: white;
   }
 }
-
+.main{
+  margin-left: 200px;
+  transition: .3s ease-in-out
+}
 .main-open {
   margin-left: 65px;
 }
