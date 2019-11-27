@@ -148,6 +148,14 @@ const routes = [
         }
       },
       {
+        path:'gasMoney',
+        name:"GasMoney",
+        component: () => import('../views/GasMoney.vue'),//气费
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'serveMoney',
         name:"ServeMoney",
         component: () => import('../views/ServeMoney.vue'),//物业费
@@ -156,9 +164,25 @@ const routes = [
         }
       },
       {
-        path:'cleanMoney',
-        name:"CleanMoney",
-        component: () => import('../views/CleanMoney.vue'),//家政收费
+        path:'lockPeople',
+        name:"LockPeople",
+        component: () => import('../views/LockPeople.vue'),//开锁人员信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'lockMsg',
+        name:"LockMsg",
+        component: () => import('../views/LockMsg.vue'),//开锁信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'lockMoney',
+        name:"LockMoney",
+        component: () => import('../views/LockMoney.vue'),//开锁收费
         meta: {
           auth: true
         }
