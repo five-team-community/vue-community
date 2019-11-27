@@ -20,7 +20,7 @@ const routes = [
     component: Home,
     children:[
       {
-        path:'a',
+        path:'',
         name:'Dash',
         component:Dash,
         meta: {
@@ -70,7 +70,135 @@ const routes = [
       {
         path:'fix',
         name:"Fix",
-        component: () => import('../views/Fix.vue'),//维修
+        component: () => import('../views/Fix.vue'),//维修部位
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'fixMsg',
+        name:"FixMsg",
+        component: () => import('../views/FixMsg.vue'),//维修信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'fixMoney',
+        name:"FixMoney",
+        component: () => import('../views/FixMoney.vue'),//维修收费
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'cleanPeople',
+        name:"CleanPeople",
+        component: () => import('../views/CleanPeople.vue'),//家政人员信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'cleanMsg',
+        name:"CleanMsg",
+        component: () => import('../views/CleanMsg.vue'),//家政信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'cleanMoney',
+        name:"CleanMoney",
+        component: () => import('../views/CleanMoney.vue'),//家政收费
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'recycleMsg',
+        name:"RecycleMsg",
+        component: () => import('../views/RecycleMsg.vue'),//回收信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'recycleMoney',
+        name:"recycleMoney",
+        component: () => import('../views/recycleMoney.vue'),//回收收费
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'waterMoney',
+        name:"WaterMoney",
+        component: () => import('../views/waterMoney.vue'),//水费
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'energyMoney',
+        name:"EnergyMoney",
+        component: () => import('../views/EnergyMoney.vue'),//电费
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'serveMoney',
+        name:"ServeMoney",
+        component: () => import('../views/ServeMoney.vue'),//物业费
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'cleanMoney',
+        name:"CleanMoney",
+        component: () => import('../views/CleanMoney.vue'),//家政收费
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'notice',
+        name:"Notice",
+        component: () => import('../views/Notice.vue'),//社区公告
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'activity',
+        name:"Activity",
+        component: () => import('../views/Activity.vue'),//社区活动
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'info',
+        name:"Info",
+        component: () => import('../views/Info.vue'),//社区资讯
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'user',
+        name:"User",
+        component: () => import('../views/User.vue'),//用户管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'role',
+        name:"Role",
+        component: () => import('../views/Role.vue'),//角色管理
         meta: {
           auth: true
         }
