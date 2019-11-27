@@ -188,9 +188,9 @@ const routes = [
         }
       },
       {
-        path:'note',
-        name:"Note",
-        component: () => import('../views/note.vue'),//社区公告
+        path:'Notice',
+        name:"Notice",
+        component: () => import('../views/Notice.vue'),//社区公告
         meta: {
           auth: true
         }
@@ -234,23 +234,23 @@ const routes = [
         meta: {
           auth: true
         }
+        
+      },
+      {
+        path:'fixdetail',
+        name:"fixdetail",
+        component: () => import('../views/fixdetail.vue'),//维修
+        meta: {
+          auth: true
+        }
+        
       }
     ]
-  },
-  {
-    path: '/worker',
-    name: 'worker',
-    component: () => import('../views/worker.vue')
   },
   {
     path: '/tablenote',
     name: 'tablenote',
     component: () => import('../views/note.vue')
-  },
-  {
-    path: '/fixdetail',
-    name: 'tablenote',
-    component: () => import('../views/fixdetail.vue')
   }
 ]
 

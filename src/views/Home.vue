@@ -94,7 +94,7 @@
             <span slot="title">社区运营</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/home/hotic">社区公告</el-menu-item>
+            <el-menu-item index="/home/Notice">社区公告</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
             <el-menu-item index="/home/activity">社区活动</el-menu-item>
