@@ -12,14 +12,14 @@
         :unique-opened="true"
         :router="true"
       >
-        <div class="nav-header">
+        <el-menu-item class="nav-header">
           <div class="nav-header-l" v-show="!isCollapse">
-            <img src="../assets/img/login-logo.png" alt />
-          </div>
-          <div class="nav-header-s" v-show="isCollapse">
-            <img src="../assets/img/logo.png" alt />
-          </div>
-        </div>
+              <img src="../assets/img/login-logo.png" alt />
+            </div>
+            <div class="nav-header-s" v-show="isCollapse">
+              <img src="../assets/img/logo.png" alt />
+            </div>
+        </el-menu-item>
         <el-submenu index="1">
           <template slot="title">
             <i class="el-icon-office-building"></i>
@@ -165,11 +165,11 @@ export default {
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
-  min-height: 300px;
+  min-height: 400px;
 }
 .nav {
   float: left;
-  // height: 600px;
+  height: 600px;
   background: @navColor;
   i {
     color: white;
@@ -179,6 +179,7 @@ export default {
   background: #2F4050;
 }
 .main {
+  background: white;
   margin-left: 200px;
   transition: 0.3s ease-in-out;
 }
@@ -196,7 +197,8 @@ export default {
 .nav-header {
   background: url("../assets/img/header-profile.png") center;
   width: 100%;
-  padding: 30px 0;
+  height: 120px;
+  padding-top: 30px;
 }
 .nav-header-l {
   width: 120px;

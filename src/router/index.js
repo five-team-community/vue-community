@@ -44,6 +44,22 @@ const routes = [
         }
       },
       {
+        path:'addHouse',
+        name:"AddwHouse",
+        component: () => import('../views/AddHouse.vue'),//房产管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'alterHouse',
+        name:"AlterHouse",
+        component: () => import('../views/AlterHouse.vue'),//房产管理
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'host',
         name:"Host",
         component: () => import('../views/Host.vue'),//业主管理
