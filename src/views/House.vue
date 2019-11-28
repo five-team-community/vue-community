@@ -40,7 +40,7 @@
           <el-table-column prop="isCount" label="是否计费"></el-table-column>
           <el-table-column prop="blindNum" label="绑定数"></el-table-column>
           <el-table-column prop="blindMax" label="限制绑定数"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
               <el-button type="info" icon="el-icon-edit-outline" size="mini" class="btn-alter" @click="alter(scope.$index)"></el-button>
