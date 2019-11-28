@@ -36,6 +36,14 @@ const routes = [
         }
       },
       {
+        path:'showHouse',
+        name:"ShowHouse",
+        component: () => import('../views/ShowHouse.vue'),//房产管理
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'host',
         name:"Host",
         component: () => import('../views/Host.vue'),//业主管理
@@ -196,7 +204,7 @@ const routes = [
         }
       },
       {
-        path:'notice',
+        path:'Notice',
         name:"Notice",
         component: () => import('../views/Notice.vue'),//社区公告
         meta: {
@@ -234,8 +242,46 @@ const routes = [
         meta: {
           auth: true
         }
+      },
+      {
+        path:'worker',
+        name:"worker",
+        component: () => import('../views/worker.vue'),//维修
+        meta: {
+          auth: true
+        }
+        
+      },
+      {
+        path:'fixdetail',
+        name:"fixdetail",
+        component: () => import('../views/fixdetail.vue'),//维修
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'putnote',
+        name:"putnote",
+        component: () => import('../views/putnote.vue'),//维修
+        meta: {
+          auth: true
+        }  
       }
     ]
+  },
+  {
+    path: '/tablenote',
+    name: 'tablenote',
+    component: () => import('../views/note.vue')
+  },
+  {
+    path:'/putnote',
+    name:"putnote",
+    component: () => import('../views/putnote.vue'),//维修
+    meta: {
+      auth: true
+    }  
   }
 ]
 

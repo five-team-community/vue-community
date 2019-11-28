@@ -2,7 +2,10 @@
   <div id="mynote">
     <div class="title">
         <i class="el-icon-s-order"></i>
-        <span>我的已办</span>
+        <span>房产列表</span>
+        <div class="back">
+          <el-button round size='mini' class="back-btn" icon='el-icon-arrow-left' @click="back">返回</el-button>
+        </div>
       </div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="待处理人">
@@ -175,7 +178,6 @@ export default {
     }
   }
 }
-
 #mynote{
   margin: 15px;
   h1{
@@ -193,9 +195,5 @@ export default {
   background-color: #e9eef3;
   color: #333;
   text-align: center;
-}
-.el-form{
-  margin-left: 10px;
-  margin-top: 10px;
 }
 </style>
