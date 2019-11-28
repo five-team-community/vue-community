@@ -1,10 +1,12 @@
 <template>
   <div id="house">
     <div class="content">
+      <!-- 标题 -->
       <div class="title">
         <i class="el-icon-s-order"></i>
         房产列表
       </div>
+      <!-- 筛选数据的输入表单 -->
       <div class="choose">
         <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
           <el-form-item label="房号">
@@ -24,12 +26,15 @@
           </el-form-item>
         </el-form>
       </div>
+      <!-- 新增和搜索按钮 -->
       <div class="btn">
         <div>
           <el-button icon="el-icon-plus" class="btn-add" @click='add'>新增</el-button>
           <el-button icon="el-icon-search" class="btn-search" @click='searchMsg'>搜素</el-button>
         </div>
       </div>
+
+      <!-- 表格数据 -->
       <div class="mytable">
         <el-table :data="getData" border style="width: 100%" >
           <el-table-column prop="no" label="房号"></el-table-column>
@@ -40,6 +45,8 @@
           <el-table-column prop="isCount" label="是否计费"></el-table-column>
           <el-table-column prop="blindNum" label="绑定数"></el-table-column>
           <el-table-column prop="blindMax" label="限制绑定数"></el-table-column>
+
+          <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
@@ -48,12 +55,15 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <!-- 分页 -->
         <div class="clearfix"><el-pagination background layout="prev, pager, next" :page-size="5" :total="10" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
       </div>
     </div>
   </div>
 </template>
 <script>
+// 模拟的数据
 var houseData=[
   {
     no:"1",
@@ -138,44 +148,45 @@ var houseData=[
 export default {
   data() {
     return {
-      currentPage:1,
-      search: {
+      currentPage:1,//记录当前页
+      search: {//记录筛选的数据项
         houseNum: "",
         host: "",
         telphone: "",
         isEmpty: ""
       },
-      houseData:[]
+      houseData:[]//表单所以数据
     };
   },
   methods: {
-    add(){
+    add(){//新增
       console.log("新增");
     },
-    searchMsg(){
+    searchMsg(){//搜索
       console.log(this.search);
     },
-    show(index){
+    show(index){//查看
       index = 5*(this.currentPage-1)+index;
       console.log("查看",index);
+      this.$router.push({path:'/home/showHouse?id='+index});
     },
-    alter(index){
+    alter(index){//修改
       index = 5*(this.currentPage-1)+index;
       console.log("修改",index);
     },
-    del(index){
+    del(index){//删除
       index = 5*(this.currentPage-1)+index;
       console.log("删除",index);
     },
-    changePage(val){
+    changePage(val){//改变页码
       this.currentPage=val;
     }
   },
   created(){
-    this.houseData=houseData;
+    this.houseData=houseData;//创建时获取数据
   },
   computed: {
-    getData(){
+    getData(){//计算当前页的数据，table绑定该值
       var start=5*(this.currentPage-1);
       return this.houseData.slice(start,start+5);
    }

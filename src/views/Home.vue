@@ -165,11 +165,11 @@ export default {
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
-  min-height: 400px;
+  min-height: 300px;
 }
 .nav {
   float: left;
-  height: 600px;
+  // height: 600px;
   background: @navColor;
   i {
     color: white;

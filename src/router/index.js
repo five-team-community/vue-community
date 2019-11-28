@@ -41,24 +41,7 @@ const routes = [
         component: () => import('../views/ShowHouse.vue'),//房产管理
         meta: {
           auth: true
-        },
-        children:[
-          {
-            path:'houseMsg',
-            name:"HouseMsg",
-            component: () => import('../views/HouseMsg.vue'),//房产管理
-            meta: {
-              auth: true
-            }
-          },{
-            path:'housePeople',
-            name:"HousePeople",
-            component: () => import('../views/HousePeople.vue'),//房产管理
-            meta: {
-              auth: true
-            }
-          }
-        ]
+        }
       },
       {
         path:'host',
