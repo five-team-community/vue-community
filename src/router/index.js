@@ -36,6 +36,31 @@ const routes = [
         }
       },
       {
+        path:'showHouse',
+        name:"ShowHouse",
+        component: () => import('../views/ShowHouse.vue'),//房产管理
+        meta: {
+          auth: true
+        },
+        children:[
+          {
+            path:'houseMsg',
+            name:"HouseMsg",
+            component: () => import('../views/HouseMsg.vue'),//房产管理
+            meta: {
+              auth: true
+            }
+          },{
+            path:'housePeople',
+            name:"HousePeople",
+            component: () => import('../views/HousePeople.vue'),//房产管理
+            meta: {
+              auth: true
+            }
+          }
+        ]
+      },
+      {
         path:'host',
         name:"Host",
         component: () => import('../views/Host.vue'),//业主管理
