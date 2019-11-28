@@ -3,7 +3,7 @@
     <div class="right">
       <div class="headBox">
         <i class="el-icon-s-open"></i>
-        <p>报修分类</p>
+        <p>报修订单列表</p>
       </div>
       <el-divider style="margin:0"></el-divider>
       <div class="searchBox">
@@ -64,7 +64,8 @@
           :page-size="100"
           layout="total, sizes, prev, pager, next"
           :total="400"
-          style="float:right">
+          style="float:right"
+          background>
       </el-pagination>
   </div>
     </div>

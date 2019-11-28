@@ -3,7 +3,7 @@
     <div class="right">
       <div class="headBox">
         <i class="el-icon-s-open"></i>
-        <p>报修分类</p>
+        <p>报修管理</p>
       </div>
       <el-divider style="margin:0"></el-divider>
       <div class="searchBox">
@@ -73,7 +73,7 @@
           <el-table-column prop="phone" label="联系电话" ></el-table-column>
           <el-table-column prop="fixType" label="报修部位" ></el-table-column>
           <el-table-column prop="repairContent" label="报修内容" ></el-table-column>
-          <el-table-column prop="repairPersonId" label="维修人员" ></el-table-column>
+          <el-table-column prop="repairPersonName" label="维修人员" ></el-table-column>
           <el-table-column prop="regDate" label="登记时间" ></el-table-column>
           <el-table-column prop="repairState" label="状态" style="width: 10%"></el-table-column>
           <el-table-column prop="operate" label="操作">
@@ -91,7 +91,8 @@
           :page-size="100"
           layout="total, sizes, prev, pager, next"
           :total="400"
-          style="float:right">
+          style="float:right"
+          background>
       </el-pagination>
   </div>
     </div>
@@ -116,80 +117,80 @@ export default {
           name: "王小虎",
           phone: "12345678911",
           fixType: "单元门禁",
-          fixContent: "门锁坏了",
-          fixWorker: "王师傅",
-          checkTime: "2019-11-26 13:36:55",
-          status: "待处理"
+          repairContent: "门锁坏了",
+          repairPersonName: "王师傅",
+          regDate: "2019-11-26 13:36:55",
+          repairState: "待处理"
         },
         {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
           fixType: "单元门禁",
-          fixContent: "门锁坏了",
-          fixWorker: "王师傅",
-          checkTime: "2019-11-26 13:36:55",
-          status: "待处理"
+          repairContent: "门锁坏了",
+          repairPersonName: "王师傅",
+          regDate: "2019-11-26 13:36:55",
+          repairState: "待处理"
         },
         {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
           fixType: "单元门禁",
-          fixContent: "门锁坏了",
-          fixWorker: "王师傅",
-          checkTime: "2019-11-26 13:36:55",
-          status: "待处理"
+          repairContent: "门锁坏了",
+          repairPersonName: "王师傅",
+          regDate: "2019-11-26 13:36:55",
+          repairState: "待处理"
         },
         {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
           fixType: "单元门禁",
-          fixContent: "门锁坏了",
-          fixWorker: "王师傅",
-          checkTime: "2019-11-26 13:36:55",
-          status: "待处理"
+          repairContent: "门锁坏了",
+          repairPersonName: "王师傅",
+          regDate: "2019-11-26 13:36:55",
+          repairState: "待处理"
         },
         {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
           fixType: "单元门禁",
-          fixContent: "门锁坏了",
-          fixWorker: "王师傅",
-          checkTime: "2019-11-26 13:36:55",
-          status: "待处理"
+          repairContent: "门锁坏了",
+          repairPersonName: "王师傅",
+          regDate: "2019-11-26 13:36:55",
+          repairState: "待处理"
         },
         {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
           fixType: "单元门禁",
-          fixContent: "门锁坏了",
-          fixWorker: "王师傅",
-          checkTime: "2019-11-26 13:36:55",
-          status: "待处理"
+          repairContent: "门锁坏了",
+          repairPersonName: "王师傅",
+          regDate: "2019-11-26 13:36:55",
+          repairState: "待处理"
         },
         {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
           fixType: "单元门禁",
-          fixContent: "门锁坏了",
-          fixWorker: "王师傅",
-          checkTime: "2019-11-26 13:36:55",
-          status: "待处理"
+          repairContent: "门锁坏了",
+          repairPersonName: "王师傅",
+          regDate: "2019-11-26 13:36:55",
+          repairState: "待处理"
         },
         {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
           fixType: "单元门禁",
-          fixContent: "门锁坏了",
-          fixWorker: "王师傅",
-          checkTime: "2019-11-26 13:36:55",
-          status: "待处理"
+          repairContent: "门锁坏了",
+          repairPersonName: "王师傅",
+          regDate: "2019-11-26 13:36:55",
+          repairState: "待处理"
         }
       ],
       input: '',

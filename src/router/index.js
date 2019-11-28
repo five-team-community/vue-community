@@ -84,6 +84,14 @@ const routes = [
         }
       },
       {
+        path:'fixMsgAdd',
+        name:"FixMsgAdd",
+        component: () => import('../views/FixAdd.vue'),//维修信息
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'fixMoney',
         name:"FixMoney",
         component: () => import('../views/FixMoney.vue'),//维修收费
