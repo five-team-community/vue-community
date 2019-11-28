@@ -1,6 +1,13 @@
 <template>
   <div class="forms">
-    <h1>查看报修详情</h1>
+    <div class="title">
+        <i class="el-icon-s-order"></i>
+        <span>查看维修详情</span>
+        <div class="back">
+          <el-button round size='mini' class="back-btn" icon='el-icon-arrow-left' @click="back">返回</el-button>
+        </div>
+      </div>
+
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="登记信息" name="first">
         <el-row>
@@ -136,6 +143,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.title {
+  padding: 15px 20px;
+  border-top: 3px solid #e7eaec;
+  border-bottom: 1px solid #e7eaec;
+  i {
+    margin-right: 2px;
+  }
+  .back {
+    float: right;
+    .back-btn{
+      padding: 5px;
+    }
+  }
+}
+
 .forms {
   border: 1px solid black;
   margin: 10px;

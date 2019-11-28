@@ -21,7 +21,7 @@
       <el-col :span="10">
         <el-row>
           <el-button type="primary" icon="el-icon-edit">新建</el-button>
-          <el-button type="success"><i class="el-icon-upload el-icon--right"></i>发布</el-button>
+          <el-button type="success" @click="putout"><i class="el-icon-upload el-icon--right"></i>发布</el-button>
           <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
         </el-row>
       </el-col>
@@ -32,20 +32,17 @@
       tooltip-effect="dark"
       style="width: 100%"
       @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column prop="id" label="ID" width="120"> </el-table-column>
-      <el-table-column prop="name" label="标题" width="120"> </el-table-column>
-      <el-table-column label="创建日期" width="120">
+      <el-table-column type="selection" > </el-table-column>
+      <el-table-column prop="id" label="ID" width="100"> </el-table-column>
+      <el-table-column prop="name" label="标题" > </el-table-column>
+      <el-table-column label="发布日期" >
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
-      <el-table-column label="发布日期" width="120">
+      <el-table-column label="文章内容" >
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
-      <el-table-column label="失效日期" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column prop="state" label="状态" width="120"> </el-table-column>
-      <el-table-column label="处理">
+      <el-table-column prop="state" label="状态" width="100"> </el-table-column>
+      <el-table-column label="处理" width="250">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
             >查看详情</el-button
@@ -128,7 +125,10 @@ export default {
     },
     handleClick(tab, event) {
       console.log(tab, event);
-    }
+    },
+    putout () {
+      this.$router.push('/home/putnote')
+    },
   }
 };
 </script>

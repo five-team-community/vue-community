@@ -1,6 +1,9 @@
 <template>
   <div id="mynote">
-    <h1>我的待办</h1>
+    <div class="title">
+        <i class="el-icon-s-order"></i>
+        <span>我的待办</span>
+      </div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-form-item label="待处理人">
         <el-select v-model="formInline.region" placeholder="待处理人">
@@ -158,6 +161,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.title {
+  padding: 15px 20px;
+  border-top: 3px solid #e7eaec;
+  border-bottom: 1px solid #e7eaec;
+  i {
+    margin-right: 2px;
+  }
+  .back {
+    float: right;
+    .back-btn{
+      padding: 5px;
+    }
+  }
+}
+
 #mynote{
   margin: 15px;
   h1{
