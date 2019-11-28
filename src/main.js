@@ -7,8 +7,11 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/less/resize.css';
 import './assets/theme/index.css';
+import vueAxios from 'vue-axios';
+import http from './utils/http';
 
 Vue.use(ElementUI);
+Vue.use(vueAxios, http);
 
 Vue.config.productionTip = false
 
