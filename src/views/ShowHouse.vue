@@ -39,7 +39,10 @@
           </el-tab-pane>
            <el-tab-pane>
             <span slot="label"><i class="el-icon-user-solid"></i> 绑定用户</span>
-            我的行程
+            <userItem v-for="item in userList" :key="item.id" :user="item"></userItem>
+            <div class="add-btn">
+              <el-button type="primary" plain round size="medium" @click="add" icon="el-icon-plus">新增绑定</el-button>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -47,6 +50,7 @@
   </div>
 </template>
 <script>
+import UserItem from '../components/UserItem'
 var houseData = {
   no:"111",
   name:"瑞通生活社区东1幢1单元RTSH-FJ-001室",
@@ -56,14 +60,54 @@ var houseData = {
   host:"林海",
   tel:"16832428374",
   time:"2018-08-09"
-  
 };
+var userList=[
+  {
+    id:1,
+    name:"aaa",
+    host:"bbb",
+    tel:"12324",
+    time:"2019-08-07"
+  },
+   {
+    id:2,
+    name:"aaa",
+    host:"bbb",
+    tel:"12324",
+    time:"2019-08-07"
+  },
+   {
+    id:3,
+    name:"aaa",
+    host:"bbb",
+    tel:"12324",
+    time:"2019-08-07"
+  },
+   {
+    id:4,
+    name:"aaa",
+    host:"bbb",
+    tel:"12324",
+    time:"2019-08-07"
+  },
+   {
+    id:5,
+    name:"aaa",
+    host:"bbb",
+    tel:"12324",
+    time:"2019-08-07"
+  }
+]
 export default {
   data() {
     return {
       tab:1,
-      houseData: {}
+      houseData: {},
+      userList:[]
     };
+  },
+  components: {
+    UserItem
   },
   methods: {
     back(){
@@ -72,6 +116,7 @@ export default {
   },
   created() {
     this.houseData = houseData;
+    this.userList = userList;
   },
   computed: {}
 };
@@ -135,5 +180,12 @@ export default {
 }
 .el-tabs--border-card>.el-tabs__content{
   padding: 30px;
+}
+.add-btn{
+  text-align: right;
+  padding: 5px 20px;
+  padding-top:20px;
+  margin-top: 30px;
+  border-top: 1px solid @lineColor;
 }
 </style>
