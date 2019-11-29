@@ -6,25 +6,29 @@
         <span>气费</span>
       </div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-col :span="14">
-        <el-form-item label="标题">
-          <el-input v-model="formInline.user" placeholder="联系电话"></el-input>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="formInline.region" placeholder="状态">
-            <el-option label="待处理" value="shanghai"></el-option>
-            <el-option label="已处理" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit" icon="el-icon-search"
-            >查询</el-button
-          >
-        </el-form-item>
-      </el-col>
-      <el-col :span="10">
-      </el-col>
-    </el-form>
+        <el-col :span="10">
+          <el-form-item label="业主姓名:">
+            <el-input v-model="formInline.user" placeholder="业主姓名"></el-input>
+          </el-form-item>
+        </el-col>
+          <el-col :span="14">
+          <el-form-item label="">
+            <div class="block">
+              <span class="demonstration">选择时间：</span>
+              <el-date-picker
+                v-model="value1"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </div>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit" icon="el-icon-search">查询</el-button>
+          </el-form-item>
+        </el-col>
+      </el-form>
     <el-table
       ref="multipleTable"
       :data="getData"

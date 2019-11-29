@@ -254,6 +254,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin: 10px;
+  padding-bottom: 10px;
 }
 .el-table {
   background-color: #e9eef3;

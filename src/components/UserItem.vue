@@ -1,0 +1,62 @@
+<template>
+  <div class="user-item">
+    <div class="line"></div>
+    <div class="content clearfix">
+      <div class="name">用户名:{{user.name}}</div>
+      <div class="host">关联业主:{{user.host}}</div>
+      <div class="tel">手机号:{{user.tel}}</div>
+      <div class="time">绑定时间:<i class="el-icon-date"></i> {{user.time}}</div>
+      <div class="del">
+      <el-button type="danger" plain round size="medium" @click="del" icon="el-icon-link">解绑用户</el-button>
+    </div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  name:"UserItem",
+  props:{
+    user:Object,
+  },
+  methods:{
+   del(){
+     console.log("删除",this.user.id);
+   }
+  }
+}
+</script>
+<style lang="less" scoped>
+@import "../assets/less/base.less";
+.user-item{
+  position: relative;
+  padding: 5px;
+  margin: 5px;
+  background: #FBFBFB;
+  .content>div{
+    float: left;
+    width: 20%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    // text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+  }
+  .del{
+    text-align: right;
+  }
+  .line{
+    width: 2px;
+    height: 50px;
+    background: #BBBBBB;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  &:hover{
+    background: #E9E9E9;
+    .line{
+      background: @greenColor;
+    }
+  }
+}
+</style>

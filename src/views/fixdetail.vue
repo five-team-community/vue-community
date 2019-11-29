@@ -181,8 +181,10 @@ export default {
     border: 1px solid lightgray;
   }
 }
-.el-button{
+.el-tabs .el-button{
   float: right;
-  margin: 10px;
+  margin: 20px;
+  background-color: @darkGreenColor;
+  color: @navChoose;
 }
 </style>

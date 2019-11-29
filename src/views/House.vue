@@ -1,10 +1,12 @@
 <template>
   <div id="house">
     <div class="content">
+      <!-- 标题 -->
       <div class="title">
         <i class="el-icon-s-order"></i>
         房产列表
       </div>
+      <!-- 筛选数据的输入表单 -->
       <div class="choose">
         <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
           <el-form-item label="房号">
@@ -24,14 +26,17 @@
           </el-form-item>
         </el-form>
       </div>
+      <!-- 新增和搜索按钮 -->
       <div class="btn">
         <div>
           <el-button icon="el-icon-plus" class="btn-add" @click="add">新增</el-button>
           <el-button icon="el-icon-search" class="btn-search" @click="searchMsg">搜素</el-button>
         </div>
       </div>
+
+      <!-- 表格数据 -->
       <div class="mytable">
-        <el-table :data="getData" border style="width: 100%">
+        <el-table :data="getData" border style="width: 100%" v-loading="loading">
           <el-table-column prop="no" label="房号"></el-table-column>
           <el-table-column prop="host" label="业主姓名"></el-table-column>
           <el-table-column prop="tel" label="预留手机号"></el-table-column>
@@ -40,6 +45,8 @@
           <el-table-column prop="isCount" label="是否计费"></el-table-column>
           <el-table-column prop="blindNum" label="绑定数"></el-table-column>
           <el-table-column prop="blindMax" label="限制绑定数"></el-table-column>
+
+          <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button
@@ -66,34 +73,17 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="clearfix">
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :page-size="5"
-            :total="10"
-            :pager-count="5"
-            :hide-on-single-page="true"
-            @current-change="changePage"
-            class="page"
-          ></el-pagination>
-        </div>
+
+        <!-- 分页 -->
+        <div class="clearfix" v-show="!loading"><el-pagination background layout="prev, pager, next" :page-size="5" :total="houseData.length" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
       </div>
+      
     </div>
   </div>
 </template>
 <script>
-var houseData = [
-  {
-    no: "1",
-    host: "aaa",
-    tel: "12324234",
-    time: "2018-08-07",
-    isEmpty: "是",
-    isCount: "计费",
-    blindNum: 3,
-    blindMax: 20
-  },
+// 模拟的数据
+var houseData=[
   {
     no: "2",
     host: "aaa",
@@ -168,47 +158,66 @@ var houseData = [
 export default {
   data() {
     return {
-      currentPage: 1,
-      search: {
+      loading:true,
+      currentPage:1,//记录当前页
+      search: {//记录筛选的数据项
         houseNum: "",
         host: "",
         telphone: "",
         isEmpty: ""
       },
-      houseData: []
+      houseData:[]//表单所以数据
     };
   },
   methods: {
-    add() {
-      console.log("新增");
+    add(){//新增
+      this.$router.push({path:'/home/addHouse'});
     },
-    searchMsg() {
+    searchMsg(){//搜索
       console.log(this.search);
     },
-    show(index) {
-      index = 5 * (this.currentPage - 1) + index;
-      console.log("查看", index);
+    show(index){//查看
+      index = 5*(this.currentPage-1)+index;
+      console.log("查看",index);
+      this.$router.push({path:'/home/showHouse?id='+index});
     },
-    alter(index) {
-      index = 5 * (this.currentPage - 1) + index;
-      console.log("修改", index);
+    alter(index){//修改
+      index = 5*(this.currentPage-1)+index;
+      this.$router.push({path:'/home/alterHouse?id='+index});
     },
-    del(index) {
-      index = 5 * (this.currentPage - 1) + index;
-      console.log("删除", index);
+    del(index){//删除
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        index = 5*(this.currentPage-1)+index;
+        console.log("删除",index);
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
+      
     },
-    changePage(val) {
-      this.currentPage = val;
+    changePage(val){//改变页码
+      this.currentPage=val;
     }
   },
-  created() {
-    this.houseData = houseData;
+  created(){
+    this.loading = false;
+    this.houseData=houseData;//创建时获取数据
   },
   computed: {
-    getData() {
-      var start = 5 * (this.currentPage - 1);
-      return this.houseData.slice(start, start + 5);
-    }
+    getData(){//计算当前页的数据，table绑定该值
+      var start=5*(this.currentPage-1);
+      return this.houseData.slice(start,start+5);
+   }
   }
 };
 </script>
