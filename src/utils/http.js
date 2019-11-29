@@ -11,10 +11,12 @@ const http = axios.create({
 // 请求拦截，统一在请求时带上 token
 http.interceptors.request.use(function (config) {
   // 获取 token
-  const token = sessionStorage.getItem('token')
+  const token = sessionStorage.getItem('token');
+  const validateId = sessionStorage.getItem('validateId');
   if(token) {
     // 在请求头上带上 token，固定写法
-    config.headers['Authorization'] = token
+    config.headers['Authorization'] = token;
+    config.headers['validateId'] = validateId;
   }
   return config;
 }, function (error) {

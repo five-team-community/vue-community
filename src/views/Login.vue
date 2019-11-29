@@ -28,22 +28,30 @@ export default {
   methods: {
     login(){
       console.log("你点击了登录",this.username,this.password);
-      
+
       this.axios.post("/user/login", {
         userName: this.username,
         userPasswd: this.password
       })
       .then((res) => {
         console.log(res)
-        if(res.data.state == "200") {
+        if(res.data.code == "200") {
           // var token = "njaksxbxkjasbkjcxasbjk" // 模拟后台返回的token
-          var token = res.token;
-          sessionStorage.setItem("token", token)
+          console.log("aaa");
+          var token = res.data.data.token;
+          console.log(res.data.data.validateId);
+          var validateId = res.data.data.validateId;
+          sessionStorage.setItem("validateId",validateId);
+          sessionStorage.setItem("token", token);
 
-          // 获取参数（未登录时想访问的路由）
+          const aaa = sessionStorage.getItem('token');
+          const bbb = sessionStorage.getItem('validateId');
+          console.log(aaa,bbb,sessionStorage);
+         
+          //获取参数（未登录时想访问的路由）
           var url = this.$route.query.redirect;
 
-          url = url ? url : "/home"
+          url = url ? url : "/home/house"
           // 切换路由
           this.$router.replace(url)
         } else {

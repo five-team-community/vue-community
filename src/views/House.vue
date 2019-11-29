@@ -12,13 +12,13 @@
             <el-input v-model="search.houseNum" placeholder="请输入房号"></el-input>
           </el-form-item>
           <el-form-item label="业主">
-            <el-input v-model="search.host" placeholder="请输入业主姓名"></el-input>
+            <el-input v-model="search.ownerName" placeholder="请输入业主姓名"></el-input>
           </el-form-item>
           <el-form-item label="预留手机号">
-            <el-input v-model="search.telphone" placeholder="请输入预留手机号"></el-input>
+            <el-input v-model="search.ownerPhone" placeholder="请输入预留手机号"></el-input>
           </el-form-item>
           <el-form-item label="是否闲置">
-            <el-select v-model="search.isEmpty" placeholder="是否闲置">
+            <el-select v-model="search.houseState" placeholder="是否闲置">
               <el-option label="是" value="true"></el-option>
               <el-option label="否" value="false"></el-option>
             </el-select>
@@ -36,12 +36,12 @@
       <!-- 表格数据 -->
       <div class="mytable">
         <el-table :data="getData" border style="width: 100%" v-loading="loading">
-          <el-table-column prop="no" label="房号"></el-table-column>
-          <el-table-column prop="host" label="业主姓名"></el-table-column>
-          <el-table-column prop="tel" label="预留手机号"></el-table-column>
-          <el-table-column prop="time" label="交房时间"></el-table-column>
-          <el-table-column prop="isEmpty" label="是否空置"></el-table-column>
-          <el-table-column prop="isCount" label="是否计费"></el-table-column>
+          <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
+          <el-table-column prop="ownerName" label="业主姓名"></el-table-column>
+          <el-table-column prop="ownerPhone" label="预留手机号"></el-table-column>
+          <el-table-column prop="ownerTime" label="交房时间"></el-table-column>
+          <el-table-column prop="houseState" label="是否空置"></el-table-column>
+          <el-table-column prop="isBilling" label="是否计费"></el-table-column>
           <el-table-column prop="blindNum" label="绑定数"></el-table-column>
           <el-table-column prop="blindMax" label="限制绑定数"></el-table-column>
 
@@ -65,81 +65,89 @@
 // 模拟的数据
 var houseData=[
   {
-    no:"1",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
+    housePropertyId:1,
+    housePropertyNo:"1",
+    ownerName:"aaa",
+    ownerPhone:"12324234",
+    ownerTime:"2018-08-07",
+    houseState:"是",
+    isBilling:"计费",
     blindNum:3,
     blindMax:20
   },
   {
-    no:"2",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
+    housePropertyId:2,
+    housePropertyNo:"2",
+    ownerName:"aaa",
+    ownerPhone:"12324234",
+    ownerTime:"2018-08-07",
+    houseState:"是",
+    isBilling:"计费",
     blindNum:3,
     blindMax:20
   },
   {
-    no:"3",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
+    housePropertyId:3,
+    housePropertyNo:"3",
+    ownerName:"aaa",
+    ownerPhone:"12324234",
+    ownerTime:"2018-08-07",
+    houseState:"是",
+    isBilling:"计费",
     blindNum:3,
     blindMax:20
   },
   {
-    no:"4",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
+    housePropertyId:4,
+    housePropertyNo:"4",
+    ownerName:"aaa",
+    ownerPhone:"12324234",
+    ownerTime:"2018-08-07",
+    houseState:"是",
+    isBilling:"计费",
     blindNum:3,
     blindMax:20
   },
   {
-    no:"5",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
+    housePropertyId:5,
+    housePropertyNo:"5",
+    ownerName:"aaa",
+    ownerPhone:"12324234",
+    ownerTime:"2018-08-07",
+    houseState:"是",
+    isBilling:"计费",
     blindNum:3,
     blindMax:20
   },
   {
-    no:"6",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
+    housePropertyId:6,
+    housePropertyNo:"6",
+    ownerName:"aaa",
+    ownerPhone:"12324234",
+    ownerTime:"2018-08-07",
+    houseState:"是",
+    isBilling:"计费",
     blindNum:3,
     blindMax:20
   },
   {
-    no:"7",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
+    housePropertyId:7,
+    housePropertyNo:"7",
+    ownerName:"aaa",
+    ownerPhone:"12324234",
+    ownerTime:"2018-08-07",
+    houseState:"是",
+    isBilling:"计费",
     blindNum:3,
     blindMax:20
   },{
-    no:"8",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
+    housePropertyId:8,
+    housePropertyNo:"8",
+    ownerName:"aaa",
+    ownerPhone:"12324234",
+    ownerTime:"2018-08-07",
+    houseState:"是",
+    isBilling:"计费",
     blindNum:3,
     blindMax:20
   }
@@ -151,9 +159,9 @@ export default {
       currentPage:1,//记录当前页
       search: {//记录筛选的数据项
         houseNum: "",
-        host: "",
-        telphone: "",
-        isEmpty: ""
+        ownerName: "",
+        ownerPhone: "",
+        houseState: ""
       },
       houseData:[]//表单所以数据
     };
@@ -181,7 +189,12 @@ export default {
         type: 'warning'
       }).then(() => {
         index = 5*(this.currentPage-1)+index;
-        console.log("删除",index);
+        var housePropertyId= this.housePropertyId;
+        console.log("删除",housePropertyId);
+
+        // ****************************************删除请求**********************************************
+
+
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -199,6 +212,11 @@ export default {
     }
   },
   created(){
+    
+    // **************************************获取数据请求*********************************************
+
+
+
     this.loading = false;
     this.houseData=houseData;//创建时获取数据
   },
