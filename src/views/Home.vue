@@ -12,13 +12,13 @@
         text-color="#fff"
         :unique-opened="true"
         :router="true">
-        <el-menu-item class="nav-header">
-          <div class="nav-header-l" v-show="!isCollapse">
-              <img src="../assets/img/login-logo.png" alt />
-            </div>
-            <div class="nav-header-s" v-show="isCollapse">
-              <img src="../assets/img/logo.png" alt />
-            </div>
+        <el-menu-item class="nav-header" style="padding :30px 10px">
+          <!-- <div class="nav-header-l" v-show="!isCollapse"> -->
+              <img src="../assets/img/login-logo.png" alt v-show="!isCollapse" width="120px"/>
+            <!-- </div> -->
+            <!-- <div class="nav-header-s" v-show="isCollapse"> -->
+              <img src="../assets/img/logo.png" alt v-show="isCollapse" width="40px"/>
+            <!-- </div> -->
         </el-menu-item>
         <el-submenu index="1">
           <template slot="title">
@@ -206,6 +206,7 @@ export default {
   width: 100%;
   height: 120px;
   padding-top: 30px;
+  text-align: center
 }
 .nav-header-l {
   width: 120px;
