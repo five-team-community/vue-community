@@ -1,6 +1,5 @@
 <template>
   <div id="house">
-    <div class="content">
       <!-- 标题 -->
       <div class="title">
         <i class="el-icon-s-order"></i>
@@ -61,7 +60,6 @@
       </div>
       
     </div>
-  </div>
 </template>
 <script>
 // 模拟的数据
@@ -216,12 +214,8 @@ export default {
 @import "../assets/less/base.less";
 #house {
   color: @fontColor;
-  background-color: #f3f3f4;
-  padding: 20px 10px;
+  background-color: white;
   min-height: 500px;
-}
-.content {
-  background: white;
 }
 .title {
   padding: 15px 20px;

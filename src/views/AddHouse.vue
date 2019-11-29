@@ -3,7 +3,7 @@
    <div class="content">
       <!-- 标题 -->
     <div class="title">
-      <i class="el-icon-s-order"></i>
+      <i class="el-icon-edit"></i>
       <span>新增房产信息</span>
 
       <!-- 返回按钮 -->

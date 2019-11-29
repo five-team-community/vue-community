@@ -68,6 +68,30 @@ const routes = [
         }
       },
       {
+        path:'addhost',
+        name:"AddHost",
+        component: () => import('../views/AddHost.vue'),//业主管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'showhost',
+        name:"ShowHost",
+        component: () => import('../views/ShowHost.vue'),//业主管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'alterhost',
+        name:"AlterHost",
+        component: () => import('../views/AlterHost.vue'),//业主管理
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'serve',
         name:"Serve",
         component: () => import('../views/Serve.vue'),//服务人员管理

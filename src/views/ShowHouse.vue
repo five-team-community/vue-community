@@ -5,7 +5,7 @@
       <!-- 标题 -->
       <div class="title">
         <i class="el-icon-s-order"></i>
-        <span>房产列表</span>
+        <span>房产信息详情</span>
 
         <!-- 返回按钮 -->
         <div class="back">

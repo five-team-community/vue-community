@@ -28,9 +28,10 @@ export default {
   methods: {
     login(){
       console.log("你点击了登录",this.username,this.password);
+      
       this.axios.post("/user/login", {
-         userName: this.username,
-          password: this.password
+        userName: this.username,
+        userPasswd: this.password
       })
       .then((res) => {
         console.log(res)
