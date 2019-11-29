@@ -55,11 +55,11 @@
       </el-form-item>
 
       <el-form-item label="职业:" prop="work" >
-        <el-input v-model="form.birthday" placeholder="请输入职业"></el-input>
+        <el-input v-model="form.work" placeholder="请输入职业"></el-input>
       </el-form-item>
 
       <el-form-item label="从业/就读单位:" prop="workPlace" >
-        <el-input v-model="form.birthday" placeholder="请输入从业/就读单位"></el-input>
+        <el-input v-model="form.workPlace" placeholder="请输入从业/就读单位"></el-input>
       </el-form-item>
 
       <el-form-item class="control">
@@ -97,6 +97,8 @@
           link:'aaa',
           birthday:'',
           birthplace:'',
+          work:'',
+          workPlace:'',
         },
         phone:{validator: checkPhone, trigger: ['blur','change']},
          area: {11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江",
