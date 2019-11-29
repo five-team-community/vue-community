@@ -94,7 +94,7 @@ const routes = [
       {
         path:'fixMsgAdd',
         name:"FixMsgAdd",
-        component: () => import('../views/FixAdd.vue'),//维修信息
+        component: () => import('../views/FixMsgAdd.vue'),//维修信息添加
         meta: {
           auth: true
         }

@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#ddd;height:900px;display: flex;justify-content: center;align-items:center;">
+  <div class="bg">
     <div class="right">
       <div class="headBox">
         <i class="el-icon-s-open"></i>
@@ -7,56 +7,39 @@
       </div>
       <el-divider style="margin:0"></el-divider>
       <div class="searchBox">
-        <el-row>
-          <el-col :span="6">
-            <span>房号：</span>
-            <el-input v-model="input" placeholder="请输入房号" style="width:50%"></el-input>
-          </el-col>
-          <el-col :span="6">
-            <span>联系电话：</span>
-            <el-input v-model="input" placeholder="请输入联系电话" style="width:50%"></el-input>
-          </el-col>
-          <el-col :span="6">
-            <span>家政服务人员：</span>
-            <el-select v-model="value" placeholder="请选择服务人员">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+        <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
+          <el-form-item label="房号">
+            <el-input v-model="search.houseNum" placeholder="请输入房号"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话">
+            <el-input v-model="search.host" placeholder="请输入业主姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="服务人员">
+            <el-select v-model="search.isEmpty" placeholder="请选择服务人员">
+              <el-option label="是" value="true"></el-option>
+              <el-option label="否" value="false"></el-option>
             </el-select>
-          </el-col>
-          <el-col :span="6">
-            <span>状态：</span>
-            <el-select v-model="value" placeholder="请选择状态">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+          </el-form-item>
+          <el-form-item label="订单状态">
+            <el-select v-model="search.isEmpty" placeholder="请选择状态">
+              <el-option label="已处理" value="true"></el-option>
+              <el-option label="未处理" value="false"></el-option>
             </el-select>
-          </el-col>
-          <el-col :span="12" class="block">
-            <span>登记时间：</span>
-            <el-date-picker
-              v-model="value1"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </el-col>
-          <el-col :span="12">
-            <el-button type="primary" icon="el-icon-edit">登记</el-button>
-            <el-button type="success" icon="el-icon-check">导出</el-button>
-            <el-button type="info" icon="el-icon-search">查询</el-button>
-          </el-col>
-        </el-row>
+          </el-form-item>
+          <el-form-item label="登记时间">
+            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="btn">
+        <div>
+          <el-button icon="el-icon-plus" class="btn-add" @click="add">登记</el-button>
+          <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
+          <el-button icon="el-icon-search" class="btn-search" >查询</el-button>
+        </div>
       </div>
       <div class="contentBox">
-        <el-table :data="tableData" stripe border style="width: 98%">
+        <el-table :data="showData" stripe border style="width: 100%">
           <el-table-column prop="houseNum" label="房号"></el-table-column>
           <el-table-column prop="name" label="姓名" ></el-table-column>
           <el-table-column prop="phone" label="联系电话" ></el-table-column>
@@ -64,42 +47,31 @@
           <el-table-column prop="regDate" label="登记时间" ></el-table-column>
           <el-table-column prop="cleanState" label="状态" style="width: 10%"></el-table-column>
           <el-table-column prop="operate" label="操作">
-            <el-button type="primary" icon="el-icon-search"></el-button>
-            <el-button type="danger" icon="el-icon-delete"></el-button>
+            <template slot-scope="scope">
+              <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
+              <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+            </template>
           </el-table-column>
         </el-table>
-      </div>
-      <div class="block">
-        <el-pagination
+        <div class="block">
+          <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-size="5"
+          :page-sizes="[5,10]"
           layout="total, sizes, prev, pager, next"
-          :total="400"
-          style="float:right"
-          background>
-      </el-pagination>
-  </div>
+          :total="8"
+          :pager-count="5"
+          background></el-pagination>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
-  },
-  data() {
-    return {
-      tableData: [
-        {
+var tableData = [
+  {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
@@ -108,7 +80,7 @@ export default {
           cleanState: "待处理"
         },
         {
-          houseNum: "FFFF-0001",
+          houseNum: "FFFF-0002",
           name: "王小虎",
           phone: "12345678911",
           cleanPeople: "李大妈",
@@ -116,7 +88,7 @@ export default {
           cleanState: "待处理"
         },
         {
-          houseNum: "FFFF-0001",
+          houseNum: "FFFF-0003",
           name: "王小虎",
           phone: "12345678911",
           cleanPeople: "李大妈",
@@ -124,7 +96,7 @@ export default {
           cleanState: "待处理"
         },
         {
-          houseNum: "FFFF-0001",
+          houseNum: "FFFF-0004",
           name: "王小虎",
           phone: "12345678911",
           cleanPeople: "李大妈",
@@ -132,7 +104,7 @@ export default {
           cleanState: "待处理"
         },
         {
-          houseNum: "FFFF-0001",
+          houseNum: "FFFF-0005",
           name: "王小虎",
           phone: "12345678911",
           cleanPeople: "李大妈",
@@ -140,7 +112,7 @@ export default {
           cleanState: "待处理"
         },
         {
-          houseNum: "FFFF-0001",
+          houseNum: "FFFF-0006",
           name: "王小虎",
           phone: "12345678911",
           cleanPeople: "李大妈",
@@ -148,7 +120,7 @@ export default {
           cleanState: "待处理"
         },
         {
-          houseNum: "FFFF-0001",
+          houseNum: "FFFF-0007",
           name: "王小虎",
           phone: "12345678911",
           cleanPeople: "李大妈",
@@ -156,33 +128,28 @@ export default {
           cleanState: "待处理"
         },
         {
-          houseNum: "FFFF-0001",
+          houseNum: "FFFF-0008",
           name: "王小虎",
           phone: "12345678911",
           cleanPeople: "李大妈",
           regDate: "2019-11-26 13:36:55",
           cleanState: "待处理"
         }
-      ],
+]
+export default {
+  data() {
+    return {
+      currentPage: 1,
+      pagesize:5,
+      tableData:[],
+      search: {//记录筛选的数据项
+        houseNum: "",
+        host: "",
+        telphone: "",
+        isEmpty: ""
+      },
       input: '',
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
-        pickerOptions: {
+      pickerOptions: {
           shortcuts: [{
             text: '最近一周',
             onClick(picker) {
@@ -208,59 +175,116 @@ export default {
               picker.$emit('pick', [start, end]);
             }
           }]
-        },
-        value1: '',
-        currentPage1: 5,
-        currentPage2: 5,
-        currentPage3: 5,
-        currentPage4: 4
+      },
+      value1: '', 
     };
+  },
+  methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.pagesize = val;
+      },
+      handleCurrentChange(val) {
+        this.currentPage=val;
+        console.log(val);
+      },
+      add(){
+        this.$router.push({path:'/home/fixMsgAdd'});
+      },
+      showDetail(index) {
+        // index = 5*(this.currentPage-1)+index;
+        console.log("详情",(index+(this.pagesize)*(this.currentPage-1)));
+        // this.$router.push({path:'/home/fixdetail'});
+      },
+      del(index) {
+        console.log(index);
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      }
+  },
+  created() {
+    this.tableData =tableData;
+  },
+  computed: {
+    showData() {
+      console.log("本页具有几个数据:",this.pagesize);
+      console.log("第几页：",this.currentPage);
+      var start =(this.pagesize) * (this.currentPage-1);
+      return this.tableData.slice(start,start+(this.pagesize));
+    }
   }
 };
 </script>
 
 <style lang="less" scoped>
-.right {
-  width: 96%;
-  height:850px;
-  background: #fff;
-  font-size: 13px;
-}
+@import "../assets/less/base.less";
+  .bg {
+    background:#f3f3f4;
+    height:auto;
+    padding:20px;
+    .right {
+      background: #fff;
+      font-size: 13px;
+      .headBox {
+        padding: 15px 20px;
+        text-align: left;
+        p {
+          display: inline;
+          color: #606266;
+          font-weight: 600;
+        }
+      }
+      .searchBox {
+        width: 98%;
+        padding: 20px 20px 0;
+      }
+      .btn {
+        width: 100%;
+        height: 40px;
+        div {
+          float:right;
+          margin-right:20px;
+          .btn-daochu {
+            background:@greenColor;
+            color: white;
+            &:hover {
+              background: @darkGreenColor;
+            }
+          }
+          .btn-search {
+            background: @blueColor;
+            color: white;
+            &:hover {
+              background: @darkBlueColor;
+            }
+          }
+        }
+      }
+      .contentBox {
+        padding: 20px 20px;
+        .el-table--border {
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+
 .el-divider--horizontal {
   margin: 0;
 }
-.headBox {
-  width: 98%;
-  height: 50px;
-  margin: 0 auto;
-  text-align: left;
-  line-height: 50px;
-  p {
-    display: inline;
-    color: #606266;
-    font-weight: 600;
-  }
-}
-.searchBox {
-  width: 98%;
-  margin: 0 auto;
-  .el-col-12 {
-    margin: 10px 0;
-  }
-  .el-col-6 {
-    margin: 10px 0;
-    text-align: left;
-    span {
-      display: inline-block;
-      width: 30%;
-      text-align: left;
-    }
-  }
-}
-.contentBox {
 
-  .el-table--border {
-    margin: 0 auto;
-  }
-}
 </style>

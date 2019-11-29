@@ -1,10 +1,10 @@
 <template>
-  <div style="background:#ddd;display: flex;justify-content: center;padding:20px 10px">
+  <div class="bg">
     <div class="right">
       <div class="headBox">
         <i class="el-icon-s-open"></i>
         <p>新增报修信息</p>
-        <a href="javascript:;" class="returnBtn">
+        <a href="javascript:;" class="returnBtn" @click="returnBtn">
           <i class="el-icon-caret-left"></i>返回
         </a>
       </div>
@@ -118,11 +118,10 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
+          :page-sizes="[5, 10]"
+          :page-size="5"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="8"
         ></el-pagination>
       </el-dialog>
     </div>
@@ -130,8 +129,77 @@
 </template>
 
 <script>
+var tableData = [
+  {
+          phone:"12365498755",
+          name: "王小虎",
+
+        },
+        {
+          phone:"12365498755",
+          name: "王小虎",
+
+        },
+        {
+          phone:"12365498755",
+          name: "王小虎",
+
+        },
+        {
+          phone:"12365498755",
+          name: "王小虎",
+
+        },
+        {
+          phone:"12365498755",
+          name: "王小虎",
+
+        },
+        {
+          phone:"12365498755",
+          name: "王小虎",
+
+        },
+        {
+          phone:"12365498755",
+          name: "王小虎",
+
+        }
+];
+
 export default {
+  data() {
+    return {
+      textarea: "",
+      currentPage: 1,
+      fileList: [{
+        name: 'food.jpeg',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+      }, {
+        name: 'food2.jpeg',
+        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+      }],
+      tableData: [],
+      multipleSelection: [],
+      dialogTableVisible: false,
+      dialogFormVisible: false,
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      },
+      formLabelWidth: "120px"
+    };
+  },
   methods: {
+    returnBtn() {
+      this.$router.push({path:'/home/fixMsg'});
+    },
      handleChange(file, fileList) {
         this.fileList = fileList.slice(-3);
       },
@@ -148,91 +216,36 @@ export default {
       this.multipleSelection = val;
     },
     handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+    }
   },
-  data() {
-    return {
-      textarea: "",
-      currentPage1: 5,
-        currentPage2: 5,
-        currentPage3: 5,
-        currentPage4: 4,
-        fileList: [{
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }, {
-          name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }],
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-08",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-06",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-07",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ],
-      multipleSelection: [],
-      dialogTableVisible: false,
-      dialogFormVisible: false,
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
-      },
-      formLabelWidth: "120px"
-    };
-  }
+  created() {
+    this.tableData = tableData;
+  },
+  computed: {
+    showData() {
+      var start = 5*(this.currentPage-1);
+      return this.tableData.slice(start,start+5);
+    }
+  },
+  
 };
 </script>
 
 <style lang="less" scoped>
+  .bg {
+    background:#f3f3f4;
+    height:auto;
+    padding:20px 10px;
+  }
 .right {
-  width: 96%;
-  height: auto;
   background: #fff;
   font-size: 13px;
   .headBox {
     padding: 14px 20px 7px;
-    margin: 0 auto;
     text-align: left;
     p {
       display: inline;
