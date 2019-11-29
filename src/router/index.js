@@ -307,6 +307,14 @@ const routes = [
         meta: {
           auth: true
         }  
+      },
+      {
+        path:'suggest',
+        name:"suggest",
+        component: () => import('../views/Suggest.vue'),//建议
+        meta: {
+          auth: true
+        }  
       }
     ]
   },

@@ -182,7 +182,6 @@ export default {
       tableData: [],
       multipleSelection: [],
       dialogTableVisible: false,
-      dialogFormVisible: false,
       form: {
         name: "",
         region: "",

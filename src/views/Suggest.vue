@@ -3,7 +3,7 @@
     <div class="right">
       <div class="headBox">
         <i class="el-icon-s-open"></i>
-        <p>报修管理</p>
+        <p>建议管理</p>
       </div>
       <el-divider style="margin:0"></el-divider>
       <div class="searchBox">
@@ -43,9 +43,7 @@
           <el-table-column prop="houseNum" label="房号"></el-table-column>
           <el-table-column prop="name" label="姓名" ></el-table-column>
           <el-table-column prop="phone" label="联系电话" ></el-table-column>
-          <el-table-column prop="fixType" label="报修部位" ></el-table-column>
-          <el-table-column prop="repairContent" label="报修内容" ></el-table-column>
-          <el-table-column prop="repairPersonName" label="维修人员" ></el-table-column>
+          <el-table-column prop="suggestContent" label="内容" ></el-table-column>
           <el-table-column prop="regDate" label="登记时间" ></el-table-column>
           <el-table-column prop="repairState" label="状态" style="width: 10%"></el-table-column>
           <el-table-column prop="operate" label="操作" >
@@ -71,14 +69,12 @@
 </template>
 
 <script>
-/* var tableData = [
+var tableData = [
   {
           houseNum: "FFFF-0001",
           name: "王小虎",
           phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
+          suggestContent: "门锁坏了",
           regDate: "2019-11-26 13:36:55",
           repairState: "待处理"
         },
@@ -86,9 +82,7 @@
           houseNum: "FFFF-0002",
           name: "王小虎",
           phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
+          suggestContent: "门锁坏了",
           regDate: "2019-11-26 13:36:55",
           repairState: "待处理"
         },
@@ -96,9 +90,7 @@
           houseNum: "FFFF-0003",
           name: "王小虎",
           phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
+          suggestContent: "门锁坏了",
           regDate: "2019-11-26 13:36:55",
           repairState: "待处理"
         },
@@ -106,9 +98,7 @@
           houseNum: "FFFF-0004",
           name: "王小虎",
           phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
+          suggestContent: "门锁坏了",
           regDate: "2019-11-26 13:36:55",
           repairState: "待处理"
         },
@@ -116,9 +106,7 @@
           houseNum: "FFFF-0005",
           name: "王小虎",
           phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
+          suggestContent: "门锁坏了",
           regDate: "2019-11-26 13:36:55",
           repairState: "待处理"
         },
@@ -126,9 +114,7 @@
           houseNum: "FFFF-0006",
           name: "王小虎",
           phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
+          suggestContent: "门锁坏了",
           regDate: "2019-11-26 13:36:55",
           repairState: "待处理"
         },
@@ -136,9 +122,7 @@
           houseNum: "FFFF-0007",
           name: "王小虎",
           phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
+          suggestContent: "门锁坏了",
           regDate: "2019-11-26 13:36:55",
           repairState: "待处理"
         },
@@ -146,13 +130,11 @@
           houseNum: "FFFF-0008",
           name: "王小虎",
           phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
+          suggestContent: "门锁坏了",
           regDate: "2019-11-26 13:36:55",
           repairState: "待处理"
         }
-]; */
+];
 export default {
   data() {
     return {
@@ -197,53 +179,44 @@ export default {
     };
   },
   methods: {
-    handleSizeChange(val) {
-      console.log(val);
-      this.pagesize = val;
-    },
-    handleCurrentChange(val) {
-      this.currentPage=val;
-      console.log(val);
-    },
-    add(){
-      this.$router.push({path:'/home/fixMsgAdd'});
-    },
-    showDetail(index) {
-      index = 5*(this.currentPage-1)+index;
-      console.log("详情",index);
-      this.$router.push({path:'/home/fixdetail'});
-    },
-    del(index) {
-      console.log(index);
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+      handleSizeChange(val) {
+        console.log(val);
+        this.pagesize = val;
+      },
+      handleCurrentChange(val) {
+        this.currentPage=val;
+        console.log(val);
+      },
+      add(){
+        this.$router.push({path:'/home/fixMsgAdd'});
+      },
+      showDetail(index) {
+        index = 5*(this.currentPage-1)+index;
+        console.log("详情",index);
+        this.$router.push({path:'/home/fixdetail'});
+      },
+      del(index) {
+        console.log(index);
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
         });
-        /* tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1); */
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
-      });
-    }
+      }
   },
   created() {
-    this.axios
-        .get("/repairInfo/getAllRepairInfo" )
-        .then((res) => {
-          console.log(res.data);
-          /* this.tableData =tableData; */
-        })
-        .catch(err=> {
-          console.log(err)
-        }) 
-    
+    this.tableData =tableData;
   },
   computed: {
     showData() {

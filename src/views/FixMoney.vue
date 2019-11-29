@@ -28,7 +28,7 @@
           <el-table-column prop="name" label="用户姓名" ></el-table-column>
           <el-table-column prop="fixContent" label="报修内容" ></el-table-column>
           <el-table-column prop="payDate" label="订单创建时间" ></el-table-column>
-          <el-table-column prop="orderMoney" label="金额" ></el-table-column>
+          <el-table-column prop="orderMoney" label="支付金额" ></el-table-column>
         </el-table>
       </div>
       <div class="block">
