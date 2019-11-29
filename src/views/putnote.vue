@@ -1,15 +1,16 @@
 <template>
-<div class="putnote">
+<div class="mynote">
+    <div class="content">
     <div class="title">
         <i class="el-icon-s-order"></i>
-        <span>房产列表</span>
+        <span>新增公告</span>
         <div class="back">
           <el-button round size='mini' class="back-btn" icon='el-icon-arrow-left' @click="back">返回</el-button>
         </div>
       </div>
     <el-form ref="form" :model="form" label-width="80px">
-    <el-form-item label="公告标题">
-      <el-input v-model="form.name"></el-input>
+    <el-form-item label="公告标题" >
+      <el-input v-model="form.name"  ></el-input>
     </el-form-item>
     <el-form-item label="活动时间">
       <el-col :span="11">
@@ -31,6 +32,7 @@
       <el-button>取消</el-button>
     </el-form-item>
   </el-form>
+  </div>
 </div>
   
 </template>
@@ -54,11 +56,25 @@ export default {
   methods: {
     onSubmit() {
       console.log("submit!");
+    },
+    back() {
+        console.log('back');
     }
   }
 };
 </script>
 <style lang="less" scoped>
+@import "../assets/less/base.less";
+.mynote{
+  color: @fontColor;
+  background-color: #f3f3f4;
+  padding: 20px 10px;
+  min-height: 500px;
+.content {
+  background: white;
+}
+
+}
 .title {
   padding: 15px 20px;
   border-top: 3px solid #e7eaec;
@@ -73,7 +89,48 @@ export default {
     }
   }
 }
- .putnote{
-     width: 800px;
- }
+ .btn{
+  height: 40px;
+}
+.btn > div {
+  float: right;
+  margin-right: 30px;
+  color: white;
+  .btn-add {
+    background: @greenColor;
+    color: white;
+    &:hover {
+      background: @darkGreenColor;
+    }
+  }
+  .btn-search {
+    background: @blueColor;
+    color: white;
+    &:hover {
+      background: @darkBlueColor;
+    }
+  }
+}
+.mytable{
+  padding: 20px 30px;
+}
+.el-button--mini, .el-button--mini.is-round{
+  padding: 3px;
+}
+.btn-alter{
+  background: @blueColor;
+  border-color: @blueColor;
+}
+.page{
+  float: right;
+  margin-top: 20px;
+  
+}
+.el-form{
+    padding:  50px 30px;
+}
+.el-form-item{
+    height: 40px;
+    
+}
 </style>

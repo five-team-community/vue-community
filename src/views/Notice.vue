@@ -1,6 +1,10 @@
 <template>
-  <div id="mynote">
-    <h1>社区公告</h1>
+<div id="mynote">
+    <div class="content">
+    <div class="title">
+        <i class="el-icon-s-order"></i>
+        <span>社区公告</span>
+      </div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-col :span="14">
         <el-form-item label="标题">
@@ -13,14 +17,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" icon="el-icon-search"
+          <el-button type="primary"  icon="el-icon-search"
             >查询</el-button
           >
         </el-form-item>
       </el-col>
       <el-col :span="10">
         <el-row>
-          <el-button type="primary" icon="el-icon-edit">新建</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="putout">新建</el-button>
           <el-button type="success"><i class="el-icon-upload el-icon--right"></i>发布</el-button>
           <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
         </el-row>
@@ -31,7 +35,7 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
-      @selection-change="handleSelectionChange">
+     >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="id" label="ID" width="120"> </el-table-column>
       <el-table-column prop="name" label="标题" width="120"> </el-table-column>
@@ -62,8 +66,17 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="100">
-    </el-pagination>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="5"
+        :total="10"
+        :pager-count="5"
+        :hide-on-single-page="true"
+        @current-change="changePage"
+        class="page"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -128,20 +141,39 @@ export default {
     },
     handleClick(tab, event) {
       console.log(tab, event);
-    }
+    },
+    putout () {
+      this.$router.push('/home/putnote')
+    },
   }
 };
 </script>
 
 <style lang="less" scoped>
-#mynote{
-  margin: 15px;
-  h1{
-    margin-bottom: 15px;
-    text-align: center;
+@import "../assets/less/base.less";
+#mynote {
+  color: @fontColor;
+  background-color: #f3f3f4;
+  min-height: 500px;
+    padding: 20px 10px;
+  .content {
+    background: white;
   }
 }
-
+.title {
+  padding: 15px 20px;
+  border-top: 3px solid #e7eaec;
+  border-bottom: 1px solid #e7eaec;
+  i {
+    margin-right: 2px;
+  }
+  .back {
+    float: right;
+    .back-btn {
+      padding: 5px;
+    }
+  }
+}
 .el-header,
 .el-footer {
   background-color: #b3c0d1;
@@ -182,5 +214,9 @@ body > .el-container {
 }
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
+}
+.el-form{
+  padding-left: 20px;
+  padding-top: 20px;
 }
 </style>

@@ -1,6 +1,10 @@
 <template>
   <div id="mynote">
-    <h1>水费</h1>
+    <div class="content">
+    <div class="title">
+        <i class="el-icon-s-order"></i>
+        <span>水费</span>
+      </div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-col :span="14">
         <el-form-item label="标题">
@@ -19,62 +23,87 @@
         </el-form-item>
       </el-col>
       <el-col :span="10">
-        <el-row>
-          <el-button type="primary" icon="el-icon-edit">新建</el-button>
-          <el-button type="success"><i class="el-icon-upload el-icon--right"></i>发布</el-button>
-          <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
-        </el-row>
       </el-col>
     </el-form>
     <el-table
       ref="multipleTable"
-      :data="tableData"
+      :data="getData"
       tooltip-effect="dark"
       style="width: 100%"
-      @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column prop="id" label="ID" width="120"> </el-table-column>
-      <el-table-column prop="name" label="标题" width="120"> </el-table-column>
-      <el-table-column label="创建日期" width="120">
+      >
+      <el-table-column prop="id" label="房号" >F01</el-table-column>
+      <el-table-column prop="name" label="业主姓名"> </el-table-column>
+      <el-table-column label="原金额" >
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
-      <el-table-column label="发布日期" width="120">
+      <el-table-column label="充值金额">
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
-      <el-table-column label="失效日期" width="120">
+      <el-table-column label="现有金额" >
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
-      <el-table-column prop="state" label="状态" width="120"> </el-table-column>
-      <el-table-column label="处理">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >查看详情</el-button
-          >
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
-          >
-        </template>
+      <el-table-column label="缴费订单号">
+        <template >1</template>
       </el-table-column>
+      <el-table-column label="缴费时间" >
+        <template slot-scope="scope">{{ scope.row.date }}</template>
+      </el-table-column>
+      <el-table-column label="支付方式">
+        <template>支付宝</template>
+      </el-table-column>
+      <el-table-column prop="state" label="状态"> </el-table-column>
+      <el-table-column label="操作" align="center" width="250">
+            <template slot-scope="scope">
+              <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
+              <el-button type="info" icon="el-icon-edit-outline" size="mini" class="btn-alter" @click="alter(scope.$index)"></el-button>
+              <el-button type="danger" slot="reference" icon="el-icon-delete" size="mini" class="btn-del" @click="open"></el-button>
+            </template>
+          </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="100">
+    <el-pagination background layout="prev, pager, next"   :page-size="5"
+        :total="10"
+        :pager-count="5"
+        :hide-on-single-page="true"
+        @current-change="changePage"
+        class="page">
     </el-pagination>
+  </div>
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      formInline: {
-        user: "",
-        region: ""
-      },
-      tableData: [
+    var  tableData = [
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
         {
           listname: "物业投诉",
           date: "2016-05-02",
@@ -115,8 +144,17 @@ export default {
           address: "上海市普陀区金沙江路 1518 弄",
           state: "待处理"
         }
-      ],
-      loading: false
+    ];
+export default {
+  data() {
+    return {
+      currentPage: 1,
+      formInline: {
+        user: "",
+        region: ""
+      },
+      loading: false,
+      tableData:[]
     };
   },
   methods: {
@@ -128,42 +166,80 @@ export default {
     },
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    show(index) {
+      index = 5 * (this.currentPage - 1) + index;
+      console.log("查看", index);
+    },
+    alter(index) {
+      index = 5 * (this.currentPage - 1) + index;
+      console.log("修改", index);
+    },
+    del(index) {
+      index = 5 * (this.currentPage - 1) + index;
+      console.log("删除", index);
+    },
+    changePage(val) {
+      this.currentPage = val;
+    },
+    open() {
+        this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
+    }
+  },
+  created() {
+    this.tableData = tableData;
+  },
+  computed: {
+    getData() {
+      var start = 5 * (this.currentPage - 1);
+      return this.tableData.slice(start, start + 5);
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
+@import "../assets/less/base.less";
 #mynote{
-  margin: 15px;
-  h1{
-    margin-bottom: 15px;
-    text-align: center;
+  color: @fontColor;
+  background-color: #f3f3f4;
+  padding: 20px 10px;
+  min-height: 500px;
+.content {
+  background: white;
+}
+
+}
+.title {
+  padding: 15px 20px;
+  border-top: 3px solid #e7eaec;
+  border-bottom: 1px solid #e7eaec;
+  i {
+    margin-right: 2px;
+  }
+  .back {
+    float: right;
+    .back-btn{
+      padding: 5px;
+    }
   }
 }
-
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-  line-height: 300px;
-}
-
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  h1 {
-    margin-bottom: 15px;
-  }
+.el-form{
+  padding: 15px 20px;
 }
 
 body > .el-container {
@@ -182,5 +258,30 @@ body > .el-container {
 }
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
+}
+.btn{
+  height: 40px;
+}
+.btn > div {
+  float: right;
+  margin-right: 30px;
+  color: white;
+  .btn-add {
+    background: @greenColor;
+    color: white;
+    &:hover {
+      background: @darkGreenColor;
+    }
+  }
+  .btn-search {
+    background: @blueColor;
+    color: white;
+    &:hover {
+      background: @darkBlueColor;
+    }
+  }
+}
+.el-button--mini, .el-button--mini.is-round{
+  padding: 3px;
 }
 </style>

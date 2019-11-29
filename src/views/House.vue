@@ -26,12 +26,12 @@
       </div>
       <div class="btn">
         <div>
-          <el-button icon="el-icon-plus" class="btn-add" @click='add'>新增</el-button>
-          <el-button icon="el-icon-search" class="btn-search" @click='searchMsg'>搜素</el-button>
+          <el-button icon="el-icon-plus" class="btn-add" @click="add">新增</el-button>
+          <el-button icon="el-icon-search" class="btn-search" @click="searchMsg">搜素</el-button>
         </div>
       </div>
       <div class="mytable">
-        <el-table :data="getData" border style="width: 100%" >
+        <el-table :data="getData" border style="width: 100%">
           <el-table-column prop="no" label="房号"></el-table-column>
           <el-table-column prop="host" label="业主姓名"></el-table-column>
           <el-table-column prop="tel" label="预留手机号"></el-table-column>
@@ -42,143 +42,173 @@
           <el-table-column prop="blindMax" label="限制绑定数"></el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
-              <el-button type="info" icon="el-icon-edit-outline" size="mini" class="btn-alter" @click="alter(scope.$index)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini" class="btn-del" @click="del(scope.$index)"></el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                size="mini"
+                class="btn-show"
+                @click="show(scope.$index)"
+              ></el-button>
+              <el-button
+                type="info"
+                icon="el-icon-edit-outline"
+                size="mini"
+                class="btn-alter"
+                @click="alter(scope.$index)"
+              ></el-button>
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                class="btn-del"
+                @click="del(scope.$index)"
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
-        <div class="clearfix"><el-pagination background layout="prev, pager, next" :page-size="5" :total="10" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
+        <div class="clearfix">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="5"
+            :total="10"
+            :pager-count="5"
+            :hide-on-single-page="true"
+            @current-change="changePage"
+            class="page"
+          ></el-pagination>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-var houseData=[
+var houseData = [
   {
-    no:"1",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
-    blindNum:3,
-    blindMax:20
+    no: "1",
+    host: "aaa",
+    tel: "12324234",
+    time: "2018-08-07",
+    isEmpty: "是",
+    isCount: "计费",
+    blindNum: 3,
+    blindMax: 20
   },
   {
-    no:"2",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
-    blindNum:3,
-    blindMax:20
+    no: "2",
+    host: "aaa",
+    tel: "12324234",
+    time: "2018-08-07",
+    isEmpty: "是",
+    isCount: "计费",
+    blindNum: 3,
+    blindMax: 20
   },
   {
-    no:"3",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
-    blindNum:3,
-    blindMax:20
+    no: "3",
+    host: "aaa",
+    tel: "12324234",
+    time: "2018-08-07",
+    isEmpty: "是",
+    isCount: "计费",
+    blindNum: 3,
+    blindMax: 20
   },
   {
-    no:"4",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
-    blindNum:3,
-    blindMax:20
+    no: "4",
+    host: "aaa",
+    tel: "12324234",
+    time: "2018-08-07",
+    isEmpty: "是",
+    isCount: "计费",
+    blindNum: 3,
+    blindMax: 20
   },
   {
-    no:"5",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
-    blindNum:3,
-    blindMax:20
+    no: "5",
+    host: "aaa",
+    tel: "12324234",
+    time: "2018-08-07",
+    isEmpty: "是",
+    isCount: "计费",
+    blindNum: 3,
+    blindMax: 20
   },
   {
-    no:"6",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
-    blindNum:3,
-    blindMax:20
+    no: "6",
+    host: "aaa",
+    tel: "12324234",
+    time: "2018-08-07",
+    isEmpty: "是",
+    isCount: "计费",
+    blindNum: 3,
+    blindMax: 20
   },
   {
-    no:"7",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
-    blindNum:3,
-    blindMax:20
-  },{
-    no:"8",
-    host:"aaa",
-    tel:"12324234",
-    time:"2018-08-07",
-    isEmpty:"是",
-    isCount:"计费",
-    blindNum:3,
-    blindMax:20
+    no: "7",
+    host: "aaa",
+    tel: "12324234",
+    time: "2018-08-07",
+    isEmpty: "是",
+    isCount: "计费",
+    blindNum: 3,
+    blindMax: 20
+  },
+  {
+    no: "8",
+    host: "aaa",
+    tel: "12324234",
+    time: "2018-08-07",
+    isEmpty: "是",
+    isCount: "计费",
+    blindNum: 3,
+    blindMax: 20
   }
-]
+];
 export default {
   data() {
     return {
-      currentPage:1,
+      currentPage: 1,
       search: {
         houseNum: "",
         host: "",
         telphone: "",
         isEmpty: ""
       },
-      houseData:[]
+      houseData: []
     };
   },
   methods: {
-    add(){
+    add() {
       console.log("新增");
     },
-    searchMsg(){
+    searchMsg() {
       console.log(this.search);
     },
-    show(index){
-      index = 5*(this.currentPage-1)+index;
-      console.log("查看",index);
+    show(index) {
+      index = 5 * (this.currentPage - 1) + index;
+      console.log("查看", index);
     },
-    alter(index){
-      index = 5*(this.currentPage-1)+index;
-      console.log("修改",index);
+    alter(index) {
+      index = 5 * (this.currentPage - 1) + index;
+      console.log("修改", index);
     },
-    del(index){
-      index = 5*(this.currentPage-1)+index;
-      console.log("删除",index);
+    del(index) {
+      index = 5 * (this.currentPage - 1) + index;
+      console.log("删除", index);
     },
-    changePage(val){
-      this.currentPage=val;
+    changePage(val) {
+      this.currentPage = val;
     }
   },
-  created(){
-    this.houseData=houseData;
+  created() {
+    this.houseData = houseData;
   },
   computed: {
-    getData(){
-      var start=5*(this.currentPage-1);
-      return this.houseData.slice(start,start+5);
-   }
+    getData() {
+      var start = 5 * (this.currentPage - 1);
+      return this.houseData.slice(start, start + 5);
+    }
   }
 };
 </script>
@@ -242,7 +272,7 @@ export default {
 .myinput .el-input {
   width: 90%;
 }
-.btn{
+.btn {
   height: 40px;
 }
 .btn > div {
@@ -264,19 +294,19 @@ export default {
     }
   }
 }
-.mytable{
+.mytable {
   padding: 20px 30px;
 }
-.el-button--mini, .el-button--mini.is-round{
+.el-button--mini,
+.el-button--mini.is-round {
   padding: 3px;
 }
-.btn-alter{
+.btn-alter {
   background: @blueColor;
   border-color: @blueColor;
 }
-.page{
+.page {
   float: right;
   margin-top: 20px;
-  
 }
 </style>

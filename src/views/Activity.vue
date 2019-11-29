@@ -1,10 +1,14 @@
 <template>
-  <div id="mynote">
-    <h1>社区活动</h1>
+   <div id="mynote">
+    <div class="content">
+    <div class="title">
+        <i class="el-icon-s-order"></i>
+        <span>社区活动</span>
+      </div>
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
       <el-col :span="14">
-        <el-form-item label="活动类型">
-          <el-input v-model="formInline.user" placeholder="活动类型"></el-input>
+        <el-form-item label="活动名称">
+          <el-input v-model="formInline.user" placeholder="活动名称"></el-input>
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="formInline.region" placeholder="状态">
@@ -31,7 +35,7 @@
       :data="tableData"
       tooltip-effect="dark"
       style="width: 100%"
-      @selection-change="handleSelectionChange">
+      >
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="id" label="社区" width="120"> </el-table-column>
       <el-table-column prop="name" label="活动名称" width="120"> </el-table-column>
@@ -47,12 +51,8 @@
       <el-table-column prop="state" label="审核状态" width="120"> </el-table-column>
       <el-table-column label="处理">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >查看详情</el-button
-          >
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button
             size="mini"
             type="danger"
@@ -62,8 +62,17 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="100">
-    </el-pagination>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="5"
+        :total="10"
+        :pager-count="5"
+        :hide-on-single-page="true"
+        @current-change="changePage"
+        class="page"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -128,20 +137,39 @@ export default {
     },
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    onSubmit() {
+      console.log("submit!");
     }
   }
 };
 </script>
 
 <style lang="less" scoped>
-#mynote{
-  margin: 15px;
-  h1{
-    margin-bottom: 15px;
-    text-align: center;
+@import "../assets/less/base.less";
+#mynote {
+  color: @fontColor;
+  background-color: #f3f3f4;
+  min-height: 500px;
+    padding: 20px 10px;
+  .content {
+    background: white;
   }
 }
-
+.title {
+  padding: 15px 20px;
+  border-top: 3px solid #e7eaec;
+  border-bottom: 1px solid #e7eaec;
+  i {
+    margin-right: 2px;
+  }
+  .back {
+    float: right;
+    .back-btn {
+      padding: 5px;
+    }
+  }
+}
 .el-header,
 .el-footer {
   background-color: #b3c0d1;
@@ -182,5 +210,9 @@ body > .el-container {
 }
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
+}
+.el-form{
+  padding-left: 20px;
+  padding-top: 20px;
 }
 </style>
