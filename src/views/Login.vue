@@ -28,6 +28,32 @@ export default {
   methods: {
     login(){
       console.log("你点击了登录",this.username,this.password);
+      
+      this.axios.post("/user/login", {
+        userName: this.username,
+        userPasswd: this.password
+      })
+      .then((res) => {
+        console.log(res)
+        if(res.data.state == "200") {
+          // var token = "njaksxbxkjasbkjcxasbjk" // 模拟后台返回的token
+          var token = res.token;
+          sessionStorage.setItem("token", token)
+
+          // 获取参数（未登录时想访问的路由）
+          var url = this.$route.query.redirect;
+
+          url = url ? url : "/home"
+          // 切换路由
+          this.$router.replace(url)
+        } else {
+          console.log("登陆失败")
+        }
+      })
+      .catch(err=> {
+        console.log(err)
+      })
+      
     }
   }
 };

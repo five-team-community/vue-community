@@ -7,7 +7,7 @@
       <div class="tel">手机号:{{user.tel}}</div>
       <div class="time">绑定时间:<i class="el-icon-date"></i> {{user.time}}</div>
       <div class="del">
-      <el-button type="danger" plain round size="medium" @click="del" icon="el-icon-link">解除绑定</el-button>
+      <el-button type="danger" plain round size="medium" @click="del" icon="el-icon-link">解绑用户</el-button>
     </div>
     </div>
   </div>

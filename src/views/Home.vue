@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <div class="nav">
-      <el-menu
+    <el-container >
+  <el-aside :width="navWidth" style="transition: 0.3s ease-in-out;">
+    <el-menu
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
@@ -10,16 +11,15 @@
         active-text-color="#fff"
         text-color="#fff"
         :unique-opened="true"
-        :router="true"
-      >
-        <div class="nav-header">
+        :router="true">
+        <el-menu-item class="nav-header">
           <div class="nav-header-l" v-show="!isCollapse">
-            <img src="../assets/img/login-logo.png" alt />
-          </div>
-          <div class="nav-header-s" v-show="isCollapse">
-            <img src="../assets/img/logo.png" alt />
-          </div>
-        </div>
+              <img src="../assets/img/login-logo.png" alt />
+            </div>
+            <div class="nav-header-s" v-show="isCollapse">
+              <img src="../assets/img/logo.png" alt />
+            </div>
+        </el-menu-item>
         <el-submenu index="1">
           <template slot="title">
             <i class="el-icon-office-building"></i>
@@ -31,9 +31,7 @@
           <el-menu-item-group>
             <el-menu-item index="/home/host">业主管理</el-menu-item>
           </el-menu-item-group>
-          <!-- <el-menu-item-group>
-            <el-menu-item index="1-3">服务人员管理</el-menu-item>
-          </el-menu-item-group>-->
+
         </el-submenu>
         <el-submenu index="2">
           <template slot="title">
@@ -59,7 +57,7 @@
           </el-submenu>
           <el-submenu index="1-4">
             <span slot="title">回收管理</span>
-            <!-- <el-menu-item index="1-4-1">回收物品</el-menu-item> -->
+     
             <el-menu-item index="/home/recycleMsg">回收信息</el-menu-item>
             <el-menu-item index="/home/recycleMoney">收费订单</el-menu-item>
           </el-submenu>
@@ -116,25 +114,28 @@
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
-    </div>
-    <div class="right">
-      <div class="main" :class="{'main-open':isCollapse}">
-        <div class="top">
-          <div class="top-left">
-            <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-              <button
-                type="button"
-                @click="change"
-                class="open-btn"
-                :class="{'el-icon-s-fold': !isCollapse, 'el-icon-s-unfold':isCollapse}"
-              ></button>
-            </el-radio-group>
-          </div>
-          <div class="top-right"></div>
-        </div>
-        <router-view />
+  </el-aside>
+  
+  <el-container>
+    <el-header height="50px">
+      <div class="top-left">
+        <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
+          <button
+            type="button"
+            @click="change"
+            class="open-btn"
+            :class="{'el-icon-s-fold': !isCollapse, 'el-icon-s-unfold':isCollapse}"
+          ></button>
+        </el-radio-group>
       </div>
-    </div>
+      <div class="top-right"></div>
+    </el-header>
+    
+    <el-main style="background-color: #f3f3f4;">
+      <router-view />
+    </el-main>
+  </el-container>
+</el-container>
   </div>
 </template>
 
@@ -143,6 +144,7 @@ export default {
   name: "home",
   data() {
     return {
+      navWidth:"200px",
       isCollapse: false
     };
   },
@@ -156,6 +158,16 @@ export default {
     },
     change() {
       this.isCollapse = !this.isCollapse;
+      console.log(this.navWidth);
+      if(this.navWidth == "200px"){
+        console.log("aaa");
+        this.navWidth = "65px";
+        console.log(this.navWidth);
+      }
+      else if(this.navWidth == "65px"){
+        this.navWidth = "200px";
+      }
+      
     }
   }
 };
@@ -165,20 +177,16 @@ export default {
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
-  min-height: 300px;
+  min-height: 400px;
 }
-.nav {
-  float: left;
-  // height: 600px;
+.el-aside{
   background: @navColor;
-  i {
-    color: white;
-  }
 }
 .right {
   background: #2F4050;
 }
 .main {
+  background: white;
   margin-left: 200px;
   transition: 0.3s ease-in-out;
 }
@@ -196,7 +204,8 @@ export default {
 .nav-header {
   background: url("../assets/img/header-profile.png") center;
   width: 100%;
-  padding: 30px 0;
+  height: 120px;
+  padding-top: 30px;
 }
 .nav-header-l {
   width: 120px;
@@ -219,15 +228,15 @@ export default {
 .el-submenu__title:hover {
   background-color: @navChoose;
 }
-.top {
-  background: white;
-  height: 30px;
-  padding: 15px;
-  border-bottom: 1px solid #e7eaec;
-  .top-left {
-    float: left;
-    height: 100%;
-    margin-left: 10px;
-  }
+.el-header{
+  padding: 10px 20px;
+}
+.top-left {
+  float: left;
+  // margin-left: 10px;
+}
+
+.el-main{
+  padding: 20px 10px;
 }
 </style>
