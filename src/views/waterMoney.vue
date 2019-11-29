@@ -11,12 +11,11 @@
             <el-input v-model="formInline.user" placeholder="业主姓名"></el-input>
           </el-form-item>
         </el-col>
-          <el-col :span="14">
-          <el-form-item label="">
+        <el-col :span="14">
+          <el-form-item label>
             <div class="block">
               <span class="demonstration">选择时间：</span>
               <el-date-picker
-                v-model="value1"
                 type="daterange"
                 range-separator="至"
                 start-placeholder="开始日期"
@@ -53,28 +52,32 @@
         <el-table-column prop="state" label="状态"></el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              size="mini"
-              class="btn-show"
-              @click="show(scope.$index)"
-            ></el-button>
-            <el-button
-              type="info"
-              icon="el-icon-edit-outline"
-              size="mini"
-              class="btn-alter"
-              @click="alter(scope.$index)"
-            ></el-button>
-            <el-button
-              type="danger"
-              slot="reference"
-              icon="el-icon-delete"
-              size="mini"
-              class="btn-del"
-              @click="open"
-            ></el-button>
+            <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                size="mini"
+                class="btn-show"
+                @click="gotomoneydetail"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="修改" placement="bottom">
+              <el-button
+                type="info"
+                icon="el-icon-edit-outline"
+                size="mini"
+                class="btn-alter"
+                @click="alter(scope.$index)"
+              ></el-button>
+            </el-tooltip>
+              <el-button
+                type="danger"
+                slot="reference"
+                icon="el-icon-delete"
+                size="mini"
+                class="btn-del"
+                @click="open"
+              ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -92,80 +95,83 @@
   </div>
 </template>
 <script>
-var tableData = [
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  },
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  },
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  },
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  },
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  },
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  },
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  },
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  },
-  {
-    listname: "物业投诉",
-    date: "2016-05-02",
-    name: "王小虎",
-    phone: 13880888088,
-    address: "上海市普陀区金沙江路 1518 弄",
-    state: "待处理"
-  }
-];
+var  tableData = [
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        },
+        {
+          listname: "物业投诉",
+          date: "2016-05-02",
+          name: "王小虎",
+          phone: 13880888088,
+          address: "上海市普陀区金沙江路 1518 弄",
+          state: "待处理"
+        }
+    ];
+/*  var tableData = [
+  
+];  */
 export default {
   data() {
     return {
@@ -175,7 +181,7 @@ export default {
         region: ""
       },
       loading: false,
-      tableData: []
+       tableData: []
     };
   },
   methods: {
@@ -200,10 +206,13 @@ export default {
       index = 5 * (this.currentPage - 1) + index;
       console.log("删除", index);
     },
+    gotomoneydetail() {
+      this.$router.push("/home/moneydetail");
+    },
     changePage(val) {
       this.currentPage = val;
     },
-    open() {
+    open () {
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -221,9 +230,29 @@ export default {
             message: "已取消删除"
           });
         });
-    }
+    },
+    onSubmit () {
+      console.log('submit')
+    },
+    getwaterdata(){
+      this.axios
+        .get("/user/login",{
+          userName: 'admin',
+          userpasswd:'admin'
+        }) 
+        .then(res => {
+          console.log(res.data)
+        res.data = tableData;
+        var token = res.data.token;
+            sessionStorage.setItem("token", token);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
   },
   created() {
+    this.getwaterdata(),
     this.tableData = tableData;
   },
   computed: {
@@ -232,7 +261,7 @@ export default {
       return this.tableData.slice(start, start + 5);
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

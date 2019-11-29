@@ -24,9 +24,8 @@
       </el-col>
       <el-col :span="10">
         <el-row>
-          <el-button type="primary" icon="el-icon-edit" @click="putout">新建</el-button>
-          <el-button type="success"><i class="el-icon-upload el-icon--right"></i>发布</el-button>
-          <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="putout">新建公告</el-button>
+          <el-button type="success"><i class="el-icon-upload el-icon--right"></i>发布公告</el-button>
         </el-row>
       </el-col>
     </el-form>
@@ -49,22 +48,36 @@
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column prop="state" label="状态" width="120"> </el-table-column>
-      <el-table-column label="处理">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >查看详情</el-button
-          >
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
+      <el-table-column label="操作" align="center" width="250">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                size="mini"
+                class="btn-show"
+                @click="gotomoneydetail"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="修改" placement="bottom">
+              <el-button
+                type="info"
+                icon="el-icon-edit-outline"
+                size="mini"
+                class="btn-alter"
+                @click="alter(scope.$index)"
+              ></el-button>
+            </el-tooltip>
+              <el-button
+                type="danger"
+                slot="reference"
+                icon="el-icon-delete"
+                size="mini"
+                class="btn-del"
+                @click="open"
+              ></el-button>
+          </template>
+        </el-table-column>
     </el-table>
       <el-pagination
         background
@@ -211,6 +224,10 @@ body > .el-container {
   justify-content: center;
   align-items: center;
   margin: 10px;
+}
+.el-button--mini,
+.el-button--mini.is-round {
+  padding: 3px;
 }
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;

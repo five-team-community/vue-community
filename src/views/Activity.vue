@@ -49,18 +49,36 @@
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
       <el-table-column prop="state" label="审核状态" width="120"> </el-table-column>
-      <el-table-column label="处理">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
+      <el-table-column label="操作" align="center" width="250">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                size="mini"
+                class="btn-show"
+                @click="gotomoneydetail"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="修改" placement="bottom">
+              <el-button
+                type="info"
+                icon="el-icon-edit-outline"
+                size="mini"
+                class="btn-alter"
+                @click="alter(scope.$index)"
+              ></el-button>
+            </el-tooltip>
+              <el-button
+                type="danger"
+                slot="reference"
+                icon="el-icon-delete"
+                size="mini"
+                class="btn-del"
+                @click="open"
+              ></el-button>
+          </template>
+        </el-table-column>
     </el-table>
       <el-pagination
         background
@@ -210,6 +228,10 @@ body > .el-container {
 }
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
+}
+.el-button--mini,
+.el-button--mini.is-round {
+  padding: 3px;
 }
 .el-form{
   padding-left: 20px;

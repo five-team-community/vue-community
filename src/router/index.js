@@ -269,6 +269,14 @@ const routes = [
         }
       },
       {
+        path:'moneydetail',
+        name:"moneydetail",
+        component: () => import('../views/moneydetail.vue'),//维修
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'putnote',
         name:"putnote",
         component: () => import('../views/putnote.vue'),//维修
