@@ -81,10 +81,9 @@ export default {
   },
   methods: {
     back(){//返回房产信息列表
-      this.$router.push({path:'/home/house'});
+      this.$router.push({path:'/home/host'});
     },
     searchUserTel(){
-      
       console.log(this.usermsg.data);
     },
     addBind(){
@@ -114,7 +113,7 @@ export default {
 #show-house {
   color: @fontColor;
   background-color: #f3f3f4;
-  padding: 20px 10px;
+
   min-height: 500px;
 }
 .content {

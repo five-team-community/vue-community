@@ -140,14 +140,6 @@ const routes = [
         }
       },
       {
-        path:'cleanPeople',
-        name:"CleanPeople",
-        component: () => import('../views/CleanPeople.vue'),//家政人员信息
-        meta: {
-          auth: true
-        }
-      },
-      {
         path:'cleanMsg',
         name:"CleanMsg",
         component: () => import('../views/CleanMsg.vue'),//家政信息
@@ -207,14 +199,6 @@ const routes = [
         path:'serveMoney',
         name:"ServeMoney",
         component: () => import('../views/ServeMoney.vue'),//物业费
-        meta: {
-          auth: true
-        }
-      },
-      {
-        path:'lockPeople',
-        name:"LockPeople",
-        component: () => import('../views/LockPeople.vue'),//开锁人员信息
         meta: {
           auth: true
         }
