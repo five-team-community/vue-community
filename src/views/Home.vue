@@ -13,12 +13,8 @@
         :unique-opened="true"
         :router="true">
         <el-menu-item class="nav-header" style="padding :30px 10px">
-          <!-- <div class="nav-header-l" v-show="!isCollapse"> -->
-              <img src="../assets/img/login-logo.png" alt v-show="!isCollapse" width="120px"/>
-            <!-- </div> -->
-            <!-- <div class="nav-header-s" v-show="isCollapse"> -->
-              <img src="../assets/img/logo.png" alt v-show="isCollapse" width="40px"/>
-            <!-- </div> -->
+          <img src="../assets/img/login-logo.png" alt v-show="!isCollapse" width="120px"/>
+          <img src="../assets/img/logo.png" alt v-show="isCollapse" width="40px"/>
         </el-menu-item>
         <el-submenu index="1">
           <template slot="title">
@@ -30,6 +26,9 @@
           </el-menu-item-group>
           <el-menu-item-group>
             <el-menu-item index="/home/host">业主管理</el-menu-item>
+          </el-menu-item-group>
+          <el-menu-item-group>
+            <el-menu-item index="/home/serve">服务人员管理</el-menu-item>
           </el-menu-item-group>
 
         </el-submenu>
@@ -51,7 +50,7 @@
           </el-submenu>
           <el-submenu index="1-3">
             <span slot="title">家政管理</span>
-            <el-menu-item index="/home/cleanPeople">人员管理</el-menu-item>
+
             <el-menu-item index="/home/cleanMsg">家政信息</el-menu-item>
             <el-menu-item index="/home/cleanMoney">收费订单</el-menu-item>
           </el-submenu>
@@ -63,7 +62,7 @@
           </el-submenu>
           <el-submenu index="1-5">
             <span slot="title">开锁服务</span>
-            <el-menu-item index="/home/lockPeople">人员管理</el-menu-item>
+            
             <el-menu-item index="/home/lockMsg">开锁信息</el-menu-item>
             <el-menu-item index="/home/lockMoney">收费订单</el-menu-item>
           </el-submenu>
@@ -158,11 +157,11 @@ export default {
     },
     change() {
       this.isCollapse = !this.isCollapse;
-      console.log(this.navWidth);
+
       if(this.navWidth == "200px"){
-        console.log("aaa");
+
         this.navWidth = "65px";
-        console.log(this.navWidth);
+
       }
       else if(this.navWidth == "65px"){
         this.navWidth = "200px";
@@ -208,20 +207,7 @@ export default {
   padding-top: 30px;
   text-align: center
 }
-.nav-header-l {
-  width: 120px;
-  margin: 0 auto;
-  img {
-    width: 100%;
-  }
-}
-.nav-header-s {
-  width: 40px;
-  margin: 0 auto;
-  img {
-    width: 100%;
-  }
-}
+
 .el-menu {
   background: @navColor;
   border-right: none;

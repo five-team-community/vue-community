@@ -22,25 +22,25 @@
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">房号:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.housePropertyNo}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">名称:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.name}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.houseName}}</div></el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">房产性质:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.nature}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.houseNature}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">建筑面积:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.area}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.houseArea}}</div></el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">户型:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.type}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.houseStyle}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">业主名称:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.host}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.ownerName}}</div></el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">预留电话:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.tel}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.ownerPhone}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">交房时间:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.time}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.ownerTime}}</div></el-col>
             </el-row>
           </el-tab-pane>
 
@@ -107,45 +107,45 @@ var houseData = {
   houseNature:"商用",
   houseArea:99.00,
   houseStyle:"三居室",
-  host:"林海",
-  tel:"16832428374",
-  time:"2018-08-09"
+  ownerName:"林海",
+  ownerPhone:"16832428374",
+  ownerTime:"2018-08-09"
 };
 var userList=[
   {
-    id:1,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
+    inhabitantId:1,
+    inhabitantName:"aaa",
+    ownerName:"bbb",
+    telNum:"12324",
+    checkInTime:"2019-08-07"
   },
    {
-    id:2,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
+    inhabitantId:2,
+    inhabitantName:"aaa",
+    ownerName:"bbb",
+    telNum:"12324",
+    checkInTime:"2019-08-07"
   },
    {
-    id:3,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
+    inhabitantId:3,
+    inhabitantName:"aaa",
+    ownerName:"bbb",
+    telNum:"12324",
+    checkInTime:"2019-08-07"
   },
    {
-    id:4,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
+    inhabitantId:4,
+    inhabitantName:"aaa",
+    ownerName:"bbb",
+    telNum:"12324",
+    checkInTime:"2019-08-07"
   },
    {
-    id:5,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
+    inhabitantId:5,
+    inhabitantName:"aaa",
+    ownerName:"bbb",
+    telNum:"12324",
+    checkInTime:"2019-08-07"
   }
 ]
 

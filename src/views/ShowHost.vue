@@ -14,28 +14,34 @@
       </div>
       <div class="main">
         <el-row :gutter="10">
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">房号:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.no}}</div></el-col>
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">名称:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.name}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">绑定用户:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.link}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">绑定房产:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.no}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">房产性质:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.nature}}</div></el-col>
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">建筑面积:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.area}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">真实姓名:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.name}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">预留手机号:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.tel}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">户型:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.type}}</div></el-col>
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">业主名称:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.host}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">身份证号码:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.idCard}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">性别:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.sex}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">预留电话:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.tel}}</div></el-col>
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">交房时间:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.time}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">籍贯:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.birthplace}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">出生年月:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.birthday}}</div></el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">职业:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.work}}</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">从业/就读单位:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.workPlace}}</div></el-col>
         </el-row>
       </div>
     </div>
@@ -45,62 +51,19 @@
 
 // 模拟数据
 var houseData = {
-  no:"111",
-  name:"瑞通生活社区东1幢1单元RTSH-FJ-001室",
-  nature:"商用",
-  area:99.00,
-  type:"三居室",
-  host:"林海",
-  tel:"16832428374",
-  time:"2018-08-09"
+  id:1,
+  no:"1",
+  name:"aaa",
+  tel:"1232434",
+  sex:'男',
+  idCard:'513022199802168027',
+  time:"2019-08-07",
+  link:'bbb',
+  birthday:'1998-03-08',
+  birthplace:'四川',
+  work:'aaa',
+  workPlace:'ccc',
 };
-var userList=[
-  {
-    id:1,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
-  },
-   {
-    id:2,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
-  },
-   {
-    id:3,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
-  },
-   {
-    id:4,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
-  },
-   {
-    id:5,
-    name:"aaa",
-    host:"bbb",
-    tel:"12324",
-    time:"2019-08-07"
-  }
-]
-var usermsg={
-    state:200,
-    msg:"查询失败！",
-    data:{
-      id:1,
-      name:"aa",
-      tel:"123",
-    }
-
-}
 export default {
   data() {
     return {  
@@ -118,10 +81,9 @@ export default {
   },
   methods: {
     back(){//返回房产信息列表
-      this.$router.push({path:'/home/house'});
+      this.$router.push({path:'/home/host'});
     },
     searchUserTel(){
-      this.usermsg=usermsg;
       console.log(this.usermsg.data);
     },
     addBind(){
@@ -141,7 +103,7 @@ export default {
   },
   created() {//创建时获取数据
     this.houseData = houseData;
-    this.userList = userList;
+
   },
   computed: {}
 };
@@ -151,7 +113,7 @@ export default {
 #show-house {
   color: @fontColor;
   background-color: #f3f3f4;
-  padding: 20px 10px;
+
   min-height: 500px;
 }
 .content {
