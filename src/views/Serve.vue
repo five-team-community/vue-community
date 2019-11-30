@@ -9,14 +9,18 @@
       <!-- 筛选数据的输入表单 -->
       <div class="choose">
         <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
-          <el-form-item label="房号：">
-            <el-input v-model="search.houseNum" placeholder="请输入房号"></el-input>
-          </el-form-item>
           <el-form-item label="姓名：">
-            <el-input v-model="search.host" placeholder="请输入业主姓名"></el-input>
+            <el-input v-model="search.houseNum" placeholder="请输入姓名"></el-input>
           </el-form-item>
-          <el-form-item label="手机号：">
-            <el-input v-model="search.telphone" placeholder="请输入预留手机号"></el-input>
+          <el-form-item label="电话：">
+            <el-input v-model="search.host" placeholder="请输入电话"></el-input>
+          </el-form-item>
+          <el-form-item label="身份：">
+             <el-select v-model="search.houseState" placeholder="选择身份">
+              <el-option label="家政员工" value="true"></el-option>
+              <el-option label="维修员工" value="false"></el-option>
+              <el-option label="开锁员工" value="false"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item class="btn">
               <el-button icon="el-icon-plus" class="btn-add" @click='add'>新增</el-button>
@@ -170,7 +174,7 @@ export default {
   },
   methods: {
     add(){//新增
-      this.$router.push({path:'/home/addHost'});
+      this.$router.push({path:'/home/addServe'});
     },
     searchMsg(){//搜索
       console.log(this.search);
