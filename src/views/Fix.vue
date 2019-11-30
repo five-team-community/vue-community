@@ -11,7 +11,7 @@
       </div>
       <div class="content">
         <el-table :data="showDate" border stripe>
-        <el-table-column prop="partName" label="报修部位" style="width: 50%">
+        <el-table-column prop="repairsParts[0].partName" label="报修部位" style="width: 50%">
         </el-table-column>
         <el-table-column prop="operate" label="操作" style="width: 50%">
           <template slot-scope="scope">
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  var tableData = [
+  /* var tableData = [
     {
           partName: '外围设备',
         }, 
@@ -89,7 +89,7 @@
         {
           partName: '门',
         }
-  ];
+  ]; */
   export default {
     data() {
       return {
@@ -127,18 +127,18 @@
       },
       okadd() { // 确认添加
         console.log("添加的内容",this.form.name);
-        var newName = this.form.name;
-        tableData.push({"partName":newName});
+        /* var newName = this.form.name; */
+        /* tableData.push({"partName":newName}); */
         this.dialogFormVisible = false;
         
       },
       okedit() { // 确认修改
-        console.log("修改的内容：",this.form2.name);
+        /* console.log("修改的内容：",this.form2.name);
         console.log("要修改的id：",this.form2.ind);
         var news = this.form2.name;
         var ind = this.form2.ind;
         tableData[ind].partName = news;
-        this.dialogFormVisible2 = false;
+        this.dialogFormVisible2 = false; */
       },
       del(index) { //删除
         console.log(index+(this.pagesize)*(this.currentPage-1));
@@ -151,7 +151,7 @@
             type: 'success',
             message: '删除成功!'
           });
-          tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1);
+          /* tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1); */
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -166,7 +166,17 @@
       }
     },
     created() {
-      this.tableData = tableData;
+      this.axios
+        .get("/repairInfo/getAllRepairInfo" )
+        .then((res) => {
+          console.log(res.data.data.repairInfo);
+          this.tableData = (res.data.data.repairInfo);
+          console.log(this.tableData);
+          /* this.tableData =tableData; */
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
     },
     computed: {
       showDate() {

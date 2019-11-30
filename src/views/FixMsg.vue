@@ -12,22 +12,21 @@
             <el-input v-model="search.houseNum" placeholder="请输入房号"></el-input>
           </el-form-item>
           <el-form-item label="联系电话">
-            <el-input v-model="search.host" placeholder="请输入业主姓名"></el-input>
+            <el-input v-model="search.telphone" placeholder="请输入用户联系电话"></el-input>
           </el-form-item>
-          <el-form-item label="服务人员">
-            <el-select v-model="search.isEmpty" placeholder="请选择服务人员">
-              <el-option label="是" value="true"></el-option>
-              <el-option label="否" value="false"></el-option>
+          <el-form-item label="报修服务人员">
+            <el-select v-model="search.staffName" placeholder="请选择报修服务人员">
+              <el-option label="staff"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="订单状态">
-            <el-select v-model="search.isEmpty" placeholder="请选择状态">
+            <el-select v-model="search.stauts" placeholder="请选择状态">
               <el-option label="已处理" value="true"></el-option>
               <el-option label="待处理" value="false"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="登记时间">
-            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
         </el-form>
       </div>
@@ -35,17 +34,17 @@
         <div>
           <el-button icon="el-icon-plus" class="btn-add" @click='add'>登记</el-button>
           <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
-          <el-button icon="el-icon-search" class="btn-search" >查询</el-button>
+          <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
       <div class="contentBox">
         <el-table :data="showData" stripe border style="width: 100%">
           <el-table-column prop="houseNum" label="房号"></el-table-column>
-          <el-table-column prop="name" label="姓名" ></el-table-column>
-          <el-table-column prop="phone" label="联系电话" ></el-table-column>
-          <el-table-column prop="fixType" label="报修部位" ></el-table-column>
+          <el-table-column prop="inhabitant.inhabitantName" label="姓名" ></el-table-column>
+          <el-table-column prop="staff.telNum" label="联系电话" ></el-table-column>
+          <el-table-column prop="repairsParts[0].partName" label="报修部位" ></el-table-column>
           <el-table-column prop="repairContent" label="报修内容" ></el-table-column>
-          <el-table-column prop="repairPersonName" label="维修人员" ></el-table-column>
+          <el-table-column prop="staff.staffName" label="维修人员" ></el-table-column>
           <el-table-column prop="regDate" label="登记时间" ></el-table-column>
           <el-table-column prop="repairState" label="状态" style="width: 10%"></el-table-column>
           <el-table-column prop="operate" label="操作" >
@@ -159,13 +158,13 @@ export default {
       currentPage: 1,
       pagesize:5,
       tableData:[],
-      search: {//记录筛选的数据项
+      search: {//记录查询的数据
         houseNum: "",
-        host: "",
+        staffName:"",
         telphone: "",
-        isEmpty: ""
+        stauts: "",
+        time:""
       },
-      input: '',
       pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -192,28 +191,43 @@ export default {
               picker.$emit('pick', [start, end]);
             }
           }]
-      },
-      value1: '', 
+      }
     };
   },
   methods: {
-    handleSizeChange(val) {
+    handleSizeChange(val) { //改变页数
       console.log(val);
       this.pagesize = val;
     },
-    handleCurrentChange(val) {
+    handleCurrentChange(val) { // 改变页
       this.currentPage=val;
       console.log(val);
     },
-    add(){
+    add(){ //登记
       this.$router.push({path:'/home/fixMsgAdd'});
     },
-    showDetail(index) {
+    showDetail(index) { // 查看详情
       index = 5*(this.currentPage-1)+index;
       console.log("详情",index);
-      this.$router.push({path:'/home/fixdetail'});
+      this.$router.push({path:'/home/fixdetail?id='+index});
     },
-    del(index) {
+    searchBtn() { // 查询 请求数据
+      this.axios
+        .post("/repairInfo/getAllRepairInfo",{
+          houseNum:this.houseNum,
+          telNum: this.search.telphone,
+          staffName:this.search.staffName,
+          repairState:this.search.stauts,
+          regDate:this.search.time
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
+    },
+    del(index) { // 删除 请求数据
       console.log(index);
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -225,6 +239,16 @@ export default {
           message: '删除成功!'
         });
         /* tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1); */
+        this.axios
+          .post("/repairInfo/getAllRepairInfo",{
+            id: index
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch(err=> {
+            console.log(err)
+          }) 
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -237,8 +261,9 @@ export default {
     this.axios
         .get("/repairInfo/getAllRepairInfo" )
         .then((res) => {
-          console.log(res.data);
-          /* this.tableData =tableData; */
+          console.log(res.data.data.repairInfo);
+          this.tableData = (res.data.data.repairInfo);
+          console.log(this.tableData);
         })
         .catch(err=> {
           console.log(err)

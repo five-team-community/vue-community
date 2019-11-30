@@ -12,43 +12,41 @@
             <el-input v-model="search.houseNum" placeholder="请输入房号"></el-input>
           </el-form-item>
           <el-form-item label="联系电话">
-            <el-input v-model="search.host" placeholder="请输入业主姓名"></el-input>
+            <el-input v-model="search.telphone" placeholder="请输入用户电话"></el-input>
           </el-form-item>
           <el-form-item label="服务人员">
-            <el-select v-model="search.isEmpty" placeholder="请选择服务人员">
-              <el-option label="是" value="true"></el-option>
-              <el-option label="否" value="false"></el-option>
+            <el-select v-model="search.staffName" placeholder="请选择服务人员">
+              <el-option label="staff" value="staff"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="订单状态">
-            <el-select v-model="search.isEmpty" placeholder="请选择状态">
+            <el-select v-model="search.status" placeholder="请选择状态">
               <el-option label="已处理" value="true"></el-option>
               <el-option label="待处理" value="false"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="登记时间">
-            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
         </el-form>
       </div>
       <div class="btn" >
         <div>
-          <el-button icon="el-icon-plus" class="btn-add" @click='add'>登记</el-button>
           <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
-          <el-button icon="el-icon-search" class="btn-search" >查询</el-button>
+          <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
       <div class="contentBox">
         <el-table :data="showData" stripe border style="width: 100%">
-          <el-table-column prop="houseNum" label="房号"></el-table-column>
-          <el-table-column prop="name" label="姓名" ></el-table-column>
-          <el-table-column prop="phone" label="联系电话" ></el-table-column>
-          <el-table-column prop="suggestContent" label="内容" ></el-table-column>
-          <el-table-column prop="regDate" label="登记时间" ></el-table-column>
-          <el-table-column prop="repairState" label="状态" style="width: 10%"></el-table-column>
+          <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
+          <el-table-column prop="inhabitantName" label="姓名" ></el-table-column>
+          <el-table-column prop="telNum" label="联系电话" ></el-table-column>
+          <el-table-column prop="sugContent" label="内容" ></el-table-column>
+          <el-table-column prop="sugDate" label="登记时间" ></el-table-column>
+          <el-table-column prop="sugState" label="状态"></el-table-column>
           <el-table-column prop="operate" label="操作" >
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
+              <el-button type="primary" icon="el-icon-search" @click="showDetail(this.tableData.sugId)" ></el-button>
               <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
             </template>
           </el-table-column>
@@ -69,72 +67,9 @@
 </template>
 
 <script>
-var tableData = [
-  {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          suggestContent: "门锁坏了",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0002",
-          name: "王小虎",
-          phone: "12345678911",
-          suggestContent: "门锁坏了",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0003",
-          name: "王小虎",
-          phone: "12345678911",
-          suggestContent: "门锁坏了",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0004",
-          name: "王小虎",
-          phone: "12345678911",
-          suggestContent: "门锁坏了",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0005",
-          name: "王小虎",
-          phone: "12345678911",
-          suggestContent: "门锁坏了",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0006",
-          name: "王小虎",
-          phone: "12345678911",
-          suggestContent: "门锁坏了",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0007",
-          name: "王小虎",
-          phone: "12345678911",
-          suggestContent: "门锁坏了",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0008",
-          name: "王小虎",
-          phone: "12345678911",
-          suggestContent: "门锁坏了",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        }
-];
+/* var tableData = [
+  
+]; */
 export default {
   data() {
     return {
@@ -143,11 +78,11 @@ export default {
       tableData:[],
       search: {//记录筛选的数据项
         houseNum: "",
-        host: "",
+        staffName: "",
         telphone: "",
-        isEmpty: ""
+        status: "",
+        time:""
       },
-      input: '',
       pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -174,8 +109,7 @@ export default {
               picker.$emit('pick', [start, end]);
             }
           }]
-      },
-      value1: '', 
+      }
     };
   },
   methods: {
@@ -187,15 +121,38 @@ export default {
         this.currentPage=val;
         console.log(val);
       },
-      add(){
-        this.$router.push({path:'/home/fixMsgAdd'});
-      },
-      showDetail(index) {
+      showDetail(index) { // 查看详情
         index = 5*(this.currentPage-1)+index;
         console.log("详情",index);
-        this.$router.push({path:'/home/fixdetail'});
+        /* this.$router.push({path:'/home/SuggestDetail'}); */
       },
-      del(index) {
+      searchBtn() { // 查询 请求数据
+        var t = this.search.time;
+        console.log(t);
+        var startTime = t[0];
+        var endTime = t[1];
+        var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+        var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+        console.log("开始时间:",startTime);
+        console.log("开始时间:",startTime1);
+        console.log("结束时间:",endTime);
+        console.log("结束时间:",endTime1);
+
+        this.axios
+          .get("/suggestion/showByDate",{
+            params: {
+              beginTime:startTime1,
+              endTime:endTime1
+            }
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch(err=> {
+            console.log(err)
+          }) 
+      },
+      del(index) { // 删除
         console.log(index);
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -206,7 +163,17 @@ export default {
             type: 'success',
             message: '删除成功!'
           });
-          tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1);
+          // 数据请求
+          this.axios
+            .post("/repairInfo/getAllRepairInfo",{
+              id: index
+            })
+            .then((res) => {
+              console.log(res);
+            })
+            .catch(err=> {
+              console.log(err)
+            }) 
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -216,7 +183,16 @@ export default {
       }
   },
   created() {
-    this.tableData =tableData;
+    this.axios
+        .get("/suggestion/showAll" )
+        .then((res) => {
+          console.log(res.data.data.data[0]);
+          this.tableData.push(res.data.data.data[0]);
+          console.log(this.tableData[0]);
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
   },
   computed: {
     showData() {

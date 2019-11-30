@@ -12,30 +12,28 @@
             <el-input v-model="search.houseNum" placeholder="请输入房号"></el-input>
           </el-form-item>
           <el-form-item label="联系电话">
-            <el-input v-model="search.host" placeholder="请输入业主姓名"></el-input>
+            <el-input v-model="search.telphone" placeholder="请输入用户电话"></el-input>
           </el-form-item>
           <el-form-item label="服务人员">
-            <el-select v-model="search.isEmpty" placeholder="请选择服务人员">
-              <el-option label="是" value="true"></el-option>
-              <el-option label="否" value="false"></el-option>
+            <el-select v-model="search.staffName" placeholder="请选择服务人员">
+              <el-option label="staff"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="订单状态">
-            <el-select v-model="search.isEmpty" placeholder="请选择状态">
+            <el-select v-model="search.stauts" placeholder="请选择状态">
               <el-option label="已处理" value="true"></el-option>
               <el-option label="未处理" value="false"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="登记时间">
-            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
         </el-form>
       </div>
       <div class="btn">
         <div>
-          <el-button icon="el-icon-plus" class="btn-add" @click="add">登记</el-button>
           <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
-          <el-button icon="el-icon-search" class="btn-search" >查询</el-button>
+          <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
       <div class="contentBox">
@@ -70,7 +68,7 @@
 </template>
 
 <script>
-var tableData = [
+/* var tableData = [
   {
           houseNum: "FFFF-0001",
           name: "王小虎",
@@ -135,7 +133,7 @@ var tableData = [
           regDate: "2019-11-26 13:36:55",
           cleanState: "待处理"
         }
-]
+] */
 export default {
   data() {
     return {
@@ -144,11 +142,11 @@ export default {
       tableData:[],
       search: {//记录筛选的数据项
         houseNum: "",
-        host: "",
+        staffName: "",
         telphone: "",
-        isEmpty: ""
+        stauts: "",
+        time:""
       },
-      input: '',
       pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -175,28 +173,41 @@ export default {
               picker.$emit('pick', [start, end]);
             }
           }]
-      },
-      value1: '', 
+      }
     };
   },
   methods: {
-      handleSizeChange(val) {
+      handleSizeChange(val) {  //改变页数
         console.log(`每页 ${val} 条`);
         this.pagesize = val;
       },
-      handleCurrentChange(val) {
+      handleCurrentChange(val) { //改变页
         this.currentPage=val;
         console.log(val);
       },
-      add(){
-        this.$router.push({path:'/home/fixMsgAdd'});
+      showDetail(index) { //查看详情
+        index = (index+(this.pagesize)*(this.currentPage-1));
+        console.log("详情",index);
+        this.$router.push({path:'/home/cleanMsgDetail?id='+ index});
       },
-      showDetail(index) {
-        // index = 5*(this.currentPage-1)+index;
-        console.log("详情",(index+(this.pagesize)*(this.currentPage-1)));
-        // this.$router.push({path:'/home/fixdetail'});
-      },
-      del(index) {
+      searchBtn() { // 查询 发送请求数据
+        console.log("时间",this.search.time);
+        this.axios
+          .post("/repairInfo/getAllRepairInfo",{
+            houseNum:this.houseNum,
+            telNum: this.search.telphone,
+            staffName:this.search.staffName,
+            repairState:this.search.stauts,
+            regDate:this.search.time
+          })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch(err=> {
+            console.log(err)
+          }) 
+    },
+      del(index) { // 删除 发送请求
         console.log(index);
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -207,7 +218,16 @@ export default {
             type: 'success',
             message: '删除成功!'
           });
-          tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1);
+          this.axios
+            .post("/repairInfo/getAllRepairInfo",{
+              id: index
+            })
+            .then((res) => {
+              console.log(res);
+            })
+            .catch(err=> {
+              console.log(err)
+            }) 
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -217,7 +237,16 @@ export default {
       }
   },
   created() {
-    this.tableData =tableData;
+    this.axios  // 请求数据 渲染列表
+        .get("/suggestion/showAll" )
+        .then((res) => {
+          console.log(res.data.data.data[0]);
+          this.tableData.push(res.data.data.data[0]);
+          console.log(this.tableData[0]);
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
   },
   computed: {
     showData() {

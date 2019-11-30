@@ -132,14 +132,6 @@ const routes = [
         }
       },
       {
-        path:'fixMsgAdd',
-        name:"FixMsgAdd",
-        component: () => import('../views/FixMsgAdd.vue'),//维修信息添加
-        meta: {
-          auth: true
-        }
-      },
-      {
         path:'fixMoney',
         name:"FixMoney",
         component: () => import('../views/FixMoney.vue'),//维修收费
@@ -164,6 +156,14 @@ const routes = [
         }
       },
       {
+        path:'cleanMsgDetail',
+        name:"CleanMsgDetail",
+        component: () => import('../views/CleanMsgDetail.vue'),//家政信息详情
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'cleanMoney',
         name:"CleanMoney",
         component: () => import('../views/CleanMoney.vue'),//家政收费
@@ -175,6 +175,14 @@ const routes = [
         path:'recycleMsg',
         name:"RecycleMsg",
         component: () => import('../views/RecycleMsg.vue'),//回收信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'recycleMsgDetail',
+        name:"RecycleMsgDetail",
+        component: () => import('../views/RecycleMsgDetail.vue'),//回收信息详情
         meta: {
           auth: true
         }
@@ -231,6 +239,14 @@ const routes = [
         path:'lockMsg',
         name:"LockMsg",
         component: () => import('../views/LockMsg.vue'),//开锁信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'lockMsgDetail',
+        name:"LockMsgDetail",
+        component: () => import('../views/LockMsgDetail.vue'),//开锁信息详情
         meta: {
           auth: true
         }
@@ -312,6 +328,14 @@ const routes = [
         path:'suggest',
         name:"suggest",
         component: () => import('../views/Suggest.vue'),//建议
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'suggestDetail',
+        name:"suggestDetail",
+        component: () => import('../views/SuggestDetail.vue'),//建议详情
         meta: {
           auth: true
         }  
