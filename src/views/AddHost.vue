@@ -27,7 +27,7 @@
       </el-form-item>
 
       <el-form-item label="预留手机号:" prop="tel" :rules="[phone,{ required: true, message: '手机号不能为空', trigger: ['blur','change']}]" >
-        <el-input v-model="form.tel" placeholder="请输入预留手机号" :disabled='true'></el-input>
+        <el-input v-model="form.tel" placeholder="请输入预留手机号"></el-input>
       </el-form-item>
 
       <el-form-item label="真实姓名:" prop="name"

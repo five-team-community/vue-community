@@ -15,6 +15,7 @@ http.interceptors.request.use(function (config) {
   const validateId = sessionStorage.getItem('validateId');
   if(token) {
     // 在请求头上带上 token，固定写法
+    
     config.headers['Authorization'] = token;
     config.headers['validateId'] = validateId;
   }

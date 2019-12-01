@@ -31,7 +31,7 @@
 
       <!-- 表格数据 -->
       <div class="mytable">
-        <el-table :data="getData" border style="width: 100%" v-loading="loading">
+        <el-table :data="hostData" border style="width: 100%" v-loading="loading">
           <el-table-column prop="no" label="房号"></el-table-column>
           <el-table-column prop="name" label="真实姓名"></el-table-column>
           <el-table-column prop="idCard" label="身份证号码" width="180px"></el-table-column>
@@ -214,14 +214,14 @@ export default {
     // }
   },
   created(){
-    this.axios.post("/inhabitant/showInhabitants", {
-      })
-      .then((res) => {
-        console.log(res.data.data)
-      })
-      .catch(err=> {
-        console.log(err)
-      })
+    // this.axios.post("/inhabitant/showInhabitants", {
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data.data)
+    //   })
+    //   .catch(err=> {
+    //     console.log(err)
+    //   })
 
     this.loading = false;
     this.hostData=hostData;//创建时获取数据

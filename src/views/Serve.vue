@@ -4,19 +4,19 @@
       <!-- 标题 -->
       <div class="title">
         <i class="el-icon-s-order"></i>
-        业主信息列表
+        服务人员信息列表
       </div>
       <!-- 筛选数据的输入表单 -->
       <div class="choose">
         <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
           <el-form-item label="姓名：">
-            <el-input v-model="search.houseNum" placeholder="请输入姓名"></el-input>
+            <el-input v-model="search.name" placeholder="请输入姓名"></el-input>
           </el-form-item>
           <el-form-item label="电话：">
-            <el-input v-model="search.host" placeholder="请输入电话"></el-input>
+            <el-input v-model="search.tel" placeholder="请输入电话"></el-input>
           </el-form-item>
           <el-form-item label="身份：">
-             <el-select v-model="search.houseState" placeholder="选择身份">
+             <el-select v-model="search.identity" placeholder="选择身份">
               <el-option label="家政员工" value="true"></el-option>
               <el-option label="维修员工" value="false"></el-option>
               <el-option label="开锁员工" value="false"></el-option>
@@ -35,14 +35,14 @@
 
       <!-- 表格数据 -->
       <div class="mytable">
-        <el-table :data="getData" border style="width: 100%" v-loading="loading">
-          <el-table-column prop="no" label="房号"></el-table-column>
-          <el-table-column prop="name" label="真实姓名"></el-table-column>
+        <el-table :data="getData" border style="width: 100%" v-loading="loading" >
+          <el-table-column prop="name" label="姓名"></el-table-column>
+          <el-table-column prop="tel" label="电话"></el-table-column>
           <el-table-column prop="idCard" label="身份证号码" width="180px"></el-table-column>
           <el-table-column prop="sex" label="性别"></el-table-column>
-          <el-table-column prop="tel" label="手机号"></el-table-column>
-          <el-table-column prop="time" label="绑定时间"></el-table-column>
-          <el-table-column prop="link" label="关联注册用户"></el-table-column>
+          <el-table-column prop="identity" label="身份"></el-table-column>
+          <el-table-column prop="experience" label="经验"></el-table-column>
+          <el-table-column prop="isEmpty" label="是否空闲"></el-table-column>
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -65,102 +65,23 @@
 var hostData=[
   {
     id:1,
-    no:"1",
-    name:"aaa",
+    name:'aaa',
+    img:require("@/assets/img/logo.png"),
+    // img:"http://172.16.6.43:8080/test/img1.jpg",
     tel:"12324234",
     sex:'男',
     idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:2,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-
-  {
-    id:3,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:4,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:5,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-
-  {
-    id:6,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:7,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:8,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:9,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
+    identity: '家政',
+    experience:'2年',
+    isEmpty:'空闲'
   }
-
- 
 ]
 export default {
   data() {
     return {
+      form:{
+
+      },
       loading:true,
       currentPage:1,//记录当前页
       search: {//记录筛选的数据项
@@ -182,12 +103,12 @@ export default {
     show(index){//查看
       index = 5*(this.currentPage-1)+index;
       var id=this.hostData[index].id;
-      this.$router.push({path:'/home/showHost?id='+id});
+      this.$router.push({path:'/home/showServe?id='+id});
     },
     alter(index){//修改
       index = 5*(this.currentPage-1)+index;
       var id=this.hostData[index].id;
-      this.$router.push({path:'/home/alterHost?id='+id});
+      this.$router.push({path:'/home/alterServe?id='+id});
     },
     del(index){//删除
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -245,6 +166,7 @@ export default {
     margin-right: 2px;
   }
 }
+
 .choose {
   padding: 20px 20px 0 20px;
 }

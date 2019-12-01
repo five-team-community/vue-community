@@ -62,7 +62,7 @@
           </el-submenu>
           <el-submenu index="1-5">
             <span slot="title">开锁服务</span>
-            
+            <el-menu-item index="/home/lockPeople">合作公司</el-menu-item>
             <el-menu-item index="/home/lockMsg">开锁信息</el-menu-item>
             <el-menu-item index="/home/lockMoney">收费订单</el-menu-item>
           </el-submenu>
