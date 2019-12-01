@@ -208,17 +208,28 @@ export default {
     },
     changePage(val){//改变页码
       this.currentPage=val;
-    }
+    },
+    // formateData(){
+
+    // }
   },
   created(){
+    this.axios.post("/inhabitant/showInhabitants", {
+      })
+      .then((res) => {
+        console.log(res.data.data)
+      })
+      .catch(err=> {
+        console.log(err)
+      })
+
     this.loading = false;
     this.hostData=hostData;//创建时获取数据
   },
   computed: {
-    getData(){//计算当前页的数据，table绑定该值
-      var start=5*(this.currentPage-1);
-      return this.hostData.slice(start,start+5);
-   }
+  //   getData(){//计算当前页的数据，table绑定该值
+
+  //  }
   }
 };
 </script>

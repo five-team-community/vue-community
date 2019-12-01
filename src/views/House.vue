@@ -209,6 +209,7 @@ export default {
     },
     changePage(val){//改变页码
       this.currentPage=val;
+      console.log(val);
     }
   },
   created(){

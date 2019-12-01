@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://172.16.6.63:8080', // 服务器地址
+        target: 'http://172.16.6.43:8080', // 服务器地址
         pathRewrite: {
           '^/api': ''
         },
@@ -12,5 +12,9 @@ module.exports = {
         secure: false  // 当代理某些 https 服务时用
       }
     }
-  }
+  },
+  transpileDependencies: [
+    'vue-echarts',
+    'resize-detector'
+  ]
 }

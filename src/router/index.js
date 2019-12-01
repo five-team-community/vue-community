@@ -100,6 +100,14 @@ const routes = [
         }
       },
       {
+        path:'addServe',
+        name:"AddServe",
+        component: () => import('../views/AddServe.vue'),//服务人员管理
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'needDo',
         name:"NeedDo",
         component: () => import('../views/NeedDo.vue'),//代办
