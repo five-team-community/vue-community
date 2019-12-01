@@ -108,6 +108,22 @@ const routes = [
         }
       },
       {
+        path:'showServe',
+        name:"ShowServe",
+        component: () => import('../views/ShowServe.vue'),//服务人员管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'alterServe',
+        name:"AlterServe",
+        component: () => import('../views/AlterServe.vue'),//服务人员管理
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'needDo',
         name:"NeedDo",
         component: () => import('../views/NeedDo.vue'),//代办
@@ -239,6 +255,14 @@ const routes = [
         path:'lockMsgDetail',
         name:"LockMsgDetail",
         component: () => import('../views/LockMsgDetail.vue'),//开锁信息详情
+        meta: {
+          auth:true
+        }
+      },
+      {
+        path:'lockPeople',
+        name:"LockPeople",
+        component: () => import('../views/LockPeople.vue'),//开锁信息
         meta: {
           auth: true
         }

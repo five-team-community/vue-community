@@ -29,6 +29,8 @@ export default {
     login(){
       console.log("你点击了登录",this.username,this.password);
 
+      // *********************登录******************************
+
       this.axios.post("/user/login", {
         userName: this.username,
         userPasswd: this.password
@@ -36,17 +38,13 @@ export default {
       .then((res) => {
         console.log(res)
         if(res.data.code == "200") {
-          // var token = "njaksxbxkjasbkjcxasbjk" // 模拟后台返回的token
-          console.log("aaa");
+
+          // 保存token
           var token = res.data.data.token;
-          console.log(res.data.data.validateId);
           var validateId = res.data.data.validateId;
           sessionStorage.setItem("validateId",validateId);
           sessionStorage.setItem("token", token);
 
-          const aaa = sessionStorage.getItem('token');
-          const bbb = sessionStorage.getItem('validateId');
-          console.log(aaa,bbb,sessionStorage);
          
           //获取参数（未登录时想访问的路由）
           var url = this.$route.query.redirect;
