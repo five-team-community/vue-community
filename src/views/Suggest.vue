@@ -124,7 +124,7 @@ export default {
       showDetail(index) { // 查看详情
         index = 5*(this.currentPage-1)+index;
         console.log("详情",index);
-        /* this.$router.push({path:'/home/SuggestDetail'}); */
+        this.$router.push({path:'/home/SuggestDetail?id='+index});
       },
       searchBtn() { // 查询 请求数据
         var t = this.search.time;
@@ -153,7 +153,7 @@ export default {
           }) 
       },
       del(index) { // 删除
-        console.log(index);
+        console.log("删除的id" ,index);
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -165,8 +165,10 @@ export default {
           });
           // 数据请求
           this.axios
-            .post("/repairInfo/getAllRepairInfo",{
-              id: index
+            .get("/suggestion/deleteById",{
+              params:{
+                id: index
+              }
             })
             .then((res) => {
               console.log(res);
@@ -174,6 +176,7 @@ export default {
             .catch(err=> {
               console.log(err)
             }) 
+          
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -183,16 +186,17 @@ export default {
       }
   },
   created() {
-    this.axios
+      this.axios
         .get("/suggestion/showAll" )
         .then((res) => {
-          console.log(res.data.data.data[0]);
-          this.tableData.push(res.data.data.data[0]);
-          console.log(this.tableData[0]);
+          console.log(res.data.data.data);
+          this.tableData = (res.data.data.data);
+          console.log(this.tableData);
         })
         .catch(err=> {
           console.log(err)
         }) 
+        // 需要更新
   },
   computed: {
     showData() {

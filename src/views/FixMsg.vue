@@ -213,7 +213,7 @@ export default {
     },
     searchBtn() { // 查询 请求数据
       this.axios
-        .post("/repairInfo/getAllRepairInfo",{
+        .post("//",{
           houseNum:this.houseNum,
           telNum: this.search.telphone,
           staffName:this.search.staffName,
@@ -234,13 +234,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+
         this.$message({
           type: 'success',
           message: '删除成功!'
         });
-        /* tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1); */
+        // 请求数据
         this.axios
-          .post("/repairInfo/getAllRepairInfo",{
+          .post("//",{
             id: index
           })
           .then((res) => {

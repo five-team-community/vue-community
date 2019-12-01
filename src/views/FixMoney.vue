@@ -12,15 +12,21 @@
             <el-input v-model="search.houseNum" placeholder="请输入交易号"></el-input>
           </el-form-item>
           <el-form-item label="登记时间">
-            <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+            <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
         </el-form>
       </div>
       <div class="btn">
         <div>
-          <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
-          <el-button icon="el-icon-search" class="btn-search" >查询</el-button>
+          <el-button icon="el-icon-tickets" class="btn-daochu" @click="exportBnt">导出</el-button>
+          <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
+      </div>
+      <div class="totalMoney">
+        <el-row :gutter="10">
+          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="TMtitle">订单总额：</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="TMmoney">666</div></el-col>
+        </el-row>
       </div>
       <div class="contentBox">
         <el-table :data="showData" stripe border style="width: 100%">
@@ -48,7 +54,7 @@
 </template>
 
 <script>
-var tableData = [
+/* var tableData = [
   {
           orderNo: "FFFF-0001",
           name: "王小虎",
@@ -113,7 +119,7 @@ var tableData = [
           payDate: "2019-11-26 13:36:55",
           orderMoney: "50"
         }
-]
+] */
 export default {
   data() {
     return {
@@ -121,12 +127,9 @@ export default {
       pagesize:5,
       tableData: [],
       search: {//记录筛选的数据项
-        houseNum: "",
-        host: "",
-        telphone: "",
-        isEmpty: ""
+        orderNo: "",
+        time: ""
       },
-      input: '',
       options: [{
           value: '选项1',
           label: '黄金糕'
@@ -186,11 +189,31 @@ export default {
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.currentPage=val;
+      },
+      searchBtn() { // 查询
+        this.axios
+          .get("//")
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      },
+      exportBnt() { // 导出
+
       }
   },
   
   created() {
-    this.tableData =tableData;
+    this.axios
+      .get("//")
+      .then((res)=> {
+        console.log(res);
+      })
+      .catch((err)=> {
+        console.log(err);
+      })
   },
   computed: {
     showData() {
@@ -246,7 +269,18 @@ export default {
               }
             }
           }
+      }
+      .totalMoney {
+        padding: 5px 20px;
+        font-size: 16px;
+        color: #676a6c;
+        .TMtitle {
+          font-weight: 600;
         }
+        .TMmoney {
+          color: red;
+        }
+      }
       .contentBox {
         padding: 20px 20px;
         .el-table--border {
