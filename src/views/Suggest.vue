@@ -126,7 +126,9 @@ export default {
         console.log("详情",index);
         this.$router.push({path:'/home/SuggestDetail?id='+index});
       },
-      searchBtn() { // 查询 请求数据
+      searchBtn() { // 查询
+        
+        // 时间格式
         var t = this.search.time;
         console.log(t);
         var startTime = t[0];
@@ -138,6 +140,7 @@ export default {
         console.log("结束时间:",endTime);
         console.log("结束时间:",endTime1);
 
+        // 发送请求
         this.axios
           .get("/suggestion/showByDate",{
             params: {

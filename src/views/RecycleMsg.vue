@@ -41,7 +41,7 @@
           <el-table-column prop="houseNum" label="房号"></el-table-column>
           <el-table-column prop="name" label="姓名" ></el-table-column>
           <el-table-column prop="phone" label="用户联系电话" ></el-table-column>
-          <el-table-column prop="recyclePeople" label="回收人员" ></el-table-column>
+          <el-table-column prop="recycleType" label="物品类型" ></el-table-column>
           <el-table-column prop="regDate" label="登记时间" ></el-table-column>
           <el-table-column prop="cleanState" label="状态" style="width: 10%"></el-table-column>
           <el-table-column prop="operate" label="操作">

@@ -32,8 +32,7 @@
       </div>
       <div class="btn" >
         <div>
-          <el-button icon="el-icon-plus" class="btn-add" @click='add'>登记</el-button>
-          <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
+          <el-button icon="el-icon-tickets" class="btn-daochu" @click="exportBtn">导出</el-button>
           <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
@@ -203,13 +202,13 @@ export default {
       this.currentPage=val;
       console.log(val);
     },
-    add(){ //登记
-      this.$router.push({path:'/home/fixMsgAdd'});
-    },
     showDetail(index) { // 查看详情
       index = 5*(this.currentPage-1)+index;
       console.log("详情",index);
       this.$router.push({path:'/home/fixdetail?id='+index});
+    },
+    exportBtn() { // 导出
+
     },
     searchBtn() { // 查询 请求数据
       this.axios
