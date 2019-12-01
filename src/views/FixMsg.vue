@@ -291,11 +291,8 @@ export default {
       background: #fff;
       font-size: 13px;
       .headBox {
-        width: 98%;
-        height: 50px;
-        margin: 0 auto;
         text-align: left;
-        line-height: 50px;
+        padding: 15px 20px;
         p {
           display: inline;
           color: #606266;

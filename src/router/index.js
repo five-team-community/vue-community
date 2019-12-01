@@ -268,6 +268,14 @@ const routes = [
         }
       },
       {
+        path:'lockPeopleAdd',
+        name:"LockPeopleAdd",
+        component: () => import('../views/LockPeopleAdd.vue'),//开锁公司添加
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'lockMoney',
         name:"LockMoney",
         component: () => import('../views/LockMoney.vue'),//开锁收费

@@ -288,6 +288,14 @@ export default {
           font-size: 13px;
         }
       }
+      .block {
+        width: 100%;
+        height: 30px;
+        padding: 10px 0;
+        .el-pagination {
+          float: right;
+        }
+      }
     }
   }
 
