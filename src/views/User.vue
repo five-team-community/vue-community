@@ -1,26 +1,24 @@
 <template>
-  <div id="house">
+  <div id="user">
       <!-- 标题 -->
       <div class="title">
         <i class="el-icon-s-order"></i>
-        房产列表
+        用户列表
       </div>
       <!-- 筛选数据的输入表单 -->
       <div class="choose">
         <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
-          <el-form-item label="房号">
-            <el-input v-model="search.houseNum" placeholder="请输入房号"></el-input>
+          <el-form-item label="姓名">
+            <el-input v-model="search.houseNum" placeholder="请输入姓名"></el-input>
           </el-form-item>
-          <el-form-item label="业主">
-            <el-input v-model="search.ownerName" placeholder="请输入业主姓名"></el-input>
+          <el-form-item label="手机号">
+            <el-input v-model="search.ownerPhone" placeholder="请输入手机号"></el-input>
           </el-form-item>
-          <el-form-item label="预留手机号">
-            <el-input v-model="search.ownerPhone" placeholder="请输入预留手机号"></el-input>
-          </el-form-item>
-          <el-form-item label="是否闲置">
-            <el-select v-model="search.houseState" placeholder="是否闲置">
-              <el-option label="是" value="true"></el-option>
-              <el-option label="否" value="false"></el-option>
+          <el-form-item label="角色">
+            <el-select v-model="search.houseState" placeholder="选择角色">
+              <el-option label="管理员" value="管理员"></el-option>
+              <el-option label="服务人员" value="服务人员"></el-option>
+              <el-option label="普通用户" value="普通用户"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -36,14 +34,12 @@
       <!-- 表格数据 -->
       <div class="mytable">
         <el-table :data="getData" border style="width: 100%" v-loading="loading">
-          <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
-          <el-table-column prop="ownerName" label="业主姓名"></el-table-column>
-          <el-table-column prop="ownerPhone" label="预留手机号"></el-table-column>
-          <el-table-column prop="ownerTime" label="交房时间"></el-table-column>
-          <el-table-column prop="houseState" label="是否空置"></el-table-column>
-          <el-table-column prop="isBilling" label="是否计费"></el-table-column>
-          <el-table-column prop="blindNum" label="绑定数"></el-table-column>
-          <el-table-column prop="blindMax" label="限制绑定数"></el-table-column>
+          <el-table-column prop="housePropertyNo" label="用户名"></el-table-column>
+          <el-table-column prop="ownerName" label="真实姓名"></el-table-column>
+          <el-table-column prop="ownerPhone" label="手机号"></el-table-column>
+          <el-table-column prop="ownerTime" label="性别"></el-table-column>
+          <el-table-column prop="houseState" label="角色"></el-table-column>
+          <el-table-column prop="isBilling" label="上次登录时间"></el-table-column>
 
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
@@ -168,7 +164,7 @@ export default {
   },
   methods: {
     add(){//新增
-      this.$router.push({path:'/home/addHouse'});
+      this.$router.push({path:'/home/addUser'});
     },
     searchMsg(){//搜索
       console.log(this.search);
@@ -176,11 +172,11 @@ export default {
     show(index){//查看
       index = 5*(this.currentPage-1)+index;
       console.log("查看",index);
-      this.$router.push({path:'/home/showHouse?id='+index});
+      this.$router.push({path:'/home/showUser?id='+index});
     },
     alter(index){//修改
       index = 5*(this.currentPage-1)+index;
-      this.$router.push({path:'/home/alterHouse?id='+index});
+      this.$router.push({path:'/home/alterUser?id='+index});
     },
     del(index){//删除
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -231,7 +227,7 @@ export default {
 </script>
 <style lang="less" scoped>
 @import "../assets/less/base.less";
-#house {
+#user {
   color: @fontColor;
   background-color: white;
   min-height: 500px;
