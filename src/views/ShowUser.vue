@@ -78,6 +78,16 @@
                 </el-dialog>
 
 
+                <!-- <el-form :inline="true" :model="searchTel" class="demo-form-inline">
+                  <el-form-item label="">
+                    <el-input v-model="searchTel.tel" placeholder="请输入手机号查找注册用户"></el-input>
+                  </el-form-item>
+                  
+                  <el-form-item>
+                    <el-button type="primary" class="searchTel-btn" @click="searchUserTel">查询</el-button>
+                  </el-form-item>
+                </el-form> -->
+
             </div>
             
           </el-tab-pane>

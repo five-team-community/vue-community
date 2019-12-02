@@ -13,8 +13,10 @@
         :unique-opened="true"
         :router="true">
         <el-menu-item class="nav-header" style="padding :30px 10px">
-          <img src="../assets/img/login-logo.png" alt v-show="!isCollapse" width="120px"/>
-          <img src="../assets/img/logo.png" alt v-show="isCollapse" width="40px"/>
+          <router-link to="/home">
+            <img src="../assets/img/login-logo.png" alt v-show="!isCollapse" width="120px"/>
+            <img src="../assets/img/logo.png" alt v-show="isCollapse" width="40px"/>
+          </router-link>
         </el-menu-item>
         <el-submenu index="1">
           <template slot="title">
@@ -108,9 +110,7 @@
           <el-menu-item-group>
             <el-menu-item index="/home/user">用户管理</el-menu-item>
           </el-menu-item-group>
-          <el-menu-item-group>
-            <el-menu-item index="/home/role">角色管理</el-menu-item>
-          </el-menu-item-group>
+
         </el-submenu>
       </el-menu>
   </el-aside>
@@ -127,7 +127,16 @@
           ></button>
         </el-radio-group>
       </div>
-      <div class="top-right"></div>
+      <div class="top-right">
+        <span class="welcome">欢迎您来到易居社区服务平台</span>
+        <el-dropdown>
+        <i class="el-icon-s-custom" style="margin-left: 15px">aaa</i>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item @click="mydata">个人中心</el-dropdown-item>
+          <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      </div>
     </el-header>
     
     <el-main style="background-color: #f3f3f4;">
@@ -167,16 +176,36 @@ export default {
         this.navWidth = "200px";
       }
       
+    },
+    mydata(){
+      console.log("aaa");
+      this.$router.push({path:'/home/myData'});
+    },
+    logout(){
+      sessionStorage.clear();
+      this.$router.replace({path:'/login'});
     }
   }
 };
 </script>
 <style lang="less" scoped>
 @import "../assets/less/base.less";
-
+.welcome{
+  display: inline-block;
+  line-height: 30px;
+  font-size: 14px;
+}
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+}
+.nav-header a{
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+.top-right a{
+  color: @fontColor;
 }
 .el-aside{
   background: @navColor;
@@ -221,6 +250,9 @@ export default {
 .top-left {
   float: left;
   // margin-left: 10px;
+}
+.top-right{
+  float: right;
 }
 
 .el-main{

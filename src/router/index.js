@@ -308,17 +308,33 @@ const routes = [
         }
       },
       {
-        path:'user',
-        name:"User",
-        component: () => import('../views/User.vue'),//用户管理
+        path:'adduser',
+        name:"AddUser",
+        component: () => import('../views/AddUser.vue'),//用户管理
         meta: {
           auth: true
         }
       },
       {
-        path:'role',
-        name:"Role",
-        component: () => import('../views/Role.vue'),//角色管理
+        path:'alteruser',
+        name:"AlterUser",
+        component: () => import('../views/AlterUser.vue'),//用户管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'showuser',
+        name:"ShowUser",
+        component: () => import('../views/ShowUser.vue'),//用户管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'user',
+        name:"User",
+        component: () => import('../views/User.vue'),//用户管理
         meta: {
           auth: true
         }
@@ -360,6 +376,14 @@ const routes = [
         path:'suggestDetail',
         name:"suggestDetail",
         component: () => import('../views/SuggestDetail.vue'),//建议详情
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'myData',
+        name:"MyData",
+        component: () => import('../views/MyData.vue'),//个人中心
         meta: {
           auth: true
         }  

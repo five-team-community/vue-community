@@ -11,6 +11,9 @@
           <el-form-item label="交易号">
             <el-input v-model="search.houseNum" placeholder="请输入交易号"></el-input>
           </el-form-item>
+          <el-form-item label="用户名">
+            <el-input v-model="search.userName" placeholder="请输入用户名"></el-input>
+          </el-form-item>
           <el-form-item label="登记时间">
             <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
@@ -128,6 +131,7 @@ export default {
       tableData: [],
       search: {//记录筛选的数据项
         orderNo: "",
+        userName:"",
         time: ""
       },
       options: [{
@@ -191,8 +195,26 @@ export default {
         this.currentPage=val;
       },
       searchBtn() { // 查询
+
+        // 时间格式
+        var t = this.search.time;
+        console.log(t);
+        var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+        var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+        console.log("开始时间:",startTime1);
+        console.log("结束时间:",endTime1);
+
+        // 请求数据
         this.axios
-          .get("//")
+          .get("/repairOrder/getAllOrderByParam",
+          {
+            params: {
+              orderNo: this.search.orderNo,
+              inhabitantName: this.search.userName,
+              beginTime:startTime1,
+              endTime:endTime1,
+            }
+          })
           .then((res) => {
             console.log(res);
           })
@@ -201,15 +223,28 @@ export default {
           })
       },
       exportBnt() { // 导出
-
+        this.axios
+          .get("/repairOrder/exportOrder")
+          .then((res)=> {
+            console.log(res);
+          })
+          .catch((err)=> {
+            console.log(err);
+          })
       }
   },
   
   created() {
     this.axios
-      .get("//")
+      .get("/repairOrder/getAllOrders",
+      {
+        params: {
+          pageSize:this.pagesize,
+          currentPage: this.currentPage
+        }
+      })
       .then((res)=> {
-        console.log(res);
+        console.log(res.data);
       })
       .catch((err)=> {
         console.log(err);

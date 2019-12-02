@@ -15,9 +15,7 @@
             <el-input v-model="search.telphone" placeholder="请输入用户联系电话"></el-input>
           </el-form-item>
           <el-form-item label="报修服务人员">
-            <el-select v-model="search.staffName" placeholder="请选择报修服务人员">
-              <el-option label="staff"></el-option>
-            </el-select>
+            <el-input v-model="search.staffId" placeholder="请输入报修人员编号"></el-input>
           </el-form-item>
           <el-form-item label="订单状态">
             <el-select v-model="search.stauts" placeholder="请选择状态">
@@ -208,16 +206,34 @@ export default {
       this.$router.push({path:'/home/fixdetail?id='+index});
     },
     exportBtn() { // 导出
-
+      this.axios
+        .get("/repairInfo/exportInfo")
+        .then((res)=> {
+          console.log(res);
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
     },
     searchBtn() { // 查询 请求数据
+
+      // 时间格式
+        var t = this.search.time;
+        console.log(t);
+        var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+        var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+        console.log("开始时间:",startTime1);
+        console.log("结束时间:",endTime1);
+
       this.axios
-        .post("//",{
-          houseNum:this.houseNum,
+        .post("/repairInfo/getAllRepairInfoByParam",{
+          housePropertyNo:this.search.houseNum,
           telNum: this.search.telphone,
-          staffName:this.search.staffName,
-          repairState:this.search.stauts,
-          regDate:this.search.time
+          staffId:this.search.staffName,
+          partId:this.search.partId,
+          pageSize: 5,
+          beginTime:startTime1,
+          endTime:endTime1
         })
         .then((res) => {
           console.log(res);
@@ -240,8 +256,9 @@ export default {
         });
         // 请求数据
         this.axios
-          .post("//",{
-            id: index
+          .get("/repairInfo/deleteRepairInfoById",
+          {
+            infoldId: index
           })
           .then((res) => {
             console.log(res);
@@ -259,7 +276,11 @@ export default {
   },
   created() {
     this.axios
-        .get("/repairInfo/getAllRepairInfo" )
+        .get("/repairInfo/getAllRepairInfo",
+        {
+          pageSize: this.pagesize,
+          currentPage: this.currentPage 
+        })
         .then((res) => {
           console.log(res.data.data.repairInfo);
           this.tableData = (res.data.data.repairInfo);

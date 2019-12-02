@@ -22,6 +22,12 @@
           <el-button icon="el-icon-search" class="btn-search" >查询</el-button>
         </div>
       </div>
+      <div class="totalMoney">
+        <el-row :gutter="10">
+          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="TMtitle">订单总额：</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="TMmoney">666</div></el-col>
+        </el-row>
+      </div>
       <div class="contentBox">
         <el-table :data="showData" stripe border style="width: 100%">
           <el-table-column prop="orderNo" label="交易号"></el-table-column>

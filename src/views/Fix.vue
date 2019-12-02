@@ -11,7 +11,7 @@
       </div>
       <div class="content">
         <el-table :data="showDate" border stripe>
-        <el-table-column prop="repairsParts[0].partName" label="报修部位" style="width: 50%">
+        <el-table-column prop="partName" label="报修部位" style="width: 50%">
         </el-table-column>
         <el-table-column prop="operate" label="操作" style="width: 50%">
           <template slot-scope="scope">
@@ -64,38 +64,12 @@
 </template>
 
 <script>
-  /* var tableData = [
-    {
-          partName: '外围设备',
-        }, 
-        {
-          partName: '单元楼道',      
-        }, 
-        {
-          partName: '车位',
-        }, 
-        {
-          partName: '单元门禁',
-        }, 
-        {
-          partName: '地下室',
-        }, 
-        {
-          partName: '电梯轿厢',
-        }, 
-        {
-          partName: '公共走道',
-        }, 
-        {
-          partName: '门',
-        }
-  ]; */
   export default {
     data() {
       return {
         tableData: [],
-        currentPage: 1,
         pagesize:10,
+        currentPage: 1,
         dialogFormVisible: false,
         dialogFormVisible2: false,
         form: {
@@ -127,18 +101,40 @@
       },
       okadd() { // 确认添加
         console.log("添加的内容",this.form.name);
+        console.log(typeof(this.form.name));
+        this.axios
+          .get("/repairPart/addRepairsParts",
+            {
+              params: {
+                partName: this.form.name
+              }
+            })
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
         /* var newName = this.form.name; */
         /* tableData.push({"partName":newName}); */
         this.dialogFormVisible = false;
         
       },
       okedit() { // 确认修改
-        /* console.log("修改的内容：",this.form2.name);
-        console.log("要修改的id：",this.form2.ind);
+        console.log("修改的内容：",this.form2.name);
+        console.log("要修改的id：",this.form2.ind+1);
         var news = this.form2.name;
-        var ind = this.form2.ind;
-        tableData[ind].partName = news;
-        this.dialogFormVisible2 = false; */
+        var ind = this.form2.ind+1;
+        this.dialogFormVisible2 = false;
+        // 请求数据
+        this.axios
+          .get("/repairPart/addRepairsPartsById",
+          {
+            params: {
+              partId: ind,
+              partName: news
+            }
+          })
       },
       del(index) { //删除
         console.log(index+(this.pagesize)*(this.currentPage-1));
@@ -151,7 +147,20 @@
             type: 'success',
             message: '删除成功!'
           });
-          /* tableData.splice((index+(this.pagesize)*(this.currentPage-1)),1); */
+          // 请求数据
+          this.axios
+            .get("/repairPart/removeRepairsPartsById",
+            {
+              params: {
+                partId : index
+              }
+            })
+            .then((res)=> {
+              console.log(res)
+            })
+            .catch((err)=> {
+              console.log(err)
+            })
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -167,12 +176,17 @@
     },
     created() {
       this.axios
-        .get("/repairInfo/getAllRepairInfo" )
+        .get("/repairPart/getAllRepairsParts",
+        {
+          params: {
+            pageSize: this.pagesize,
+            currentPage: this.currentPage
+          }
+        })
         .then((res) => {
-          console.log(res.data.data.repairInfo);
-          this.tableData = (res.data.data.repairInfo);
+          console.log(res.data.data.data);
+          this.tableData = (res.data.data.data);
           console.log(this.tableData);
-          /* this.tableData =tableData; */
         })
         .catch(err=> {
           console.log(err)

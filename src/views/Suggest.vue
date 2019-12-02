@@ -32,7 +32,7 @@
       </div>
       <div class="btn" >
         <div>
-          <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
+          <el-button icon="el-icon-tickets" class="btn-daochu" @click="exportBtn">导出</el-button>
           <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
@@ -46,7 +46,8 @@
           <el-table-column prop="sugState" label="状态"></el-table-column>
           <el-table-column prop="operate" label="操作" >
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" @click="showDetail(this.tableData.sugId)" ></el-button>
+              <el-button type="primary" icon="el-icon-edit" @click="changeStatus(scope.$index)" ></el-button>
+              <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
               <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
             </template>
           </el-table-column>
@@ -121,10 +122,41 @@ export default {
         this.currentPage=val;
         console.log(val);
       },
+      changeStatus(index) { // 更改状态
+        console.log(this.tableData[index].sugState);
+        var nowStatus = this.tableData[index].sugState;
+        nowStatus = !nowStatus;
+        console.log(Number(nowStatus));
+        
+        this.axios
+          .get("/suggestion/updateState",
+          {
+            params: {
+              id: index,
+              sugState: nowStatus
+            }
+          })
+          .then((res)=> {
+            console.log(res);
+          })
+          .catch((err)=> {
+            console.log(err);
+          })
+      },
       showDetail(index) { // 查看详情
         index = 5*(this.currentPage-1)+index;
         console.log("详情",index);
         this.$router.push({path:'/home/SuggestDetail?id='+index});
+      },
+      exportBtn() { // 导出
+        this.axios
+          .get("/suggestion/excludeExcel")
+          .then((res)=> {
+            console.log(res);
+          })
+          .catch((err)=> {
+            console.log(err);
+          })
       },
       searchBtn() { // 查询
         

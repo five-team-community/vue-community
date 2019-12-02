@@ -1,5 +1,7 @@
-<template>
-  <v-chart :options="work" />
+<template> 
+  <div>
+    <v-chart :options="work" height="300px"/>
+  </div>
 </template>
 
 <style>
@@ -15,9 +17,26 @@
 </style>
 
 <script>
-import ECharts from "vue-echarts";
-import "echarts/lib/chart/line";
-import "echarts/lib/component/polar";
+
+// 导入vue-echarts插件
+import ECharts from '../components/ECharts'
+// 按需导入echarts的图形类型
+import 'echarts/lib/chart/radar'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/chart/pie'
+// 导入工具部分
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title';
+// register component to use
+import 'echarts/lib/component/legendScroll';
+// register component to use
+import 'echarts/lib/component/dataZoom';
+import 'echarts/lib/component/markPoint';
+import 'echarts/lib/component/markLine';
+import 'echarts/lib/component/markArea';
+import 'echarts/lib/component/dataZoom';
+
 
 export default {
   components: {

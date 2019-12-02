@@ -51,6 +51,7 @@ export default {
     str = str.substr(num+1);
     str = Number(str);
     console.log(str);
+
     this.axios
         .get("/suggestion/showById",
           {

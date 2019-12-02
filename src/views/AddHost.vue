@@ -163,6 +163,19 @@
         this.form.birthday = birth;
         this.form.birthplace = this.area[iden.substring(0,2)];
         console.log(this.form);
+      },
+       submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
       }
     }
   }

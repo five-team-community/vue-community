@@ -48,7 +48,7 @@
           prop="tel"
           :rules="[phone,{ required: true, message: '手机号不能为空', trigger: ['blur','change']}]"
         >
-          <el-input v-model="gettel" placeholder="请输入手机号"></el-input>
+          <el-input v-model="tel" placeholder="请输入手机号"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -106,8 +106,6 @@
           <el-input type="textarea" v-model="form.desc"></el-input>
         </el-form-item>
 
-
-
         <el-form-item class="control">
           <el-button type="danger" icon="el-icon-close" @click="back">取消</el-button>
           <el-button @click="resetForm('ruleForm')" class="reset-btn" icon="el-icon-refresh-left">重置</el-button>
@@ -141,6 +139,7 @@ export default {
         img: "",
         sex: "",
         age: "",
+        tel:"",
         idCard: "",
         identity: "",
         experience: "",
@@ -151,7 +150,6 @@ export default {
         education: "",
         work: "",
         train: "",
-        link: null
       },
       userList: [
         { id: 1, name: "aaa", tel: "12324" },
@@ -248,19 +246,20 @@ export default {
       if (sex % 2 === 0) sex = "女";
       else sex = "男";
       this.form.sex = sex;
-    }
-  },
-  computed: {
-    gettel() {
-      console.log(this.form.link);
-      if (this.form.link=='0'||this.form.link) {
-        console.log(this.userList[this.form.link]);
-        return this.userList[this.form.link].tel;
+    },
+     submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
       }
-      else{
-        return null;
-      }
-    }
   }
 };
 </script>
