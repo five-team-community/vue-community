@@ -156,6 +156,22 @@ export default {
     onSubmit() {
       console.log("submit!");
     }
+  },
+  created() {
+    this.axios
+        .get("/activity/showActivityUser"  ,{
+         params:{
+            activityId:'1'
+         } 
+        } ) 
+        .then(res => {
+        console.log(res.data)
+        console.log(res);
+/*         this.tableData = tableData; */
+        })
+        .catch(err => {
+          console.log(err);
+        })
   }
 };
 </script>

@@ -28,23 +28,23 @@
           </el-form-item>
         </el-col>
       </el-form>
-      <el-table ref="multipleTable" :data="getData" tooltip-effect="dark" style="width: 100%">
-        <el-table-column prop="id" label="房号">F01</el-table-column>
-        <el-table-column prop="name" label="业主姓名"></el-table-column>
+      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%">
+        <el-table-column prop="id" label="房号"></el-table-column>
+        <el-table-column prop="inhabitantName" label="业主姓名"> </el-table-column>
         <el-table-column label="原金额">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+          <template >{{tableData[0].payProject}}</template>
         </el-table-column>
         <el-table-column label="充值金额">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+          <template ></template>
         </el-table-column>
         <el-table-column label="现有金额">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+          <template ></template>
         </el-table-column>
         <el-table-column label="缴费订单号">
           <template>1</template>
         </el-table-column>
         <el-table-column label="缴费时间">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
+          <template >{{ }}</template>
         </el-table-column>
         <el-table-column label="支付方式">
           <template>支付宝</template>
@@ -95,7 +95,7 @@
   </div>
 </template>
 <script>
-var  tableData = [
+/* var  tableData = [
         {
           listname: "物业投诉",
           date: "2016-05-02",
@@ -168,10 +168,8 @@ var  tableData = [
           address: "上海市普陀区金沙江路 1518 弄",
           state: "待处理"
         }
-    ];
-/*  var tableData = [
-  
-];  */
+    ]; */
+
 export default {
   data() {
     return {
@@ -181,7 +179,7 @@ export default {
         region: ""
       },
       loading: false,
-       tableData: []
+      tableData: []
     };
   },
   methods: {
@@ -234,26 +232,23 @@ export default {
     onSubmit () {
       console.log('submit')
     },
-    getwaterdata(){
-      this.axios
-        .get("/user/login",{
-          userName: 'admin',
-          userpasswd:'admin'
+  },
+  created() {
+       this.axios
+        .get("/pay/leibie",{
+         params:{
+            payProject:"水费"
+         }
         }) 
         .then(res => {
-          console.log(res.data)
-        res.data = tableData;
-        var token = res.data.token;
-            sessionStorage.setItem("token", token);
+        //  res.data = tableData; 
+         this.tableData.push(res.data.data.Pays[0]);
+          console.log(res.data.data.Pays[0])
+          console.log(this.tableData)
         })
         .catch(err => {
           console.log(err);
         })
-    },
-  },
-  created() {
-    this.getwaterdata(),
-    this.tableData = tableData;
   },
   computed: {
     getData() {

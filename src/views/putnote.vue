@@ -10,7 +10,7 @@
       </div>
     <el-form ref="form" :model="form" label-width="80px">
     <el-form-item label="公告标题" >
-      <el-input v-model="form.name"  ></el-input>
+      <el-input v-model="form.name"></el-input>
     </el-form-item>
     <el-form-item label="公告时间">
       <el-col :span="11">
@@ -52,6 +52,20 @@ export default {
   methods: {
     onSubmit() {
       console.log("submit!");
+      this.axios
+        .get("/pay/leibie",{
+          payProject:'物业费'
+        }) 
+        .then(res => {
+        console.log(res.data)
+        console.log(res);
+/*         res.data = tableData; */
+/*         this.tableData = tableData; */
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        console.log(this.form.name);
     },
     back() {
         console.log('back');
