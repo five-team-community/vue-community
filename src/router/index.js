@@ -68,9 +68,57 @@ const routes = [
         }
       },
       {
+        path:'addhost',
+        name:"AddHost",
+        component: () => import('../views/AddHost.vue'),//业主管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'showhost',
+        name:"ShowHost",
+        component: () => import('../views/ShowHost.vue'),//业主管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'alterhost',
+        name:"AlterHost",
+        component: () => import('../views/AlterHost.vue'),//业主管理
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'serve',
         name:"Serve",
         component: () => import('../views/Serve.vue'),//服务人员管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'addServe',
+        name:"AddServe",
+        component: () => import('../views/AddServe.vue'),//服务人员管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'showServe',
+        name:"ShowServe",
+        component: () => import('../views/ShowServe.vue'),//服务人员管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'alterServe',
+        name:"AlterServe",
+        component: () => import('../views/AlterServe.vue'),//服务人员管理
         meta: {
           auth: true
         }
@@ -111,14 +159,6 @@ const routes = [
         path:'fixMoney',
         name:"FixMoney",
         component: () => import('../views/FixMoney.vue'),//维修收费
-        meta: {
-          auth: true
-        }
-      },
-      {
-        path:'cleanPeople',
-        name:"CleanPeople",
-        component: () => import('../views/CleanPeople.vue'),//家政人员信息
         meta: {
           auth: true
         }
@@ -188,17 +228,17 @@ const routes = [
         }
       },
       {
-        path:'lockPeople',
-        name:"LockPeople",
-        component: () => import('../views/LockPeople.vue'),//开锁人员信息
+        path:'lockMsg',
+        name:"LockMsg",
+        component: () => import('../views/LockMsg.vue'),//开锁信息
         meta: {
           auth: true
         }
       },
       {
-        path:'lockMsg',
-        name:"LockMsg",
-        component: () => import('../views/LockMsg.vue'),//开锁信息
+        path:'lockPeople',
+        name:"LockPeople",
+        component: () => import('../views/LockPeople.vue'),//开锁信息
         meta: {
           auth: true
         }
@@ -236,17 +276,33 @@ const routes = [
         }
       },
       {
-        path:'user',
-        name:"User",
-        component: () => import('../views/User.vue'),//用户管理
+        path:'adduser',
+        name:"AddUser",
+        component: () => import('../views/AddUser.vue'),//用户管理
         meta: {
           auth: true
         }
       },
       {
-        path:'role',
-        name:"Role",
-        component: () => import('../views/Role.vue'),//角色管理
+        path:'alteruser',
+        name:"AlterUser",
+        component: () => import('../views/AlterUser.vue'),//用户管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'showuser',
+        name:"ShowUser",
+        component: () => import('../views/ShowUser.vue'),//用户管理
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'user',
+        name:"User",
+        component: () => import('../views/User.vue'),//用户管理
         meta: {
           auth: true
         }
@@ -283,6 +339,39 @@ const routes = [
         meta: {
           auth: true
         }  
+      },
+      {
+        path:'notedetail',
+        name:"notedetail",
+        component: () => import('../views/notedetail.vue'),//维修
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'myData',
+        name:"MyData",
+        component: () => import('../views/MyData.vue'),//个人中心
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'activitydetail',
+        name:"activitydetail",
+        component: () => import('../views/activitydetail.vue'),//活动详情
+        meta: {
+          auth: true
+        }  
+      }
+      ,
+      {
+        path:'addActivity',
+        name:"addActivity",
+        component: () => import('../views/addActivity.vue'),//活动详情
+        meta: {
+          auth: true
+        }  
       }
     ]
   },
@@ -295,6 +384,14 @@ const routes = [
     path:'/putnote',
     name:"putnote",
     component: () => import('../views/putnote.vue'),//维修
+    meta: {
+      auth: true
+    }  
+  },
+  {
+    path:'/demo',
+    name:"putnote",
+    component: () => import('../views/demo.vue'),//维修
     meta: {
       auth: true
     }  

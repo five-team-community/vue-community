@@ -50,25 +50,30 @@ export default {
     };
   },
   methods: {
+    back(){//返回房产信息列表
+        this.$router.push({path:'/home/Notice'});
+      },
     onSubmit() {
-      console.log("submit!");
+      var t = this.form.date1;
+        var startTime = t;
+        var startTime1 = t.getFullYear()+ "-" + (t.getMonth()+1) + "-" +t.getDate();
+        console.log("开始时间1:",startTime1);
+        console.log(startTime);
       this.axios
-        .get("/pay/leibie",{
-          payProject:'物业费'
+        .post("/Announcement/addAnnouncement",{
+          title:this.form.name,
+          expirydDate:startTime1,
+          content:this.form.desc,
+          push:this.form.delivery,
         }) 
         .then(res => {
-        console.log(res.data)
-        console.log(res);
-/*         res.data = tableData; */
-/*         this.tableData = tableData; */
+          console.log('点击提交成功',res)
         })
         .catch(err => {
           console.log(err);
-        })
-        console.log(this.form.name);
-    },
-    back() {
-        console.log('back');
+        }) 
+        this.$router.push({path:'/home/Notice'});
+    
     }
   }
 };

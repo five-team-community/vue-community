@@ -75,7 +75,7 @@
               icon="el-icon-search"
               size="mini"
               class="btn-show"
-              @click="gotofixdetail"
+              @click="gotofixdetail(scope,$index)"
             ></el-button>
           </template>
         </el-table-column>
@@ -94,7 +94,7 @@
   </div>
 </template>
 <script>
-var tableData = [
+/* var tableData = [
   {
     listname: "物业投诉",
     date: "2016-05-02",
@@ -159,7 +159,7 @@ var tableData = [
     address: "上海市普陀区金沙江路 1518 弄",
     state: "待处理"
   }
-];
+]; */
 export default {
   data() {
     return {
@@ -198,7 +198,7 @@ export default {
     alter(index) {
       index = 5 * (this.currentPage - 1) + index;
       console.log("修改", index);
-    },
+    }, 
     del(index) {
       index = 5 * (this.currentPage - 1) + index;
       console.log("删除", index);
@@ -206,13 +206,27 @@ export default {
     changePage(val) {
       this.currentPage = val;
     },
-    gotofixdetail () {
-      this.$router.push('/home/fixdetail')
-    },
-    
+    gotofixdetail (index) {
+      this.$router.push('/home/fixdetail?id='+this.tableData[index].infoId)
+    }
   },
   created() {
-    this.tableData = tableData;
+     this.axios
+        .get("/repairInfo/getAllRepairInfo",{
+         params:{
+            pageSize:1,
+            currentPage:1,
+         }
+        }) 
+        .then(res => {
+        //  res.data = tableData; 
+         this.tableData = res.data.data.Pays;
+          console.log(res.data.data)
+          console.log(this.tableData)
+        })
+        .catch(err => {
+          console.log(err);
+        })
   },
   computed: {
     getData() {

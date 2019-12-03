@@ -40,6 +40,9 @@
       <el-table-column label="发布日期" >
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>
+      <el-table-column label="类别" >
+        <template slot-scope="scope">{{ scope.row.date }}</template>
+      </el-table-column>
       <el-table-column label="文章内容" >
         <template slot-scope="scope">{{ scope.row.date }}</template>
       </el-table-column>

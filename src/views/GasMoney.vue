@@ -1,27 +1,29 @@
 <template>
   <div id="mynote">
     <div class="content">
-    <div class="title">
+      <div class="title">
         <i class="el-icon-s-order"></i>
         <span>气费</span>
       </div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-col :span="10">
           <el-form-item label="业主姓名:">
             <el-input v-model="formInline.user" placeholder="业主姓名"></el-input>
           </el-form-item>
         </el-col>
-          <el-col :span="14">
-          <el-form-item label="">
+        <el-col :span="14">
+          <el-form-item label>
             <div class="block">
               <span class="demonstration">选择时间：</span>
               <el-date-picker
-                v-model="value1"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              ></el-date-picker>
+      v-model="value2"
+      type="daterange"
+      align="right"
+      unlink-panels
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+    </el-date-picker>
             </div>
           </el-form-item>
           <el-form-item>
@@ -29,126 +31,51 @@
           </el-form-item>
         </el-col>
       </el-form>
-    <el-table
-      ref="multipleTable"
-      :data="getData"
-      tooltip-effect="dark"
-      style="width: 100%"
-      >
-      <el-table-column prop="id" label="房号" >F01</el-table-column>
-      <el-table-column prop="name" label="业主姓名"> </el-table-column>
-      <el-table-column label="原金额" >
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column label="充值金额">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column label="现有金额" >
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column label="缴费订单号">
-        <template >1</template>
-      </el-table-column>
-      <el-table-column label="缴费时间" >
-        <template slot-scope="scope">{{ scope.row.date }}</template>
-      </el-table-column>
-      <el-table-column label="支付方式">
-        <template>支付宝</template>
-      </el-table-column>
-      <el-table-column prop="state" label="状态"> </el-table-column>
-      <el-table-column label="操作" align="center" width="250">
-            <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
-              <el-button type="info" icon="el-icon-edit-outline" size="mini" class="btn-alter" @click="alter(scope.$index)"></el-button>
-              <el-button type="danger" slot="reference" icon="el-icon-delete" size="mini" class="btn-del" @click="del(scope.$index)"></el-button>
-            </template>
-          </el-table-column>
-    </el-table>
-    <el-pagination background layout="prev, pager, next"   :page-size="5"
-        :total="10"
+      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%">
+        <el-table-column prop="inhabitantAndHousePropertyVO.housePropertyNo" label="房号"></el-table-column>
+        <el-table-column prop="inhabitantAndHousePropertyVO.inhabitant.inhabitantName" label="业主姓名"></el-table-column>
+        <el-table-column prop="payMoney" label="剩余金额"></el-table-column>
+        <el-table-column prop="payOrder" label="缴费订单号"></el-table-column>
+        <el-table-column prop="payDate" label="缴费时间"></el-table-column>
+        <el-table-column label="支付方式">
+          <template>支付宝</template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="250">
+          <template slot-scope="scope">
+            <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                size="mini"
+                class="btn-show"
+                @click="gotomoneydetail(scope.$index)"
+              ></el-button>
+            </el-tooltip>
+            <el-button
+              type="danger"
+              slot="reference"
+              icon="el-icon-delete"
+              size="mini"
+              class="btn-del"
+              @click="handleDelete(scope.$index)"
+            ></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="1"
+        :total="2"
         :pager-count="5"
         :hide-on-single-page="true"
         @current-change="changePage"
-        class="page">
-    </el-pagination>
-  </div>
+        class="page"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 <script>
-    var  tableData = [
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        }
-    ];
 export default {
   data() {
     return {
@@ -158,14 +85,13 @@ export default {
         region: ""
       },
       loading: false,
-      tableData:[]
+      tableData: [],
+      value1: '',
+      value2: ''
     };
   },
   methods: {
     handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
       console.log(index, row);
     },
     handleClick(tab, event) {
@@ -183,13 +109,120 @@ export default {
       index = 5 * (this.currentPage - 1) + index;
       console.log("删除", index);
     },
+    gotomoneydetail(index) {
+      this.$router.push({
+        path: "/home/moneydetail?id=" + this.tableData[index].payOrder
+      });
+      console.log("跳转", this.tableData[index].payOrder);
+    },
     changePage(val) {
       this.currentPage = val;
+      this.axios
+      .post("/pay/leibie", {      
+          payProject: "气费",
+          currentPage:val,
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      
     },
+    handleDelete(index) {
+      this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+          this.axios
+            .post("/pay/delorder", {
+                payOrder: this.tableData[index].payOrder
+            })
+            .then(res => {
+              console.log("删除成功", res);
+              this.axios
+                .post("/pay/leibie", {
+                  payProject: "气费"
+                })
+                .then(res => {
+                  //  res.data = tableData;
+                  this.tableData = res.data.data.Pays;
+                  this.loading = false;
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    onSubmit() {
+      var t = this.value2;
+      console.log(this.formInline.user)
+        var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+        var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+        console.log("开始时间:",startTime1);
+        console.log("结束时间:",endTime1);
+      this.axios
+      .get("/pay/leibie", {
+          starttime:startTime1,
+          endtime:endTime1,
+          userName:this.formInline.user
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    }
   },
   created() {
-    this.tableData = tableData;
-  },
+    this.axios
+      .post("/pay/leibie", {      
+          payProject: "气费",
+          currentPage:this.currentPage,
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, 
+  /* this.axios
+      .post("/pay/jiemian", {
+
+          inhabitantId:1,
+          payUnitId:4,
+        
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+        console.log("第一个数据", res.data);
+        console.log(res.data.data);
+        console.log(this.tableData);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, */
   computed: {
     getData() {
       var start = 5 * (this.currentPage - 1);
@@ -201,15 +234,14 @@ export default {
 
 <style lang="less" scoped>
 @import "../assets/less/base.less";
-#mynote{
+#mynote {
   color: @fontColor;
   background-color: #f3f3f4;
   padding: 20px 10px;
   min-height: 500px;
-.content {
-  background: white;
-}
-
+  .content {
+    background: white;
+  }
 }
 .title {
   padding: 15px 20px;
@@ -220,12 +252,12 @@ export default {
   }
   .back {
     float: right;
-    .back-btn{
+    .back-btn {
       padding: 5px;
     }
   }
 }
-.el-form{
+.el-form {
   padding: 15px 20px;
 }
 
@@ -237,7 +269,7 @@ body > .el-container {
 .el-container:nth-child(6) .el-aside {
   line-height: 260px;
 }
-.el-pagination{
+.el-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -246,7 +278,7 @@ body > .el-container {
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
 }
-.btn{
+.btn {
   height: 40px;
 }
 .btn > div {
@@ -268,7 +300,8 @@ body > .el-container {
     }
   }
 }
-.el-button--mini, .el-button--mini.is-round{
+.el-button--mini,
+.el-button--mini.is-round {
   padding: 3px;
 }
 </style>

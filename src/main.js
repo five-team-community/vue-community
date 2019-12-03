@@ -9,6 +9,13 @@ import './assets/less/resize.css';
 import './assets/theme/index.css';
 import vueAxios from 'vue-axios';
 import http from './utils/http';
+import ECharts from 'vue-echarts/components/ECharts' // refers to components/ECharts.vue in webpack
+import 'echarts/lib/chart/bar'
+import 'echarts/lib/component/tooltip'
+import 'echarts/lib/component/title'
+
+
+Vue.component('v-chart', ECharts)
 
 Vue.use(ElementUI);
 Vue.use(vueAxios, http);

@@ -142,7 +142,7 @@ var formData={
 .addHouse {
   color: @fontColor;
   background-color: #f3f3f4;
-  padding: 20px 10px;
+
   min-height: 500px;
 }
 .content {

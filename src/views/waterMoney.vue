@@ -15,12 +15,15 @@
           <el-form-item label>
             <div class="block">
               <span class="demonstration">选择时间：</span>
-              <el-date-picker
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              ></el-date-picker>
+               <el-date-picker
+      v-model="value2"
+      type="daterange"
+      align="right"
+      unlink-panels
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+    </el-date-picker> 
             </div>
           </el-form-item>
           <el-form-item>
@@ -28,28 +31,14 @@
           </el-form-item>
         </el-col>
       </el-form>
-      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%">
-        <el-table-column prop="id" label="房号"></el-table-column>
-        <el-table-column prop="inhabitantName" label="业主姓名"> </el-table-column>
-        <el-table-column label="原金额">
-          <template >{{tableData[0].payProject}}</template>
+      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" v-loading='loading' >
+        <el-table-column prop="inhabitantAndHousePropertyVO.housePropertyNo" label="房号"></el-table-column>
+        <el-table-column prop="inhabitantAndHousePropertyVO.inhabitant.inhabitantName" label="业主姓名"></el-table-column>
+        <el-table-column prop="payMoney" label="剩余金额"></el-table-column>
+        <el-table-column prop="payOrder" label="缴费订单号"></el-table-column>
+        <el-table-column prop="payDate" label="缴费时间"></el-table-column>
+        <el-table-column prop="payProject" label="支付类型">
         </el-table-column>
-        <el-table-column label="充值金额">
-          <template ></template>
-        </el-table-column>
-        <el-table-column label="现有金额">
-          <template ></template>
-        </el-table-column>
-        <el-table-column label="缴费订单号">
-          <template>1</template>
-        </el-table-column>
-        <el-table-column label="缴费时间">
-          <template >{{ }}</template>
-        </el-table-column>
-        <el-table-column label="支付方式">
-          <template>支付宝</template>
-        </el-table-column>
-        <el-table-column prop="state" label="状态"></el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
@@ -58,34 +47,25 @@
                 icon="el-icon-search"
                 size="mini"
                 class="btn-show"
-                @click="gotomoneydetail"
+                @click="gotomoneydetail(scope.$index)"
               ></el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="修改" placement="bottom">
-              <el-button
-                type="info"
-                icon="el-icon-edit-outline"
-                size="mini"
-                class="btn-alter"
-                @click="alter(scope.$index)"
-              ></el-button>
-            </el-tooltip>
-              <el-button
-                type="danger"
-                slot="reference"
-                icon="el-icon-delete"
-                size="mini"
-                class="btn-del"
-                @click="open"
-              ></el-button>
+            <el-button
+              type="danger"
+              slot="reference"
+              icon="el-icon-delete"
+              size="mini"
+              class="btn-del"
+              @click="handleDelete(scope.$index)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
         background
         layout="prev, pager, next"
-        :page-size="5"
-        :total="10"
+        :page-size="1"
+        :total="5"
         :pager-count="5"
         :hide-on-single-page="true"
         @current-change="changePage"
@@ -95,81 +75,6 @@
   </div>
 </template>
 <script>
-/* var  tableData = [
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        }
-    ]; */
-
 export default {
   data() {
     return {
@@ -178,15 +83,13 @@ export default {
         user: "",
         region: ""
       },
-      loading: false,
-      tableData: []
+      loading: true,
+      tableData: [],
+      value2: '',
     };
   },
   methods: {
     handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
       console.log(index, row);
     },
     handleClick(tab, event) {
@@ -204,13 +107,31 @@ export default {
       index = 5 * (this.currentPage - 1) + index;
       console.log("删除", index);
     },
-    gotomoneydetail() {
-      this.$router.push("/home/moneydetail");
+    gotomoneydetail(index) {
+      this.$router.push({
+        path: "/home/moneydetail?id=" + this.tableData[index].payId
+      });
+      console.log("跳转", this.tableData[index].payOrder);
     },
     changePage(val) {
+      console.log(this.currentPage)
       this.currentPage = val;
+      this.axios
+      .post("/pay/leibie", {      
+          payProject: "水费",
+          currentPage:val,
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+        console.log(res.data);
+        this.loading =false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      
     },
-    open () {
+    handleDelete(index) {
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -221,6 +142,28 @@ export default {
             type: "success",
             message: "删除成功!"
           });
+          this.axios
+            .post("/pay/delorder", {
+                payOrder: this.tableData[index].payOrder
+            })
+            .then(res => {
+              console.log("删除成功", res);
+              this.axios
+                .post("/pay/leibie", {
+                  payProject: "水费"
+                })
+                .then(res => {
+                  //  res.data = tableData;
+                  this.tableData = res.data.data.Pays;
+                  this.loading = false;
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+            });
         })
         .catch(() => {
           this.$message({
@@ -229,34 +172,69 @@ export default {
           });
         });
     },
-    onSubmit () {
-      console.log('submit')
-    },
+    onSubmit() {
+       var t = this.value2;
+      console.log(this.formInline.user)
+        var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+        var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+        console.log("开始时间:",startTime1);
+        console.log("结束时间:",endTime1); 
+      this.axios
+      .post("/pay/moname", {
+          payProject:'水费',
+           starttime:startTime1,
+          endtime:endTime1, 
+          userName:this.formInline.user
+      })
+      .then(res => {
+        this.tableData = res.data.data.pays;
+        console.log(res.data.data);
+        console.log(this.tableData);
+        this.loading =false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    }
   },
   created() {
-       this.axios
-        .get("/pay/leibie",{
-         params:{
-            payProject:"水费"
-         }
-        }) 
-        .then(res => {
-        //  res.data = tableData; 
-         this.tableData.push(res.data.data.Pays[0]);
-          console.log(res.data.data.Pays[0])
-          console.log(this.tableData)
-        })
-        .catch(err => {
-          console.log(err);
-        })
+    this.axios
+      .post("/pay/leibie", {      
+          payProject: "水费",
+          currentPage:this.currentPage,
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+        this.loading =false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
+  /* this.axios
+      .post("/pay/jiemian", {
+
+          inhabitantId:1,
+          payUnitId:4,
+        
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+        console.log("第一个数据", res.data);
+        console.log(res.data.data);
+        console.log(this.tableData);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, */
   computed: {
     getData() {
       var start = 5 * (this.currentPage - 1);
       return this.tableData.slice(start, start + 5);
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

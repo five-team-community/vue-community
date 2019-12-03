@@ -5,28 +5,24 @@
         <i class="el-icon-s-order"></i>
         <span>社区活动</span>
       </div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
+    <el-form :inline="true" :model="form" class="demo-form-inline">
       <el-col :span="14">
         <el-form-item label="活动名称">
-          <el-input v-model="formInline.user" placeholder="活动名称"></el-input>
+          <el-input v-model="form.user" placeholder="活动名称"></el-input>
         </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="formInline.region" placeholder="状态">
-            <el-option label="待处理" value="shanghai"></el-option>
-            <el-option label="已处理" value="beijing"></el-option>
+        <el-form-item label="联系人">
+          <el-select v-model="form.contactsName" placeholder="请选择联系人">
+            <el-option v-for="item in options" :key="item.activityId" :label="item.contactsName" :value="item.contactsName"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit" icon="el-icon-search"
-            >查询</el-button
-          >
-        </el-form-item>
+       
       </el-col>
       <el-col :span="10">
         <el-row>
-          <el-button type="primary" icon="el-icon-edit">新建</el-button>
-          <el-button type="success"><i class="el-icon-upload el-icon--right"></i>发布</el-button>
-          <el-button type="danger" icon="el-icon-delete">批量删除</el-button>
+          <el-button type="primary" @click="onSubmit" icon="el-icon-search"
+            >查询</el-button
+          >
+          <el-button type="primary" icon="el-icon-edit" @click="handleEdit">新建</el-button>
         </el-row>
       </el-col>
     </el-form>
@@ -37,18 +33,18 @@
       style="width: 100%"
       >
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column prop="id" label="社区" width="120"> </el-table-column>
-      <el-table-column prop="name" label="活动名称" width="120"> </el-table-column>
-      <el-table-column label="活动类型" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
+      <el-table-column prop="id" label="社区" width="120"> 易居</el-table-column>
+      <el-table-column prop="activityName" label="活动名称" width="120">  </el-table-column>
+      <el-table-column prop="contactsName" label="联系人" width="120">
+
       </el-table-column>
-      <el-table-column label="首页显示" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
+      <el-table-column prop="contactsPhone" label="联系方式" width="120">
+        
       </el-table-column>
-      <el-table-column label="状态" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
+      <el-table-column prop="description" label="描述" width="120">
+       
       </el-table-column>
-      <el-table-column prop="state" label="审核状态" width="120"> </el-table-column>
+      <el-table-column prop="activityAddress" label="活动地址" width="120"> </el-table-column>
       <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
@@ -57,16 +53,7 @@
                 icon="el-icon-search"
                 size="mini"
                 class="btn-show"
-                @click="gotomoneydetail"
-              ></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="修改" placement="bottom">
-              <el-button
-                type="info"
-                icon="el-icon-edit-outline"
-                size="mini"
-                class="btn-alter"
-                @click="alter(scope.$index)"
+                @click="gotoactivitydetail(scope.$index)"
               ></el-button>
             </el-tooltip>
               <el-button
@@ -75,7 +62,7 @@
                 icon="el-icon-delete"
                 size="mini"
                 class="btn-del"
-                @click="open"
+                @click="handleDelete(scope.$index)"
               ></el-button>
           </template>
         </el-table-column>
@@ -97,12 +84,14 @@
 export default {
   data() {
     return {
-      formInline: {
+      form: {
         user: "",
         region: ""
+
       },
+      options:{},
       tableData: [
-        {
+        /* {
           listname: "物业投诉",
           date: "2016-05-02",
           name: "王小虎",
@@ -141,24 +130,107 @@ export default {
           phone: 13880888088,
           address: "上海市普陀区金沙江路 1518 弄",
           state: "待处理"
-        }
+        } */
       ],
-      loading: false
+      loading: true
     };
   },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    handleEdit() {
+      this.$router.push({
+        path: "/home/addActivity" 
+      });
     },
-    handleDelete(index, row) {
-      console.log(index, row);
+    changePage(val) {
+      console.log(this.currentPage)
+      this.currentPage = val;
+      this.axios
+      .post("/pay/leibie", {      
+          currentPage:val,
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+        console.log(res.data);
+        this.loading =false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      
+    },
+    handleDelete(index) {
+      this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+          this.axios
+            .post("/activity/deleteActivity", {
+                activityId: [this.tableData[index].activityId]
+            })
+            .then(res => {
+              console.log("删除成功", res);
+              this.axios
+                .post("/activity/showAll", {
+        pageIndex:1,
+        pageSize:5,
+        online:true,
+      })
+                .then(res => {
+                  //  res.data = tableData;
+                  this.tableData = res.data.data.Activity;
+                  this.loading = false;
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     handleClick(tab, event) {
       console.log(tab, event);
     },
     onSubmit() {
       console.log("submit!");
-    }
+    },
+    gotoactivitydetail(index) {
+      this.$router.push({
+        path: "/home/activitydetail?id=" + this.tableData[index].activityId
+      });
+      console.log("跳转", this.tableData[index].activityId);
+    },
+  },
+   created() {
+    this.axios
+      .post("/activity/showAll", {
+        pageIndex:1,
+        pageSize:5,
+        online:true,
+      })
+      .then(res => {
+        //  res.data = tableData;
+        this.tableData = res.data.data.Activity;
+        this.options=res.data.data.Activity;
+        console.log(this.options);
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>

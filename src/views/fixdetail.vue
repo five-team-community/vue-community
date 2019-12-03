@@ -91,55 +91,37 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        }
-      ],
+      tableData: [],
       activeName: "second"
     };
   },
   methods: {
+    back(){
+        this.$router.push({path:'/home/NeedDo'});
+      },
     handleClick(tab, event) {
       console.log(tab, event);
     }
+  },
+  created () {
+     var str = location.href;
+    var num = str.indexOf("=");
+    str = str.substr(num+1);
+    str = Number(str);
+    this.axios
+        .get("/pay/xiangqing",{
+         params:{
+            payOrder:str
+         }
+        }) 
+        .then(res => {
+          this.tableData = res.data.data.Pays; 
+        })
+        .catch(err => {
+          console.log(err);
+          return err;
+          
+        })
   }
 };
 </script>

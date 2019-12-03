@@ -2,10 +2,10 @@
   <div class="user-item">
     <div class="line"></div>
     <div class="content clearfix">
-      <div class="name">用户名:{{user.name}}</div>
-      <div class="host">关联业主:{{user.host}}</div>
-      <div class="tel">手机号:{{user.tel}}</div>
-      <div class="time">绑定时间:<i class="el-icon-date"></i> {{user.time}}</div>
+      <div class="name">用户名:{{user.inhabitantName}}</div>
+      <div class="host">关联业主:{{user.ownerName}}</div>
+      <div class="tel">手机号:{{user.telNum}}</div>
+      <div class="time">绑定时间:<i class="el-icon-date"></i> {{user.checkInTime}}</div>
       <div class="del">
       <el-button type="danger" plain round size="medium" @click="del" icon="el-icon-link">解绑用户</el-button>
     </div>
@@ -20,7 +20,23 @@ export default {
   },
   methods:{
    del(){
-     console.log("删除",this.user.id);
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var id=this.user.inhabitantId;
+        console.log("删除",id);
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
    }
   }
 }
