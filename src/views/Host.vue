@@ -18,15 +18,14 @@
           <el-form-item label="手机号：">
             <el-input v-model="search.telphone" placeholder="请输入预留手机号"></el-input>
           </el-form-item>
-          <el-form-item class="btn">
-              <el-button icon="el-icon-plus" class="btn-add" @click='add'>新增</el-button>
-              <el-button icon="el-icon-search" class="btn-search" @click='searchMsg'>搜素</el-button>
-          </el-form-item>
         </el-form>
       </div>
+
       <!-- 新增和搜索按钮 -->
-      <div class="btn">
-        
+      <div class="btn" style="text-align:right;margin-right:30px">
+        <el-button icon="el-icon-upload" class="btn-exclude" @click="exclude">导出报表</el-button>
+        <el-button icon="el-icon-plus" class="btn-add" @click="add">新增</el-button>
+        <el-button icon="el-icon-search" class="btn-search" @click="searchMsg">搜素</el-button>
       </div>
 
       <!-- 表格数据 -->
@@ -42,204 +41,228 @@
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
-              <el-button type="info" icon="el-icon-edit-outline" size="mini" class="btn-alter" @click="alter(scope.$index)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini" class="btn-del" @click="del(scope.$index)"></el-button>
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                size="mini"
+                class="btn-show"
+                @click="show(scope.$index)"
+              ></el-button>
+              <el-button
+                type="info"
+                icon="el-icon-edit-outline"
+                size="mini"
+                class="btn-alter"
+                @click="alter(scope.$index)"
+              ></el-button>
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                class="btn-del"
+                @click="del(scope.$index)"
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
 
         <!-- 分页 -->
-        <div class="clearfix" v-show="!loading"><el-pagination background layout="prev, pager, next" :page-size="5" :total="hostData.length" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
+        <div class="clearfix" v-show="!loading">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-size="pageSize"
+            :total="totalPage"
+            :pager-count="5"
+            :hide-on-single-page="true"
+            @current-change="changePage"
+            class="page"
+          ></el-pagination>
+        </div>
       </div>
-      
     </div>
   </div>
 </template>
 <script>
 // 模拟的数据
-var hostData=[
-  {
-    id:1,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:2,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
 
-  {
-    id:3,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:4,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:5,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-
-  {
-    id:6,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:7,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:8,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  },
-  {
-    id:9,
-    no:"1",
-    name:"aaa",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    time:"2018-08-07",
-    link:'bbb'
-  }
-
- 
-]
 export default {
   data() {
     return {
-      loading:true,
-      currentPage:1,//记录当前页
-      search: {//记录筛选的数据项
+      loading: true,
+      currentPage: 1, //记录当前页
+      pageSize: 5,
+      totalPage: 0,
+      search: {
+        //记录筛选的数据项
         houseNum: "",
         host: "",
-        telphone: "",
-        isEmpty: ""
+        telphone: ""
       },
-      hostData:[]//表单所以数据
+      hostData: [] //表单所以数据
     };
   },
   methods: {
-    add(){//新增
-      this.$router.push({path:'/home/addHost'});
+    add() {
+      //新增
+      this.$router.push({ path: "/home/addHost" });
     },
-    searchMsg(){//搜索
+    searchMsg() {
+      //****************************搜索******************************
+      this.loading = true;
       console.log(this.search);
-    },
-    show(index){//查看
-      index = 5*(this.currentPage-1)+index;
-      var id=this.hostData[index].id;
-      this.$router.push({path:'/home/showHost?id='+id});
-    },
-    alter(index){//修改
-      index = 5*(this.currentPage-1)+index;
-      var id=this.hostData[index].id;
-      this.$router.push({path:'/home/alterHost?id='+id});
-    },
-    del(index){//删除
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        index = 5*(this.currentPage-1)+index;
-        var id=this.hostData[index].id;
-        console.log("删除",id);
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+      this.axios
+        .post("/inhabitant/searchInhabitant", {
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          houseNo: this.search.houseNum,
+          name: this.search.host,
+          telNum: this.search.telphone
+        })
+        .then(res => {
+          console.log(res);
+          this.hostData = [];
+          this.formateData(res.data.data.data);
+          this.totalPage = res.data.data.count;
+          this.loading = false;
+        })
+        .catch(err => {
+          console.log(err);
         });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
+    },
+    show(index) {
+      //查看
+      index = 5 * (this.currentPage - 1) + index;
+      var id = this.hostData[index].id;
+      console.log(id);
+      this.$router.push({ path: "/home/showHost/" + id });
+    },
+    alter(index) {
+      //修改
+      index = 5 * (this.currentPage - 1) + index;
+      var id = this.hostData[index].id;
+      console.log(id);
+      this.$router.push({ path: "/home/alterHost?id=" + id });
+    },
+    del(index) {
+      //***********************************删除**************************************
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          index = 5 * (this.currentPage - 1) + index;
+          var id = this.hostData[index].id;
+          this.axios
+            .post("/inhabitant/removeInhabitant", {
+              id: id
+            })
+            .then(res => {
+              if (res.data.message == "删除成功") {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                this.house
+                this.axios
+                  .post("/inhabitant/showInhabitants", {
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize
+                  })
+                  .then(res => {
+                    console.log(res);
+                    this.hostData = [];
+                    this.formateData(res.data.data.data);
+                    this.loading = false;
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
+    changePage(val) {
+      //改变页码
+      this.currentPage = val;
+    },
+    exclude() {
+      //导出报表
+      window.location.href = "http://172.16.6.43:8080/inhabitant/excludeExcel";
+    },
+    addZero(v) {
+      return v < 10 ? "0" + v : v;
+    },
+    switchTimeFormat(time) {
+      const dateTime = new Date(time);
+      const year = dateTime.getFullYear();
+      const month = dateTime.getMonth() + 1;
+      const date = dateTime.getDate();
+
+      return `${year}-${this.addZero(month)}-${this.addZero(date)}`;
+    },
+    formateData(list) {
+      for (var i = 0; i < list.length; i++) {
+        var item = {};
+        item.id = list[i].inhabitantId;
+        item.no = list[i].housePropertyList[0].housePropertyNo;
+        item.name = list[i].inhabitantName;
+        item.idCard = list[i].idCardNo;
+        item.sex = list[i].inhabitantSex;
+        item.tel = list[i].telNum;
+        item.time = this.switchTimeFormat(list[i].checkInTime);
+        item.link = list[i].user.userName;
+        this.hostData.push(item);
+      }
+    }
+  },
+  created() {
+    this.axios
+      .get("/inhabitant/inhabitantAmount", {})
+      .then(res => {
+        console.log(res);
+        this.totalPage = res.data.data.data;
+      })
+      .catch(err => {
+        console.log(err);
       });
-      
-    },
-    changePage(val){//改变页码
-      this.currentPage=val;
-    },
-    // formateData(){
-
-    // }
-  },
-  created(){
-    // this.axios.post("/inhabitant/showInhabitants", {
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data.data)
-    //   })
-    //   .catch(err=> {
-    //     console.log(err)
-    //   })
-
-    this.loading = false;
-    this.hostData=hostData;//创建时获取数据
-  },
-  computed: {
-  //   getData(){//计算当前页的数据，table绑定该值
-
-  //  }
+    this.axios
+      .post("/inhabitant/showInhabitants", {
+        currentPage: this.currentPage,
+        pageSize: this.pageSize
+      })
+      .then(res => {
+        console.log(res);
+        this.formateData(res.data.data.data);
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
+
+
 <style lang="less" scoped>
 @import "../assets/less/base.less";
 #host {
   color: @fontColor;
-  background-color: #f3f3f4;
+
+  background-color: white;
 
   min-height: 500px;
+
 }
 .content {
   background: white;
@@ -294,9 +317,17 @@ export default {
   width: 90%;
 }
 
-.btn{
+.btn {
   margin-left: 30px;
   color: white;
+  .btn-exclude {
+    color: @yellowColor;
+    border-color: @yellowColor;
+    &:hover {
+      color: white;
+      background: @yellowColor;
+    }
+  }
   .btn-add {
     background: @greenColor;
     color: white;
@@ -312,19 +343,19 @@ export default {
     }
   }
 }
-.mytable{
+.mytable {
   padding: 20px 30px;
 }
-.el-button--mini, .el-button--mini.is-round{
+.el-button--mini,
+.el-button--mini.is-round {
   padding: 3px;
 }
-.btn-alter{
+.btn-alter {
   background: @blueColor;
   border-color: @blueColor;
 }
-.page{
+.page {
   float: right;
   margin-top: 20px;
-  
 }
 </style>

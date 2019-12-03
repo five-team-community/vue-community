@@ -17,7 +17,7 @@
             <div class="item-title">头像:</div>
           </el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10">
-            <div class="msg">
+            <div>
               <el-avatar shape="square" :size="100" :src="serveData.img" class="serve-img"></el-avatar>
             </div>
           </el-col>
@@ -132,27 +132,7 @@
 </template>
 <script>
 // 模拟数据
-var serveData = {
-  id: 1,
-  name: "aaa",
-  img: require("@/assets/img/logo.png"),
-  // img:"http://172.16.6.43:8080/test/img1.jpg",
-  tel: "12324234",
-  sex: "男",
-  age: "30",
-  idCard: "513022199802168027",
-  identity: "家政",
-  experience: "2年",
-  serve: "厨房打扫",
-  address: "四川省成都市",
-  isEmpty: "空闲",
-  nation: "汉族",
-  education: "高中",
-  work:
-    "fdskfhkajfhkashfkasjhfkjashfkasfkjjjjjasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  train: "assssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-  link: "2324"
-};
+
 export default {
   data() {
     return {
@@ -164,11 +144,56 @@ export default {
     back() {
       //返回房产信息列表
       this.$router.push({ path: "/home/serve" });
+    },
+    getAge(idCard){
+      var myDate = new Date();
+      var month = myDate.getMonth() + 1;
+      var day = myDate.getDate();
+      var age = myDate.getFullYear() - idCard.substring(6, 10) - 1;
+      if (idCard.substring(10, 12) < month || idCard.substring(10, 12) == month && idCard.substring(12, 14) <= day) {
+      age++;
+      }
+      return age;
+    },
+    formateData(item){
+      var data = {};
+      data.id = item.staffId;
+      data.img = this.$store.state.ip+item.photo;
+      data.name = item.staffName;
+      data.sex = item.staffSex;
+      data.tel = item.telNum;
+      data.idCard = item.idCardNo;
+      data.age = this.getAge(item.idCardNo);
+      data.identity = item.staffType;
+      data.experience = item.workExperience;
+      data.serve = item.serviceItem;
+      data.address = item.staffAddr;
+      data.isEmpty = item.isFree;
+      data.nation = item.staffNation;
+      data.education = item.education;
+      data.work = item.experienceInfo||"无";
+      data.train = item.trainInfo||"无";
+      data.link = item.user.userName;
+      console.log(data);
+      return data;
     }
   },
   created() {
-    //创建时获取数据
-    this.serveData = serveData;
+    //************************获取数据**********************
+
+     this.axios.post("/staff/showSingle", {
+      id:this.$route.params.id
+    })
+    .then(res => {
+      console.log(res.data);
+      
+      this.serveData = this.formateData(res.data.data.data)
+      // this.loading=false;
+    })
+    .catch(err=> {
+      console.log(err);
+    })
+    // this.serveData = serveData;
   }
 };
 </script>
@@ -225,6 +250,7 @@ export default {
 .msg {
   color: @fontColor;
   line-height: 45px;
+  height: 45px;
   font-size: 14px;
 }
 @media screen and (max-width: 768px) {

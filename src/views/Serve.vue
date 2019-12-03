@@ -22,27 +22,26 @@
               <el-option label="开锁员工" value="false"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item class="btn">
-              <el-button icon="el-icon-plus" class="btn-add" @click='add'>新增</el-button>
-              <el-button icon="el-icon-search" class="btn-search" @click='searchMsg'>搜素</el-button>
-          </el-form-item>
         </el-form>
       </div>
       <!-- 新增和搜索按钮 -->
-      <div class="btn">
-        
+      <!-- 新增和搜索按钮 -->
+      <div class="btn" style="text-align:right;margin-right:30px">
+        <el-button icon="el-icon-upload" class="btn-exclude" @click="exclude">导出报表</el-button>
+        <el-button icon="el-icon-plus" class="btn-add" @click="add">新增</el-button>
+        <el-button icon="el-icon-search" class="btn-search" @click="searchMsg">搜素</el-button>
       </div>
 
       <!-- 表格数据 -->
       <div class="mytable">
-        <el-table :data="getData" border style="width: 100%" v-loading="loading" >
-          <el-table-column prop="name" label="姓名"></el-table-column>
-          <el-table-column prop="tel" label="电话"></el-table-column>
-          <el-table-column prop="idCard" label="身份证号码" width="180px"></el-table-column>
-          <el-table-column prop="sex" label="性别"></el-table-column>
-          <el-table-column prop="identity" label="身份"></el-table-column>
-          <el-table-column prop="experience" label="经验"></el-table-column>
-          <el-table-column prop="isEmpty" label="是否空闲"></el-table-column>
+        <el-table :data="serveList" border style="width: 100%" v-loading="loading" >
+          <el-table-column prop="staffName" label="姓名"></el-table-column>
+          <el-table-column prop="telNum" label="电话"></el-table-column>
+          <el-table-column prop="idCardNo" label="身份证号码" width="180px"></el-table-column>
+          <el-table-column prop="staffSex" label="性别"></el-table-column>
+          <el-table-column prop="staffType" label="身份"></el-table-column>
+          <el-table-column prop="workExperience" label="经验"></el-table-column>
+          <el-table-column prop="isFree" label="是否空闲"></el-table-column>
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -53,44 +52,32 @@
           </el-table-column>
         </el-table>
 
+
         <!-- 分页 -->
-        <div class="clearfix" v-show="!loading"><el-pagination background layout="prev, pager, next" :page-size="5" :total="hostData.length" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
+        <div class="clearfix" v-show="!loading"><el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalPage" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
       </div>
       
     </div>
   </div>
 </template>
 <script>
-// 模拟的数据
-var hostData=[
-  {
-    id:1,
-    name:'aaa',
-    img:require("@/assets/img/logo.png"),
-    // img:"http://172.16.6.43:8080/test/img1.jpg",
-    tel:"12324234",
-    sex:'男',
-    idCard:'513022199802168027',
-    identity: '家政',
-    experience:'2年',
-    isEmpty:'空闲'
-  }
-]
+
 export default {
   data() {
     return {
       form:{
-
+        
       },
       loading:true,
       currentPage:1,//记录当前页
+      pageSize:5,
+      totalPage:0,
       search: {//记录筛选的数据项
-        houseNum: "",
-        host: "",
-        telphone: "",
-        isEmpty: ""
+        name:'',
+        tel:'',
+        identity:'',
       },
-      hostData:[]//表单所以数据
+      serveList:[]//表单所以数据
     };
   },
   methods: {
@@ -99,52 +86,120 @@ export default {
     },
     searchMsg(){//搜索
       console.log(this.search);
+
+      // ********************************搜索***************************
+      this.axios.post("/staff/showBySearch", {
+      currentPage: this.currentPage,
+      pageSize: this.pageSize,
+      name: this.search.name,
+      telNum: this.search.tel,
+      staffType: this.search.identity
+    })
+    .then(res => {
+      console.log(res.data);
+      this.serveList = res.data.data.data
+      this.loading=false;
+    })
+    .catch(err=> {
+      console.log(err);
+    })
+      
+    },
+    exclude(){//导出报表
+      window.location.href="http://172.16.6.43:8080/staff/excludeExcel";
     },
     show(index){//查看
       index = 5*(this.currentPage-1)+index;
-      var id=this.hostData[index].id;
-      this.$router.push({path:'/home/showServe?id='+id});
+      var id=this.serveList[index].staffId;
+      this.$router.push({path:'/home/showServe/'+id});
     },
     alter(index){//修改
       index = 5*(this.currentPage-1)+index;
-      var id=this.hostData[index].id;
-      this.$router.push({path:'/home/alterServe?id='+id});
+      var id=this.serveList[index].staffId;
+      this.$router.push({path:'/home/alterServe/'+id});
     },
-    del(index){//删除
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        index = 5*(this.currentPage-1)+index;
-        var id=this.hostData[index].id;
-        console.log("删除",id);
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+
+     del(index) {
+      //***********************************删除**************************************
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          index = 5 * (this.currentPage - 1) + index;
+          var id = this.serveList[index].staffId;
+          this.axios
+            .post("/staff/removeStaff", {
+              id: id
+            })
+            .then(res => {
+              if (res.data.message == "删除成功") {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                this.house
+                this.axios
+                  .post("/staff/showStaffList", {
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize
+                  })
+                  .then(res => {
+                    console.log(res);
+                    this.serveList = res.data.data.data
+                    this.loading = false;
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
-      });
-      
     },
+
+
     changePage(val){//改变页码
       this.currentPage=val;
-    }
+    },
+
+
   },
   created(){
-    this.loading = false;
-    this.hostData=hostData;//创建时获取数据
+
+    // ***************************获取数据*****************************
+    this.axios
+      .get("/staff/staffAmount", {})
+      .then(res => {
+        console.log(res);
+        this.totalPage = res.data.data.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    this.axios.post("/staff/showStaffList", {
+      currentPage: this.currentPage,
+      pageSize: this.pageSize
+    })
+    .then(res => {
+      console.log(res.data);
+      this.serveList = res.data.data.data
+      this.loading=false;
+    })
+    .catch(err=> {
+      console.log(err);
+    })
   },
-  computed: {
-    getData(){//计算当前页的数据，table绑定该值
-      var start=5*(this.currentPage-1);
-      return this.hostData.slice(start,start+5);
-   }
-  }
 };
 </script>
 <style lang="less" scoped>
@@ -212,6 +267,14 @@ export default {
 .btn{
   margin-left: 30px;
   color: white;
+  .btn-exclude{
+    color:@yellowColor;
+    border-color: @yellowColor;
+    &:hover{
+      color: white;
+      background: @yellowColor;
+    }
+  }
   .btn-add {
     background: @greenColor;
     color: white;

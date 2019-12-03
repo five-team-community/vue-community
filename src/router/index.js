@@ -36,7 +36,7 @@ const routes = [
         }
       },
       {
-        path:'showHouse',
+        path:'showHouse/:id',
         name:"ShowHouse",
         component: () => import('../views/ShowHouse.vue'),//房产管理
         meta: {
@@ -52,7 +52,7 @@ const routes = [
         }
       },
       {
-        path:'alterHouse',
+        path:'alterHouse/:id',
         name:"AlterHouse",
         component: () => import('../views/AlterHouse.vue'),//房产管理
         meta: {
@@ -76,7 +76,7 @@ const routes = [
         }
       },
       {
-        path:'showhost',
+        path:'showhost/:id',
         name:"ShowHost",
         component: () => import('../views/ShowHost.vue'),//业主管理
         meta: {
@@ -84,7 +84,7 @@ const routes = [
         }
       },
       {
-        path:'alterhost',
+        path:'alterhost/:id',
         name:"AlterHost",
         component: () => import('../views/AlterHost.vue'),//业主管理
         meta: {
@@ -108,7 +108,7 @@ const routes = [
         }
       },
       {
-        path:'showServe',
+        path:'showServe/:id',
         name:"ShowServe",
         component: () => import('../views/ShowServe.vue'),//服务人员管理
         meta: {
@@ -116,7 +116,7 @@ const routes = [
         }
       },
       {
-        path:'alterServe',
+        path:'alterServe/:id',
         name:"AlterServe",
         component: () => import('../views/AlterServe.vue'),//服务人员管理
         meta: {
@@ -284,7 +284,7 @@ const routes = [
         }
       },
       {
-        path:'alteruser',
+        path:'alteruser/:id',
         name:"AlterUser",
         component: () => import('../views/AlterUser.vue'),//用户管理
         meta: {
@@ -292,7 +292,7 @@ const routes = [
         }
       },
       {
-        path:'showuser',
+        path:'showuser/:id',
         name:"ShowUser",
         component: () => import('../views/ShowUser.vue'),//用户管理
         meta: {
