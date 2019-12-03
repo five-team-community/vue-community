@@ -23,6 +23,9 @@
         <el-form-item label="地址">
           <el-cascader v-model="form.value" :options="options"  @change="handleChange"></el-cascader>
         </el-form-item>
+        <el-form-item label="详细地址">
+          <el-input v-model="form.detailAddress" placeholder="请输入详细地址"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">添加</el-button>
         </el-form-item>
@@ -42,6 +45,7 @@ export default {
           companyName: '',
           personName: '',
           telphone: '',
+          detailAddress:'',
           date1: '',
           value:'',
           delivery: false,
@@ -51,252 +55,252 @@ export default {
       },
       value: [],
       options: [{
-          value: 'zhinan',
+          value: '四川省',
           label: '四川省',
           children: [
             {
-            value: 'shejiyuanze',
+            value: '成都市',
             label: '成都市',
             children: [{
-              value: 'yizhi',
+              value: '郫都区',
               label: '郫都区'
             }, {
-              value: 'fankui',
+              value: '金牛区',
               label: '金牛区'
             }, {
-              value: 'xiaolv',
+              value: '青羊区',
               label: '青羊区'
             }, {
-              value: 'kekong',
+              value: '锦江区',
               label: '锦江区'
             }]
           }, 
           {
-            value: 'daohang',
+            value: '德阳市',
             label: '德阳市',
             children: [{
-              value: 'cexiangdaohang',
+              value: '绵竹县',
               label: '绵竹县'
             }, {
-              value: 'dingbudaohang',
+              value: '罗江市',
               label: '罗江市'
             }]
           }]
         }, {
-          value: 'zujian',
+          value: '浙江省',
           label: '浙江省',
           children: [
             {
-            value: 'basic',
+            value: '杭州市',
             label: '杭州市',
             children: [{
-              value: 'layout',
+              value: '上城区',
               label: '上城区'
             }, {
-              value: 'color',
+              value: '下城区',
               label: '下城区'
             }, {
-              value: 'typography',
+              value: '江干区',
               label: '江干区'
             }, {
-              value: 'icon',
+              value: '西湖区',
               label: '西湖区'
             }, {
-              value: 'button',
+              value: '滨江区',
               label: '滨江区'
             }]
           }, 
           {
-            value: 'form',
+            value: '宁波市',
             label: '宁波市',
             children: [{
-              value: 'radio',
+              value: '江北区',
               label: '江北区'
             }, {
-              value: 'checkbox',
+              value: '北仑区',
               label: '北仑区'
             }, {
-              value: 'input',
+              value: '镇海区',
               label: '镇海区'
             }, {
-              value: 'input-number',
+              value: '奉化区',
               label: '奉化区'
             }, {
-              value: 'select',
+              value: '海曙区',
               label: '海曙区'
             }, {
-              value: 'cascader',
+              value: '象山县',
               label: '象山县'
             }, {
-              value: 'switch',
+              value: '宁海县',
               label: '宁海县'
             }, {
-              value: 'slider',
+              value: '余姚市',
               label: '余姚市'
             }, {
-              value: 'time-picker',
+              value: '慈溪市',
               label: '慈溪市'
             }]
           }, 
           {
-            value: 'data',
+            value: '温州市',
             label: '温州市',
             children: [{
-              value: 'table',
+              value: '鹿城区',
               label: '鹿城区'
             }, {
-              value: 'tag',
+              value: '龙湾区',
               label: '龙湾区'
             }, {
-              value: 'progress',
+              value: '瓯海区',
               label: '瓯海区'
             }, {
-              value: 'tree',
+              value: '洞头区',
               label: '洞头区'
             }, {
-              value: 'pagination',
+              value: '乐清市',
               label: '乐清市'
             }, {
-              value: 'badge',
+              value: '瑞安区',
               label: '瑞安区'
             }]
           }, 
           {
-            value: 'notice',
+            value: '嘉兴市',
             label: '嘉兴市',
             children: [{
-              value: 'alert',
+              value: '南湖区',
               label: '南湖区'
             }, {
-              value: 'loading',
+              value: '秀洲区',
               label: '秀洲区'
             }, {
-              value: 'message',
+              value: '嘉善区',
               label: '嘉善区'
             }, {
-              value: 'message-box',
+              value: '海盐县',
               label: '海盐县'
             }, {
-              value: 'notification',
+              value: '海宁市',
               label: '海宁市'
             }]
           }, 
           {
-            value: 'navigation',
+            value: '绍兴市',
             label: '绍兴市',
             children: [{
-              value: 'menu',
+              value: '越城区',
               label: '越城区'
             }, {
-              value: 'tabs',
+              value: '柯桥市',
               label: '柯桥市'
             }, {
-              value: 'breadcrumb',
+              value: '新昌县',
               label: '新昌县'
             }, {
-              value: 'dropdown',
+              value: '上虞区',
               label: '上虞区'
             }, {
-              value: 'steps',
+              value: '诸暨区',
               label: '诸暨区'
             }]
           }, 
           {
-            value: 'others',
+            value: '湖州市',
             label: '湖州市',
             children: [{
-              value: 'dialog',
+              value: '吴兴区',
               label: '吴兴区'
             }, {
-              value: 'tooltip',
+              value: '南浔区',
               label: '南浔区'
             }, {
-              value: 'popover',
+              value: '德清区',
               label: '德清区'
             }, {
-              value: 'card',
+              value: '长兴县',
               label: '长兴县'
             }, {
-              value: 'carousel',
+              value: '安吉区',
               label: '安吉区'
             }]
           }]
         }, 
         {
-          value: 'ziyuan',
+          value: '北京市',
           label: '北京市',
           children: [{
-            value: 'axure',
+            value: '朝阳区',
             label: '朝阳区'
           }, {
-            value: 'sketch',
+            value: '海淀区',
             label: '海淀区'
           },{
-            value: 'sketch',
+            value: '门头沟区',
             label: '门头沟区'
           },{
-            value: 'sketch',
+            value: '通州区',
             label: '通州区'
           },{
-            value: 'sketch',
+            value: '大兴区',
             label: '大兴区'
           },{
-            value: 'sketch',
+            value: '怀柔区',
             label: '怀柔区'
           }, {
-            value: 'jiaohu',
+            value: '密云区',
             label: '密云区'
           }]
         },
         {
-          value: 'ziyuan',
+          value: '重庆市',
           label: '重庆市',
           children: [{
-            value: 'axure',
+            value: '万州区',
             label: '万州区'
           }, {
-            value: 'sketch',
+            value: '涪陵区',
             label: '涪陵区'
           },{
-            value: 'sketch',
+            value: '渝中区',
             label: '渝中区'
           },{
-            value: 'sketch',
+            value: '大渡口区',
             label: '大渡口区'
           },{
-            value: 'sketch',
+            value: '江北区',
             label: '江北区'
           },{
-            value: 'sketch',
+            value: '九龙坡区',
             label: '九龙坡区'
           }, {
-            value: 'jiaohu',
+            value: '渝北区',
             label: '渝北区'
           }]
         },
         {
-          value: 'ziyuan',
+          value: '上海市',
           label: '上海市',
           children: [{
-            value: 'axure',
+            value: '黄浦区',
             label: '黄浦区'
           }, {
-            value: 'sketch',
+            value: '徐汇区',
             label: '徐汇区'
           },{
-            value: 'sketch',
+            value: '长宁区',
             label: '长宁区'
           },{
-            value: 'sketch',
+            value: '静安区',
             label: '静安区'
           },{
-            value: 'sketch',
+            value: '普陀区',
             label: '普陀区'
           },{
-            value: 'sketch',
+            value: '虹口区',
             label: '虹口区'
           }, {
-            value: 'jiaohu',
+            value: '浦东新区',
             label: '浦东新区'
           }]
         }]
@@ -307,10 +311,20 @@ export default {
       console.log(value);
     },
     onSubmit() {
-      console.log('submit!',this.form.companyName);
-      console.log('submit!',this.form.personName);
-      console.log('submit!',this.form.telphone);
-      console.log('submit!',this.form.value);
+      console.log('公司!',this.form.companyName);
+      console.log('联系人',this.form.personName);
+      console.log('电话',this.form.telphone);
+      console.log('详细地址',this.form.detailAddress);
+      console.log('submit!',this.form.value[0]);
+      console.log('submit!',this.form.value[1]);
+      if(this.form.value[2]) {
+        console.log('submit!',this.form.value[2]);
+        var address = this.form.value[0] + "" + this.form.value[1] + "" + this.form.value[2] + "" + this.form.detailAddress;
+      } else {
+        address = this.form.value[0] + "" + this.form.value[1] + "" + this.form.detailAddress;
+      }
+      console.log("地址：",address);
+      
     },
     returnBtn() {
       this.$router.push({path:"/home/LockPeople"});

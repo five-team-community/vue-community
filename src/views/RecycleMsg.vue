@@ -14,17 +14,6 @@
           <el-form-item label="联系电话">
             <el-input v-model="search.telphone" placeholder="请输入用户电话"></el-input>
           </el-form-item>
-          <el-form-item label="服务人员">
-            <el-select v-model="search.staFFName" placeholder="请选择服务人员">
-              <el-option label="staff"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="订单状态">
-            <el-select v-model="search.status" placeholder="请选择状态">
-              <el-option label="是" value="true"></el-option>
-              <el-option label="否" value="false"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="登记时间">
             <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
@@ -32,12 +21,12 @@
       </div>
       <div class="btn" >
         <div>
-          <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
+          <el-button icon="el-icon-tickets" class="btn-daochu" @click="exportBtn">导出</el-button>
           <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border style="width: 100%">
+        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
           <el-table-column prop="inhabitantName" label="姓名" ></el-table-column>
           <el-table-column prop="inhabitantPhone" label="用户联系电话" ></el-table-column>
@@ -46,10 +35,10 @@
           <el-table-column prop="recycleState" label="状态" style="width: 10%"></el-table-column>
           <el-table-column prop="operate" label="操作">
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+              <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
                 <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+              <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
                 <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
               </el-tooltip>
             </template>
@@ -79,14 +68,17 @@ export default {
     return {
       currentPage: 1,
       pagesize:5,
+      loading:true,
+      value:'',
       tableData:[],
       search: {//记录筛选的数据项
         houseNum: "",
         staffName: "",
         telphone: "",
-        status: "",
         time:""
       },
+      startTime1:"",
+      endTime1:"",
       pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -131,6 +123,9 @@ export default {
         console.log("详情",index);
         this.$router.push({path:'/home/recycleMsgDetail?id='+showId});
       },
+      exportBtn() {
+
+      },
       searchBtn() { // 查询 请求数据
         this.axios
           .post("/InhabitantAndRecycle/getAllInfoLike",{
@@ -170,6 +165,21 @@ export default {
             })
             .then((res) => {
               console.log(res);
+              this.axios
+                .get("/InhabitantAndRecycle/getAllUnionInfo",{
+                  params: {
+                    pageSize: this.pagesize,
+                    currentPage: this.currentPage
+                  }
+                })
+                .then((res) => {
+                  console.log(res.data.data.list);
+                  this.tableData = res.data.data.list;
+                  this.loading = false;
+                })
+                .catch(err=> {
+                  console.log(err)
+                }) 
             })
             .catch(err=> {
               console.log(err)
@@ -193,6 +203,7 @@ export default {
         .then((res) => {
           console.log(res.data.data.list);
           this.tableData = res.data.data.list;
+          this.loading = false;
         })
         .catch(err=> {
           console.log(err)

@@ -14,11 +14,7 @@
           <el-form-item label="联系电话">
             <el-input v-model="search.telphone" placeholder="请输入用户电话"></el-input>
           </el-form-item>
-          <el-form-item label="服务人员">
-            <el-select v-model="search.staffName" placeholder="请选择服务人员">
-              <el-option label="staff"></el-option>
-            </el-select>
-          </el-form-item>
+          
           <el-form-item label="登记时间">
             <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
@@ -131,12 +127,14 @@ export default {
       searchBtn() { // 查询 发送请求数据
         console.log("时间",this.search.time);
         // 时间格式
-        var t = this.search.time;
-        console.log(t);
-        this.startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
-        this.endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
-        console.log("开始时间:",this.startTime1);
-        console.log("结束时间:",this.endTime1);
+        if(this.search.time) {
+          var t = this.search.time;
+          console.log(t);
+          this.startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+          this.endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+          console.log("开始时间:",this.startTime1);
+          console.log("结束时间:",this.endTime1);
+        }
         console.log("房号:",this.search.houseNum);
         console.log("电话:",this.search.telphone);
         console.log("服务人员姓名:",this.search.staffName);

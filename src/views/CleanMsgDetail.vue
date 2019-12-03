@@ -12,27 +12,25 @@
       <div class="contentBox">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">房号:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">123123</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.housePropertyNo}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">张大炮</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.inhabitantName}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户联系电话:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">136567891234</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.inhabitantPhone}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">家政人员:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">王大妈</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.staffName}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">家政人员电话:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">12345678911</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.staffPhone}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">登记时间:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">2019-10-19</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.serviceTime}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">状态:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">已完成</div></el-col>
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">路径:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">好</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.state}}</div></el-col>
         </el-row>
       </div>
     </div>
@@ -41,6 +39,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      tableData:[]
+    }
+  },
   methods: {
     returnBtn() {
       this.$router.push({path:'/home/CleanMsg'});
@@ -54,15 +57,15 @@ export default {
     console.log("家政信息编号",str);
 
     this.axios
-      .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
+      .get("/InhabitantAndStaff/selectDetailById",
       {
         params:{
-          currentPage:this.currentPage,
-          pageSize:this.pageSize
+          risId:str
         }
       })
       .then((res)=> {
-        console.log(res.data);
+        console.log(res.data.data.inhabitantAndStaffVO);
+        this.tableData = res.data.data.inhabitantAndStaffVO;
       })
       .catch((err)=> {
         console.log(err);
