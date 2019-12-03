@@ -15,13 +15,7 @@
             <el-input v-model="search.telphone" placeholder="请输入用户联系电话"></el-input>
           </el-form-item>
           <el-form-item label="报修服务人员">
-            <el-input v-model="search.staffId" placeholder="请输入报修人员编号"></el-input>
-          </el-form-item>
-          <el-form-item label="订单状态">
-            <el-select v-model="search.stauts" placeholder="请选择状态">
-              <el-option label="已处理" value="true"></el-option>
-              <el-option label="待处理" value="false"></el-option>
-            </el-select>
+            <el-input v-model="search.staffName" placeholder="请输入报修人员姓名"></el-input>
           </el-form-item>
           <el-form-item label="登记时间">
             <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
@@ -35,8 +29,8 @@
         </div>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border style="width: 100%">
-          <el-table-column prop="houseNum" label="房号"></el-table-column>
+        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
+          <el-table-column prop="houseProperty.housePropertyNo" label="房号"></el-table-column>
           <el-table-column prop="inhabitant.inhabitantName" label="姓名" ></el-table-column>
           <el-table-column prop="staff.telNum" label="联系电话" ></el-table-column>
           <el-table-column prop="repairsParts[0].partName" label="报修部位" ></el-table-column>
@@ -46,8 +40,12 @@
           <el-table-column prop="repairState" label="状态" style="width: 10%"></el-table-column>
           <el-table-column prop="operate" label="操作" >
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
-              <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom-end">
+                <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="bottom-end">
+                <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -67,88 +65,7 @@
 </template>
 
 <script>
-/* var tableData = [
-  {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0002",
-          name: "王小虎",
-          phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0003",
-          name: "王小虎",
-          phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0004",
-          name: "王小虎",
-          phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0005",
-          name: "王小虎",
-          phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0006",
-          name: "王小虎",
-          phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0007",
-          name: "王小虎",
-          phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0008",
-          name: "王小虎",
-          phone: "12345678911",
-          fixType: "单元门禁",
-          repairContent: "门锁坏了",
-          repairPersonName: "王师傅",
-          regDate: "2019-11-26 13:36:55",
-          repairState: "待处理"
-        }
-]; */
+
 export default {
   data() {
     return {
@@ -162,6 +79,9 @@ export default {
         stauts: "",
         time:""
       },
+      startTime1:"",
+      endTime1:"",
+      loading:true,
       pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -198,12 +118,13 @@ export default {
     },
     handleCurrentChange(val) { // 改变页
       this.currentPage=val;
-      console.log(val);
+      console.log("第几页",val);
     },
     showDetail(index) { // 查看详情
       index = 5*(this.currentPage-1)+index;
+      var fixId = this.tableData[index].infoId;
       console.log("详情",index);
-      this.$router.push({path:'/home/fixdetail?id='+index});
+      this.$router.push({path:'/home/fixdetail?id='+fixId});
     },
     exportBtn() { // 导出
       this.axios
@@ -216,34 +137,41 @@ export default {
         })
     },
     searchBtn() { // 查询 请求数据
-
-      // 时间格式
+      if(this.search.time) {
+        // 时间格式
         var t = this.search.time;
         console.log(t);
-        var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
-        var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
-        console.log("开始时间:",startTime1);
-        console.log("结束时间:",endTime1);
+        this.startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+        this.endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+        console.log("开始时间:",this.startTime1);
+        console.log("结束时间:",this.endTime1);
+      }
+      console.log("房号:",this.search.houseNum);
+      console.log("电话:",this.search.telphone);
+      console.log("服务人员姓名:",this.search.staffName);
 
       this.axios
-        .post("/repairInfo/getAllRepairInfoByParam",{
-          housePropertyNo:this.search.houseNum,
-          telNum: this.search.telphone,
-          staffId:this.search.staffName,
-          partId:this.search.partId,
-          pageSize: 5,
-          beginTime:startTime1,
-          endTime:endTime1
+        .get("/repairInfo/getAllRepairInfoByParam",{
+          params:{
+            housePropertyNo:this.search.houseNum,
+            telNum: this.search.telphone,
+            staffName:this.search.staffName,
+            beginTime:this.startTime1,
+            endTime:this.endTime1,
+            pageSize: 5,
+            currentPage:1
+          }
         })
         .then((res) => {
-          console.log(res);
+          console.log(res.data.data);
         })
         .catch(err=> {
           console.log(err)
         }) 
     },
     del(index) { // 删除 请求数据
-      console.log(index);
+      console.log("要删除的id",this.tableData[index].infoId);
+      var delId = this.tableData[index].infoId;
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -258,10 +186,29 @@ export default {
         this.axios
           .get("/repairInfo/deleteRepairInfoById",
           {
-            infoldId: index
+            params: {
+              infoId: delId
+            }
           })
           .then((res) => {
             console.log(res);
+            this.axios
+              .get("/repairInfo/getAllRepairInfo",
+              {
+                params: {
+                  pageSize: this.pagesize,
+                  currentPage: this.currentPage 
+                }
+              })
+              .then((res) => {
+                console.log(res.data.data.data);
+                this.tableData = (res.data.data.data);
+                this.loading = false;
+                console.log(this.tableData);
+              })
+              .catch(err=> {
+                console.log(err)
+              }) 
           })
           .catch(err=> {
             console.log(err)
@@ -275,26 +222,29 @@ export default {
     }
   },
   created() {
+    console.log("当前每页有",this.pagesize,"个数据");
+    console.log("当前为第",this.currentPage,"页");
     this.axios
         .get("/repairInfo/getAllRepairInfo",
         {
-          pageSize: this.pagesize,
-          currentPage: this.currentPage 
+          params: {
+            pageSize: this.pagesize,
+            currentPage: this.currentPage 
+          }
         })
         .then((res) => {
-          console.log(res.data.data.repairInfo);
-          this.tableData = (res.data.data.repairInfo);
+          console.log(res.data.data.data);
+          this.tableData = (res.data.data.data);
+          this.loading = false;
           console.log(this.tableData);
         })
         .catch(err=> {
           console.log(err)
         }) 
-    
   },
   computed: {
     showData() {
-      console.log(this.pagesize);
-      console.log(this.currentPage);
+      
       var start = (this.pagesize)*(this.currentPage-1);
       return this.tableData.slice(start,start+(this.pagesize));
     }

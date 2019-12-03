@@ -7,24 +7,7 @@
       </div>
       <el-divider style="margin:0"></el-divider>
       <div class="searchBox">
-       <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
-          <el-form-item label="房号">
-            <el-input v-model="search.houseNum" placeholder="请输入房号"></el-input>
-          </el-form-item>
-          <el-form-item label="联系电话">
-            <el-input v-model="search.telphone" placeholder="请输入用户电话"></el-input>
-          </el-form-item>
-          <el-form-item label="服务人员">
-            <el-select v-model="search.staffName" placeholder="请选择服务人员">
-              <el-option label="staff" value="staff"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="订单状态">
-            <el-select v-model="search.status" placeholder="请选择状态">
-              <el-option label="已处理" value="true"></el-option>
-              <el-option label="待处理" value="false"></el-option>
-            </el-select>
-          </el-form-item>
+       <el-form :inline="true" :model="search" class="demo-form-inline" size="small"> 
           <el-form-item label="登记时间">
             <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
@@ -37,7 +20,7 @@
         </div>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border style="width: 100%">
+        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
           <el-table-column prop="inhabitantName" label="姓名" ></el-table-column>
           <el-table-column prop="telNum" label="联系电话" ></el-table-column>
@@ -46,9 +29,12 @@
           <el-table-column prop="sugState" label="状态"></el-table-column>
           <el-table-column prop="operate" label="操作" >
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-edit" @click="changeStatus(scope.$index)" ></el-button>
-              <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
-              <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+                <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+                <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -68,9 +54,6 @@
 </template>
 
 <script>
-/* var tableData = [
-  
-]; */
 export default {
   data() {
     return {
@@ -84,6 +67,7 @@ export default {
         status: "",
         time:""
       },
+      loading:true,
       pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -122,31 +106,12 @@ export default {
         this.currentPage=val;
         console.log(val);
       },
-      changeStatus(index) { // 更改状态
-        console.log(this.tableData[index].sugState);
-        var nowStatus = this.tableData[index].sugState;
-        nowStatus = !nowStatus;
-        console.log(Number(nowStatus));
-        
-        this.axios
-          .get("/suggestion/updateState",
-          {
-            params: {
-              id: index,
-              sugState: nowStatus
-            }
-          })
-          .then((res)=> {
-            console.log(res);
-          })
-          .catch((err)=> {
-            console.log(err);
-          })
-      },
+      
       showDetail(index) { // 查看详情
         index = 5*(this.currentPage-1)+index;
+        var showId = this.tableData[index].sugId;
         console.log("详情",index);
-        this.$router.push({path:'/home/SuggestDetail?id='+index});
+        this.$router.push({path:'/home/SuggestDetail?id='+showId});
       },
       exportBtn() { // 导出
         this.axios
@@ -174,10 +139,12 @@ export default {
 
         // 发送请求
         this.axios
-          .get("/suggestion/showByDate",{
+          .get("/suggestion/showByLike",{
             params: {
               beginTime:startTime1,
-              endTime:endTime1
+              endTime:endTime1,
+              currentPage:this.currentPage,
+              pageSize:this.pagesize
             }
           })
           .then((res) => {
@@ -188,7 +155,9 @@ export default {
           }) 
       },
       del(index) { // 删除
-        console.log("删除的id" ,index);
+        var delId = this.tableData[index].sugId;
+        console.log("要删除的编号",delId);
+
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -198,15 +167,35 @@ export default {
             type: 'success',
             message: '删除成功!'
           });
+
           // 数据请求
           this.axios
-            .get("/suggestion/deleteById",{
+            .get("/suggestion/deleteById",
+            {
               params:{
-                id: index
+                id: delId
               }
             })
             .then((res) => {
               console.log(res);
+              this.axios
+                .get("/suggestion/showByLike",
+                {
+                  params:{
+                    pageSize:this.pagesize,
+                    currentPage:this.currentPage
+                  }
+                })
+                .then((res) => {
+                  console.log(res.data.data.data);
+                  this.tableData = (res.data.data.data);
+                  this.loading = false;
+                  console.log(this.tableData);
+                })
+                .catch(err=> {
+                  console.log(err)
+                }) 
+
             })
             .catch(err=> {
               console.log(err)
@@ -222,10 +211,17 @@ export default {
   },
   created() {
       this.axios
-        .get("/suggestion/showAll" )
+        .get("/suggestion/showByLike",
+        {
+          params:{
+            pageSize:this.pagesize,
+            currentPage:this.currentPage
+          }
+        })
         .then((res) => {
           console.log(res.data.data.data);
           this.tableData = (res.data.data.data);
+          this.loading = false;
           console.log(this.tableData);
         })
         .catch(err=> {

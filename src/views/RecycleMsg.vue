@@ -38,16 +38,20 @@
       </div>
       <div class="contentBox">
         <el-table :data="showData" stripe border style="width: 100%">
-          <el-table-column prop="houseNum" label="房号"></el-table-column>
-          <el-table-column prop="name" label="姓名" ></el-table-column>
-          <el-table-column prop="phone" label="用户联系电话" ></el-table-column>
-          <el-table-column prop="recycleType" label="物品类型" ></el-table-column>
-          <el-table-column prop="regDate" label="登记时间" ></el-table-column>
-          <el-table-column prop="cleanState" label="状态" style="width: 10%"></el-table-column>
+          <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
+          <el-table-column prop="inhabitantName" label="姓名" ></el-table-column>
+          <el-table-column prop="inhabitantPhone" label="用户联系电话" ></el-table-column>
+          <el-table-column prop="regenerantStyle" label="物品类型" ></el-table-column>
+          <el-table-column prop="recycleTime" label="登记时间" ></el-table-column>
+          <el-table-column prop="recycleState" label="状态" style="width: 10%"></el-table-column>
           <el-table-column prop="operate" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
-              <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+                <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+                <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -69,72 +73,7 @@
 </template>
 
 <script>
-/* var tableData = [
-  {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        }
-] */
+
 export default {
   data() {
     return {
@@ -188,12 +127,13 @@ export default {
       },
       showDetail(index) { // 查看详情
         index = (index+(this.pagesize)*(this.currentPage-1));
+        var showId = this.tableData[index].regenerantId;
         console.log("详情",index);
-        this.$router.push({path:'/home/recycleMsgDetail?id='+index});
+        this.$router.push({path:'/home/recycleMsgDetail?id='+showId});
       },
       searchBtn() { // 查询 请求数据
         this.axios
-          .post("/repairInfo/getAllRepairInfo",{
+          .post("/InhabitantAndRecycle/getAllInfoLike",{
             houseNum:this.houseNum,
             telNum: this.search.telphone,
             staffName:this.search.staffName,
@@ -208,7 +148,9 @@ export default {
           }) 
       },
       del(index) { // 删除 发送请求
-        console.log(index);
+        var delId = this.tableData[index].regenerantId;
+        
+
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -218,10 +160,13 @@ export default {
             type: 'success',
             message: '删除成功!'
           });
+          
           // 删除
           this.axios
-            .post("/repairInfo/getAllRepairInfo",{
-              id: index
+            .get("/InhabitantAndRecycle/deleteByRegenerantId",{
+              params:{
+                regenerantId: delId
+              }
             })
             .then((res) => {
               console.log(res);
@@ -239,9 +184,15 @@ export default {
   },
   created() {
     this.axios
-        .get("/repairInfo/getAllRepairInfo" )
+        .get("/InhabitantAndRecycle/getAllUnionInfo",{
+          params: {
+            pageSize: this.pagesize,
+            currentPage: this.currentPage
+          }
+        })
         .then((res) => {
-          console.log(res.data.data);
+          console.log(res.data.data.list);
+          this.tableData = res.data.data.list;
         })
         .catch(err=> {
           console.log(err)

@@ -50,199 +50,254 @@ export default {
           desc: ''
       },
       value: [],
-        options: [{
+      options: [{
           value: 'zhinan',
-          label: '指南',
-          children: [{
+          label: '四川省',
+          children: [
+            {
             value: 'shejiyuanze',
-            label: '设计原则',
+            label: '成都市',
             children: [{
               value: 'yizhi',
-              label: '一致'
+              label: '郫都区'
             }, {
               value: 'fankui',
-              label: '反馈'
+              label: '金牛区'
             }, {
               value: 'xiaolv',
-              label: '效率'
+              label: '青羊区'
             }, {
               value: 'kekong',
-              label: '可控'
+              label: '锦江区'
             }]
-          }, {
+          }, 
+          {
             value: 'daohang',
-            label: '导航',
+            label: '德阳市',
             children: [{
               value: 'cexiangdaohang',
-              label: '侧向导航'
+              label: '绵竹县'
             }, {
               value: 'dingbudaohang',
-              label: '顶部导航'
+              label: '罗江市'
             }]
           }]
         }, {
           value: 'zujian',
-          label: '组件',
-          children: [{
+          label: '浙江省',
+          children: [
+            {
             value: 'basic',
-            label: 'Basic',
+            label: '杭州市',
             children: [{
               value: 'layout',
-              label: 'Layout 布局'
+              label: '上城区'
             }, {
               value: 'color',
-              label: 'Color 色彩'
+              label: '下城区'
             }, {
               value: 'typography',
-              label: 'Typography 字体'
+              label: '江干区'
             }, {
               value: 'icon',
-              label: 'Icon 图标'
+              label: '西湖区'
             }, {
               value: 'button',
-              label: 'Button 按钮'
+              label: '滨江区'
             }]
-          }, {
+          }, 
+          {
             value: 'form',
-            label: 'Form',
+            label: '宁波市',
             children: [{
               value: 'radio',
-              label: 'Radio 单选框'
+              label: '江北区'
             }, {
               value: 'checkbox',
-              label: 'Checkbox 多选框'
+              label: '北仑区'
             }, {
               value: 'input',
-              label: 'Input 输入框'
+              label: '镇海区'
             }, {
               value: 'input-number',
-              label: 'InputNumber 计数器'
+              label: '奉化区'
             }, {
               value: 'select',
-              label: 'Select 选择器'
+              label: '海曙区'
             }, {
               value: 'cascader',
-              label: 'Cascader 级联选择器'
+              label: '象山县'
             }, {
               value: 'switch',
-              label: 'Switch 开关'
+              label: '宁海县'
             }, {
               value: 'slider',
-              label: 'Slider 滑块'
+              label: '余姚市'
             }, {
               value: 'time-picker',
-              label: 'TimePicker 时间选择器'
-            }, {
-              value: 'date-picker',
-              label: 'DatePicker 日期选择器'
-            }, {
-              value: 'datetime-picker',
-              label: 'DateTimePicker 日期时间选择器'
-            }, {
-              value: 'upload',
-              label: 'Upload 上传'
-            }, {
-              value: 'rate',
-              label: 'Rate 评分'
-            }, {
-              value: 'form',
-              label: 'Form 表单'
+              label: '慈溪市'
             }]
-          }, {
+          }, 
+          {
             value: 'data',
-            label: 'Data',
+            label: '温州市',
             children: [{
               value: 'table',
-              label: 'Table 表格'
+              label: '鹿城区'
             }, {
               value: 'tag',
-              label: 'Tag 标签'
+              label: '龙湾区'
             }, {
               value: 'progress',
-              label: 'Progress 进度条'
+              label: '瓯海区'
             }, {
               value: 'tree',
-              label: 'Tree 树形控件'
+              label: '洞头区'
             }, {
               value: 'pagination',
-              label: 'Pagination 分页'
+              label: '乐清市'
             }, {
               value: 'badge',
-              label: 'Badge 标记'
+              label: '瑞安区'
             }]
-          }, {
+          }, 
+          {
             value: 'notice',
-            label: 'Notice',
+            label: '嘉兴市',
             children: [{
               value: 'alert',
-              label: 'Alert 警告'
+              label: '南湖区'
             }, {
               value: 'loading',
-              label: 'Loading 加载'
+              label: '秀洲区'
             }, {
               value: 'message',
-              label: 'Message 消息提示'
+              label: '嘉善区'
             }, {
               value: 'message-box',
-              label: 'MessageBox 弹框'
+              label: '海盐县'
             }, {
               value: 'notification',
-              label: 'Notification 通知'
+              label: '海宁市'
             }]
-          }, {
+          }, 
+          {
             value: 'navigation',
-            label: 'Navigation',
+            label: '绍兴市',
             children: [{
               value: 'menu',
-              label: 'NavMenu 导航菜单'
+              label: '越城区'
             }, {
               value: 'tabs',
-              label: 'Tabs 标签页'
+              label: '柯桥市'
             }, {
               value: 'breadcrumb',
-              label: 'Breadcrumb 面包屑'
+              label: '新昌县'
             }, {
               value: 'dropdown',
-              label: 'Dropdown 下拉菜单'
+              label: '上虞区'
             }, {
               value: 'steps',
-              label: 'Steps 步骤条'
+              label: '诸暨区'
             }]
-          }, {
+          }, 
+          {
             value: 'others',
-            label: 'Others',
+            label: '湖州市',
             children: [{
               value: 'dialog',
-              label: 'Dialog 对话框'
+              label: '吴兴区'
             }, {
               value: 'tooltip',
-              label: 'Tooltip 文字提示'
+              label: '南浔区'
             }, {
               value: 'popover',
-              label: 'Popover 弹出框'
+              label: '德清区'
             }, {
               value: 'card',
-              label: 'Card 卡片'
+              label: '长兴县'
             }, {
               value: 'carousel',
-              label: 'Carousel 走马灯'
-            }, {
-              value: 'collapse',
-              label: 'Collapse 折叠面板'
+              label: '安吉区'
             }]
           }]
-        }, {
+        }, 
+        {
           value: 'ziyuan',
-          label: '资源',
+          label: '北京市',
           children: [{
             value: 'axure',
-            label: 'Axure Components'
+            label: '朝阳区'
           }, {
             value: 'sketch',
-            label: 'Sketch Templates'
+            label: '海淀区'
+          },{
+            value: 'sketch',
+            label: '门头沟区'
+          },{
+            value: 'sketch',
+            label: '通州区'
+          },{
+            value: 'sketch',
+            label: '大兴区'
+          },{
+            value: 'sketch',
+            label: '怀柔区'
           }, {
             value: 'jiaohu',
-            label: '组件交互文档'
+            label: '密云区'
+          }]
+        },
+        {
+          value: 'ziyuan',
+          label: '重庆市',
+          children: [{
+            value: 'axure',
+            label: '万州区'
+          }, {
+            value: 'sketch',
+            label: '涪陵区'
+          },{
+            value: 'sketch',
+            label: '渝中区'
+          },{
+            value: 'sketch',
+            label: '大渡口区'
+          },{
+            value: 'sketch',
+            label: '江北区'
+          },{
+            value: 'sketch',
+            label: '九龙坡区'
+          }, {
+            value: 'jiaohu',
+            label: '渝北区'
+          }]
+        },
+        {
+          value: 'ziyuan',
+          label: '上海市',
+          children: [{
+            value: 'axure',
+            label: '黄浦区'
+          }, {
+            value: 'sketch',
+            label: '徐汇区'
+          },{
+            value: 'sketch',
+            label: '长宁区'
+          },{
+            value: 'sketch',
+            label: '静安区'
+          },{
+            value: 'sketch',
+            label: '普陀区'
+          },{
+            value: 'sketch',
+            label: '虹口区'
+          }, {
+            value: 'jiaohu',
+            label: '浦东新区'
           }]
         }]
     }
@@ -252,7 +307,10 @@ export default {
       console.log(value);
     },
     onSubmit() {
-      console.log('submit!',this.form);
+      console.log('submit!',this.form.companyName);
+      console.log('submit!',this.form.personName);
+      console.log('submit!',this.form.telphone);
+      console.log('submit!',this.form.value);
     },
     returnBtn() {
       this.$router.push({path:"/home/LockPeople"});

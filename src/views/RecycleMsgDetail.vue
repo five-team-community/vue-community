@@ -45,6 +45,27 @@ export default {
     returnBtn() {
       this.$router.push({path:'/home/recycleMsg'});
     }
+  },
+  created() {
+    var str = location.href;
+    var num = str.indexOf("=");
+    str = str.substr(num+1);
+    str = Number(str);
+    console.log("回收信息编号",str);
+
+    this.axios
+      .get("/InhabitantAndRecycle/selectDetailInfoById",
+      {
+        params:{
+          regenerantId:str
+        }
+      })
+      .then((res)=> {
+        console.log(res.data);
+      })
+      .catch((err)=> {
+        console.log(err);
+      })
   }
 }
 </script>

@@ -45,6 +45,28 @@ export default {
     returnBtn() {
       this.$router.push({path:'/home/CleanMsg'});
     }
+  },
+  created() {
+    var str = location.href;
+    var num = str.indexOf("=");
+    str = str.substr(num+1);
+    str = Number(str);
+    console.log("家政信息编号",str);
+
+    this.axios
+      .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
+      {
+        params:{
+          currentPage:this.currentPage,
+          pageSize:this.pageSize
+        }
+      })
+      .then((res)=> {
+        console.log(res.data);
+      })
+      .catch((err)=> {
+        console.log(err);
+      })
   }
 }
 </script>

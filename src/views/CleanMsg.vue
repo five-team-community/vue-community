@@ -19,12 +19,6 @@
               <el-option label="staff"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="订单状态">
-            <el-select v-model="search.stauts" placeholder="请选择状态">
-              <el-option label="已处理" value="true"></el-option>
-              <el-option label="未处理" value="false"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="登记时间">
             <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
@@ -37,17 +31,22 @@
         </div>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border style="width: 100%">
-          <el-table-column prop="houseNum" label="房号"></el-table-column>
-          <el-table-column prop="name" label="姓名" ></el-table-column>
-          <el-table-column prop="phone" label="联系电话" ></el-table-column>
-          <el-table-column prop="cleanPeople" label="家政服务人员" ></el-table-column>
-          <el-table-column prop="regDate" label="登记时间" ></el-table-column>
-          <el-table-column prop="cleanState" label="状态" style="width: 10%"></el-table-column>
+        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
+          <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
+          <el-table-column prop="inhabitantName" label="用户姓名" ></el-table-column>
+          <el-table-column prop="inhabitantPhone" label="联系电话" ></el-table-column>
+          <el-table-column prop="staffName" label="家政服务人员" ></el-table-column>
+          <el-table-column prop="staffPhone" label="服务人员电话" ></el-table-column>
+          <el-table-column prop="serviceTime" label="登记时间" ></el-table-column>
+          <el-table-column prop="state" label="状态"></el-table-column>
           <el-table-column prop="operate" label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
-              <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+                <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+                <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -68,72 +67,7 @@
 </template>
 
 <script>
-/* var tableData = [
-  {
-          houseNum: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0002",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0003",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0004",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0005",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0006",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0007",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        },
-        {
-          houseNum: "FFFF-0008",
-          name: "王小虎",
-          phone: "12345678911",
-          cleanPeople: "李大妈",
-          regDate: "2019-11-26 13:36:55",
-          cleanState: "待处理"
-        }
-] */
+
 export default {
   data() {
     return {
@@ -147,6 +81,9 @@ export default {
         stauts: "",
         time:""
       },
+      startTime1:"",
+      endTime1:"",
+      loading:true,
       pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -187,18 +124,30 @@ export default {
       },
       showDetail(index) { //查看详情
         index = (index+(this.pagesize)*(this.currentPage-1));
+        var showId = this.tableData[index].risId;
         console.log("详情",index);
-        this.$router.push({path:'/home/cleanMsgDetail?id='+ index});
+        this.$router.push({path:'/home/cleanMsgDetail?id='+ showId});
       },
       searchBtn() { // 查询 发送请求数据
         console.log("时间",this.search.time);
+        // 时间格式
+        var t = this.search.time;
+        console.log(t);
+        this.startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+        this.endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+        console.log("开始时间:",this.startTime1);
+        console.log("结束时间:",this.endTime1);
+        console.log("房号:",this.search.houseNum);
+        console.log("电话:",this.search.telphone);
+        console.log("服务人员姓名:",this.search.staffName);
+
         this.axios
-          .post("/repairInfo/getAllRepairInfo",{
-            houseNum:this.houseNum,
-            telNum: this.search.telphone,
+          .post("InhabitantAndStaff/getAllInfoLike",{
+            housePropertyNo:this.houseNum,
+            inhabitantPhone: this.search.telphone,
             staffName:this.search.staffName,
-            repairState:this.search.stauts,
-            regDate:this.search.time
+            beginTime:this.startTime1,
+            endTime:this.endTime1
           })
           .then((res) => {
             console.log(res);
@@ -208,7 +157,8 @@ export default {
           }) 
     },
       del(index) { // 删除 发送请求
-        console.log(index);
+        console.log("删除的id",this.tableData[index].risId);
+        var delId = this.tableData[index].risId;
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -219,11 +169,31 @@ export default {
             message: '删除成功!'
           });
           this.axios
-            .post("/repairInfo/getAllRepairInfo",{
-              id: index
+            .get("/InhabitantAndStaff/deleteByrisId",{
+              params: {
+                risId: delId
+              }
             })
             .then((res) => {
               console.log(res);
+              this.axios  // 请求数据 渲染列表
+                .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
+                {
+                  params: {
+                    pageSize:this.pagesize,
+                    currentPage:this.currentPage
+                  }
+                })
+                .then((res) => {
+                  console.log(res.data.data);
+                  console.log(res.data.data.inhabitantAndStaffVOList);
+                  this.tableData = res.data.data.inhabitantAndStaffVOList;
+                  this.loading = false;
+                })
+                .catch(err=> {
+                  console.log(err)
+                }) 
+
             })
             .catch(err=> {
               console.log(err)
@@ -238,11 +208,18 @@ export default {
   },
   created() {
     this.axios  // 请求数据 渲染列表
-        .get("/suggestion/showAll" )
+        .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
+        {
+          params: {
+            pageSize:this.pagesize,
+            currentPage:this.currentPage
+          }
+        })
         .then((res) => {
-          console.log(res.data.data.data[0]);
-          this.tableData.push(res.data.data.data[0]);
-          console.log(this.tableData[0]);
+          console.log(res.data.data);
+          console.log(res.data.data.inhabitantAndStaffVOList);
+          this.tableData = res.data.data.inhabitantAndStaffVOList;
+          this.loading = false;
         })
         .catch(err=> {
           console.log(err)

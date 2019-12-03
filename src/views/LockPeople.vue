@@ -20,22 +20,25 @@
           <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
-      <div class="contentBox">
+      <div class="contentBox" v-loading="loading">
         <el-table :data="showData" stripe border style="width: 100%">
-          <el-table-column prop="unlockCompany" label="开锁公司名称"></el-table-column>
-          <el-table-column prop="unlockPerson" label="联系人" ></el-table-column>
-          <el-table-column prop="unlockTelphone" label="联系电话" ></el-table-column>
-          <el-table-column prop="unlockAddress" label="公司地址" ></el-table-column>
+          <el-table-column prop="companyName" label="开锁公司名称"></el-table-column>
+          <el-table-column prop="personName" label="联系人" ></el-table-column>
+          <el-table-column prop="telNum" label="联系电话" ></el-table-column>
+          <el-table-column prop="location" label="公司地址" ></el-table-column>
           <el-table-column prop="operate" label="操作" >
             <template slot-scope="scope">
-              <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
-              <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+               <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+                 <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
+               </el-tooltip>
+               <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+                 <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+               </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
         <div class="block">
           <el-pagination
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :page-sizes="[5,10]"
             :page-size="5"
@@ -49,18 +52,13 @@
 </template>
   
 <script>
-var testData = [
-  {
-    unlockCompany: "刘师傅开锁",
-    unlockPerson: "刘星",
-    unlockTelphone: "12345678911",
-    unlockAddress: "郫都区红光镇广场路123号"
-  }
-]
 export default {
   data() {
     return {
+      pageSize:5,
+      currentPage:1,
       testData:[],
+      loading:true,
       search:{
         unlockCompanyName:""
       },
@@ -69,11 +67,28 @@ export default {
     }
   },
   methods: {
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
     showDetail(index) { // 查看详情
       console.log("查看的id：",index);
     },
     del(index) { // 删除
       console.log("删除成功!",index);
+      
+      /* this.axios
+      .get("/unlock/removeById",
+      {
+        params:{
+          unkockId:id
+        }
+      })
+      .then((res)=> {
+        console.log(res.data);
+      })
+      .then((err)=> {
+        console.log(err);
+      }) */
     },
     addBtn() { // 添加信息
       console.log("添加成功!");
@@ -88,7 +103,21 @@ export default {
     
   },
   created() {
-    this.testData = testData;
+    this.loading=true;
+    this.axios
+      .get("/unlock/getAll",
+      {
+        params:{
+          pageSize:this.pageSize,
+          currentPage:this.currentPage
+        }
+      })
+      .then((res)=> {
+        console.log(res.data);
+      })
+      .then((err)=> {
+        console.log(err);
+      })
   },
   computed: {
     showData() {

@@ -10,21 +10,24 @@
         <el-button type="primary" style="float:right;" @click="dialogFormVisible = true">添加报修部位</el-button>
       </div>
       <div class="content">
-        <el-table :data="showDate" border stripe>
+        <el-table :data="showDate" v-loading="loading" border stripe>
         <el-table-column prop="partName" label="报修部位" style="width: 50%">
         </el-table-column>
         <el-table-column prop="operate" label="操作" style="width: 50%">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" @click="edit(scope.$index)"></el-button>
-            <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+            <el-tooltip class="item" effect="dark" content="修改" placement="bottom-end">
+              <el-button type="primary" icon="el-icon-edit" @click="edit(scope.$index)"></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="删除" placement="bottom-end">
+              <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+            </el-tooltip>
+            
           </template>
         </el-table-column>
       </el-table>
       <div class="block">
           <el-pagination
           @current-change="handleCurrentChange"
-          :page-size="10"
-          :total="8"
           layout="prev, pager, next"
           background></el-pagination>
         </div>
@@ -72,6 +75,7 @@
         currentPage: 1,
         dialogFormVisible: false,
         dialogFormVisible2: false,
+        loading: true,
         form: {
           name: '',
           date1: '',
@@ -111,6 +115,23 @@
             })
           .then((res) => {
             console.log(res);
+            this.axios
+              .get("/repairPart/getAllRepairsParts",
+              {
+                params: {
+                  pageSize: this.pagesize,
+                  currentPage: this.currentPage
+                }
+              })
+              .then((res) => {
+                console.log(res.data.data.data);
+                this.tableData = (res.data.data.data);
+                this.loading=false;
+                console.log(this.tableData);
+              })
+              .catch(err=> {
+                console.log(err)
+              }) 
           })
           .catch((err) => {
             console.log(err);
@@ -122,21 +143,46 @@
       },
       okedit() { // 确认修改
         console.log("修改的内容：",this.form2.name);
-        console.log("要修改的id：",this.form2.ind+1);
+        console.log("要修改的id：",this.form2.ind);
         var news = this.form2.name;
-        var ind = this.form2.ind+1;
+        var ind = this.form2.ind;
+        var editId = this.tableData[ind].partId;
         this.dialogFormVisible2 = false;
         // 请求数据
         this.axios
           .get("/repairPart/addRepairsPartsById",
           {
             params: {
-              partId: ind,
+              partId: editId,
               partName: news
             }
           })
+          .then((res)=> {
+            console.log(res);
+            this.axios
+              .get("/repairPart/getAllRepairsParts",
+              {
+                params: {
+                  pageSize: this.pagesize,
+                  currentPage: this.currentPage
+                }
+              })
+              .then((res) => {
+                console.log(res.data.data.data);
+                this.tableData = (res.data.data.data);
+                this.loading=false;
+                console.log(this.tableData);
+              })
+              .catch(err=> {
+                console.log(err)
+              }) 
+          })
+          .catch((err)=> {
+            console.log(err);
+          })
       },
       del(index) { //删除
+        var delId = this.tableData[index].partId;
         console.log(index+(this.pagesize)*(this.currentPage-1));
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -152,11 +198,28 @@
             .get("/repairPart/removeRepairsPartsById",
             {
               params: {
-                partId : index
+                partId : delId
               }
             })
             .then((res)=> {
               console.log(res)
+              this.axios
+                .get("/repairPart/getAllRepairsParts",
+                {
+                  params: {
+                    pageSize: this.pagesize,
+                    currentPage: this.currentPage
+                  }
+                })
+                .then((res) => {
+                  console.log(res.data.data.data);
+                  this.tableData = (res.data.data.data);
+                  this.loading=false;
+                  console.log(this.tableData);
+                })
+                .catch(err=> {
+                  console.log(err)
+                }) 
             })
             .catch((err)=> {
               console.log(err)
@@ -186,6 +249,7 @@
         .then((res) => {
           console.log(res.data.data.data);
           this.tableData = (res.data.data.data);
+          this.loading=false;
           console.log(this.tableData);
         })
         .catch(err=> {

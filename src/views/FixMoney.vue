@@ -9,7 +9,7 @@
       <div class="searchBox">
         <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
           <el-form-item label="交易号">
-            <el-input v-model="search.houseNum" placeholder="请输入交易号"></el-input>
+            <el-input v-model="search.orderNo" placeholder="请输入交易号"></el-input>
           </el-form-item>
           <el-form-item label="用户名">
             <el-input v-model="search.userName" placeholder="请输入用户名"></el-input>
@@ -28,16 +28,17 @@
       <div class="totalMoney">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="TMtitle">订单总额：</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="TMmoney">666</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="TMmoney">￥{{this.totalMoney}}.00</div></el-col>
         </el-row>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border style="width: 100%">
+        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="orderNo" label="交易号"></el-table-column>
-          <el-table-column prop="name" label="用户姓名" ></el-table-column>
-          <el-table-column prop="fixContent" label="报修内容" ></el-table-column>
+          <el-table-column prop="repairsInfo.inhabitant.inhabitantName" label="用户姓名" ></el-table-column>
+          <el-table-column prop="repairsInfo.repairContent" label="报修内容" ></el-table-column>
           <el-table-column prop="payDate" label="订单创建时间" ></el-table-column>
           <el-table-column prop="orderMoney" label="支付金额" ></el-table-column>
+          <el-table-column prop="orderStatus" label="支付状态" >已完成</el-table-column>
         </el-table>
       </div>
       <div class="block">
@@ -57,78 +58,15 @@
 </template>
 
 <script>
-/* var tableData = [
-  {
-          orderNo: "FFFF-0001",
-          name: "王小虎",
-          phone: "12345678911",
-          fixContent: "门锁坏了",
-          payDate: "2019-11-26 13:36:55",
-          orderMoney: "50"
-        },
-        {
-          orderNo: "FFFF-0002",
-          name: "王小虎",
-          phone: "12345678911",
-          fixContent: "门锁坏了",
-          payDate: "2019-11-26 13:36:55",
-          orderMoney: "50"
-        },
-        {
-          orderNo: "FFFF-0003",
-          name: "王小虎",
-          phone: "12345678911",
-          fixContent: "门锁坏了",
-          payDate: "2019-11-26 13:36:55",
-          orderMoney: "50"
-        },
-        {
-          orderNo: "FFFF-0004",
-          name: "王小虎",
-          phone: "12345678911",
-          fixContent: "门锁坏了",
-          payDate: "2019-11-26 13:36:55",
-          orderMoney: "50"
-        },
-        {
-          orderNo: "FFFF-0005",
-          name: "王小虎",
-          phone: "12345678911",
-          fixContent: "门锁坏了",
-          payDate: "2019-11-26 13:36:55",
-          orderMoney: "50"
-        },
-        {
-          orderNo: "FFFF-0006",
-          name: "王小虎",
-          phone: "12345678911",
-          fixContent: "门锁坏了",
-          payDate: "2019-11-26 13:36:55",
-          orderMoney: "50"
-        },
-        {
-          orderNo: "FFFF-0007",
-          name: "王小虎",
-          phone: "12345678911",
-          fixContent: "门锁坏了",
-          payDate: "2019-11-26 13:36:55",
-          orderMoney: "50"
-        },
-        {
-          orderNo: "FFFF-0008",
-          name: "王小虎",
-          phone: "12345678911",
-          fixContent: "门锁坏了",
-          payDate: "2019-11-26 13:36:55",
-          orderMoney: "50"
-        }
-] */
+
 export default {
   data() {
     return {
       currentPage:1,
       pagesize:5,
+      loading:true,
       tableData: [],
+      totalMoney:"",
       search: {//记录筛选的数据项
         orderNo: "",
         userName:"",
@@ -179,10 +117,6 @@ export default {
           }]
         },
         value1: '',
-        currentPage1: 5,
-        currentPage2: 5,
-        currentPage3: 5,
-        currentPage4: 4
     };
   },
   methods: {
@@ -195,28 +129,34 @@ export default {
         this.currentPage=val;
       },
       searchBtn() { // 查询
-
-        // 时间格式
-        var t = this.search.time;
-        console.log(t);
-        var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
-        var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
-        console.log("开始时间:",startTime1);
-        console.log("结束时间:",endTime1);
-
+        if(this.search.time) {
+          // 时间格式
+          var t = this.search.time;
+          console.log(t);
+          var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+          var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+          console.log("开始时间:",startTime1);
+          console.log("结束时间:",endTime1);
+        }
+        console.log("订单编号:",this.search.orderNo);
+        console.log("用户名:",this.search.userName);
+        console.log("每页:",this.pagesize);
+        console.log("页数:",this.currentPage);
         // 请求数据
         this.axios
-          .get("/repairOrder/getAllOrderByParam",
+          .get("/repairOrder/getAllOrdersByParam",
           {
             params: {
               orderNo: this.search.orderNo,
               inhabitantName: this.search.userName,
               beginTime:startTime1,
               endTime:endTime1,
+              pageSize:this.pagesize,
+              currentPage:this.currentPage
             }
           })
           .then((res) => {
-            console.log(res);
+            console.log(res.data.data);
           })
           .catch((err) => {
             console.log(err);
@@ -244,7 +184,11 @@ export default {
         }
       })
       .then((res)=> {
-        console.log(res.data);
+        console.log(res.data.data.data);
+        console.log(res.data.data.totalMoney);
+        this.totalMoney = res.data.data.totalMoney;
+        this.tableData = res.data.data.data;
+        this.loading= false;
       })
       .catch((err)=> {
         console.log(err);

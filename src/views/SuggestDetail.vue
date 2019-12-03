@@ -28,7 +28,9 @@
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">状态:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{tableData[0].sugState}}</div></el-col>
         </el-row>
+        
       </div>
+      <el-button type="primary" icon="el-icon-edit" @click="changeStatus" ></el-button>
     </div>
   </div>
 </template>
@@ -41,6 +43,28 @@ export default {
     }
   },
   methods: {
+    changeStatus() { // 更改状态
+        console.log(this.tableData[0].sugState);
+        console.log(this.tableData[0].sugId);
+        var nowStatus = this.tableData[0].sugState;
+        var nowId = this.tableData[0].sugId;
+        nowStatus = !nowStatus;
+        console.log(Number(nowStatus));
+        this.axios
+          .get("/suggestion/updateState",
+          {
+            params: {
+              id: nowId,
+              sugState: nowStatus
+            }
+          })
+          .then((res)=> {
+            console.log(res);
+          })
+          .catch((err)=> {
+            console.log(err);
+          })
+      },
     returnBtn() {
       this.$router.push({path:'/home/suggest'});
     }
