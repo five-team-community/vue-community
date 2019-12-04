@@ -9,7 +9,7 @@
         </a>
       </div>
       <el-divider style="margin:0"></el-divider>
-      <div class="contentBox">
+      <div class="contentBox" v-loading="loading">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户房号:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.housePropertyNo}}</div></el-col>
@@ -43,7 +43,8 @@
 export default {
   data() {
     return {
-      tableData:[]
+      tableData:[],
+      loading : true
     }
   },
   methods: {
@@ -68,6 +69,7 @@ export default {
       .then((res)=> {
         console.log(res.data.data.inhabitantAndStaffVO);
         this.tableData = res.data.data.inhabitantAndStaffVO;
+        this.loading =false;
       })
       .catch((err)=> {
         console.log(err);

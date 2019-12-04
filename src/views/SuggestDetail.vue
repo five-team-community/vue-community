@@ -30,7 +30,7 @@
         </el-row>
         
       </div>
-      <el-button type="primary" icon="el-icon-edit" @click="changeStatus" ></el-button>
+      <el-button class="btns" type="primary" icon="el-icon-edit" :class="{showBtn:isShow}" @click="changeStatus" >已查看</el-button>
     </div>
   </div>
 </template>
@@ -39,6 +39,7 @@
 export default {
   data() {
     return {
+      isShow:false,
       tableData:[]
     }
   },
@@ -48,15 +49,18 @@ export default {
         console.log(this.tableData[0].sugId);
         var nowStatus = this.tableData[0].sugState;
         var nowId = this.tableData[0].sugId;
-        nowStatus = !nowStatus;
-        console.log(Number(nowStatus));
+        console.log(typeof nowStatus);
+        if(nowStatus == 0) {
+          console.log("改变状态");
+          nowStatus = 1;
+        }
         this.axios
           .post("/suggestion/updateState",
           {
-            
+         
               id: nowId,
               sugState: nowStatus
-            
+        
           })
           .then((res)=> {
             console.log(res);
@@ -64,6 +68,20 @@ export default {
           .catch((err)=> {
             console.log(err);
           })
+        
+
+        this.$alert('修改成功！', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `添加成功: ${ action }`
+            });
+          }
+        });
+
+    
+        
       },
     returnBtn() {
       this.$router.push({path:'/home/suggest'});
@@ -77,7 +95,7 @@ export default {
     console.log(str);
 
     this.axios
-        .post("/suggestion/showById",
+        .get("/suggestion/showById",
           {
             params: {
               id : str
@@ -87,6 +105,19 @@ export default {
           console.log(res.data);
           console.log("得到的数据",res.data.data.data);
           this.tableData.push(res.data.data.data);
+
+          if(this.tableData[0].sugState == 1) {
+            this.isShow = true;
+          }
+
+          this.tableData.map((item)=> {
+            console.log(item.sugState);
+            if(item.sugState == 0) {
+              item.sugState = "未读"
+            } else {
+              item.sugState = "已读"
+            }
+          })
         })
         .catch(err=> {
           console.log(err)
@@ -139,6 +170,12 @@ export default {
           font-size: 14px;
         }
       }
+      .btns {
+        margin: 20px;
+      }
     }
+  }
+  .showBtn {
+    display: none;
   }
 </style>

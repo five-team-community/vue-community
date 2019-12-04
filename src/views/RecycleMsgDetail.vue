@@ -9,7 +9,7 @@
         </a>
       </div>
       <el-divider style="margin:0"></el-divider>
-      <div class="contentBox">
+      <div class="contentBox" v-loading="loading">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">房号:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.housePropertyNo}}</div></el-col>
@@ -46,6 +46,7 @@ export default {
     return {
       tableData:[],
       isShow:true,
+      loading:true
     }
   },
   methods: {
@@ -54,9 +55,11 @@ export default {
     },
     add() {
       this.axios
-        .post("//updateState",
+        .get("/InhabitantAndRecycle/updateState",
         {
-          regenerantId:this.tableData.regenerantId
+          params:{
+            regenerantId:this.tableData.regenerantId
+          }
         })
         .then((res)=>{
           console.log(res);
@@ -83,7 +86,7 @@ export default {
       .then((res)=> {
         console.log(res.data.data.inhabitantAndRecycleVO);
         this.tableData = res.data.data.inhabitantAndRecycleVO;
-        
+        this.loading = false;
         if(this.tableData.recycleState != "已回收") {
           console.log("需要改变状态");
           this.isShow = false;

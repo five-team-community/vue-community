@@ -132,6 +132,16 @@ export default {
           this.totalCount = res.data.data.totalCount;
           this.loading = false;
           console.log(this.tableData);
+          this.tableData.map((item)=> {
+            console.log(item.repairState);
+            if(item.repairState == 0) {
+              item.repairState = "未受理"
+            } else if (item.repairState == 1) {
+              item.repairState = "未处理"
+            } else {
+              item.repairState = "已处理"
+            }
+          })
         })
         .catch(err=> {
           console.log(err)
@@ -187,6 +197,16 @@ export default {
           this.tableData = (res.data.data.data);
           this.totalCount = res.data.data.totalCount;
           this.loading = false;
+          this.tableData.map((item)=> {
+            console.log(item.repairState);
+            if(item.repairState == 0) {
+              item.repairState = "未受理"
+            } else if (item.repairState == 1) {
+              item.repairState = "未处理"
+            } else {
+              item.repairState = "已处理"
+            }
+          })
         })
         .catch(err=> {
           console.log(err)
@@ -228,6 +248,17 @@ export default {
                 this.tableData = (res.data.data.data);
                 this.loading = false;
                 console.log(this.tableData);
+
+                this.tableData.map((item)=> {
+                  console.log(item.repairState);
+                  if(item.repairState == 0) {
+                    item.repairState = "未受理"
+                  } else if (item.repairState == 1) {
+                    item.repairState = "未处理"
+                  } else {
+                    item.repairState = "已处理"
+                  }
+                })
               })
               .catch(err=> {
                 console.log(err)
@@ -261,6 +292,19 @@ export default {
           this.totalCount = res.data.data.totalCount;
           this.loading = false;
           console.log(this.tableData);
+
+          this.tableData.map((item)=> {
+            console.log(item.repairState);
+            if(item.repairState == 0) {
+              item.repairState = "未受理"
+            } else if (item.repairState == 1) {
+              item.repairState = "未处理"
+            } else {
+              item.repairState = "已处理"
+            }
+          })
+
+
         })
         .catch(err=> {
           console.log(err)

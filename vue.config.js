@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://172.16.6.66:8080', // 服务器地址
+        target: 'http://172.16.6.65:8080', // 服务器地址
         pathRewrite: {
           '^/api': ''
         },

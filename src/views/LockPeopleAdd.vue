@@ -11,6 +11,7 @@
       <el-divider style="margin:0"></el-divider>
       <div class="contentBox">
         <el-form ref="form" :model="form" label-width="180px">
+        
         <el-form-item label="公司名称">
           <el-input v-model="form.companyName" placeholder="请输入公司名称"></el-input>
         </el-form-item>
@@ -25,6 +26,19 @@
         </el-form-item>
         <el-form-item label="详细地址">
           <el-input v-model="form.detailAddress" placeholder="请输入详细地址"></el-input>
+        </el-form-item>
+        <el-form-item label="头像上传" class="load">
+          <el-upload
+            name="file"
+            class="avatar-uploader"
+            action="http://172.16.6.65:8080/unlock/loadHeadImg"
+            :show-file-list="false"
+            :on-success="handleSuccess"
+            :before-upload="beforeUpload"
+          >
+            <img v-if="this.form.img" :src="this.form.img" class="avatar"/>
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">添加</el-button>
@@ -51,8 +65,10 @@ export default {
           delivery: false,
           type: [],
           resource: '',
-          desc: ''
+          desc: '',
+          img:''
       },
+      imgurl:'',
       value: [],
       options: [{
           value: '四川省',
@@ -307,10 +323,26 @@ export default {
     }
   },
   methods: {
+    handleSuccess(res,file) {  // 图片上传
+      console.log(URL.createObjectURL(file.raw));
+      this.form.img = 'http://172.16.6.65:8080' + "/" + res.data.filePath;
+      this.imgurl = res.data.filePath;
+    },
+    beforeUpload(file) { // 图片判断
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if(!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式");
+      }
+      if(!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB");
+      }
+      return isJPG && isLt2M;
+    },
     handleChange(value) {
       console.log(value);
     },
-    onSubmit() {
+    onSubmit() { //确认
       console.log('公司!',this.form.companyName);
       console.log('联系人',this.form.personName);
       console.log('电话',this.form.telphone);
@@ -324,6 +356,8 @@ export default {
         address = this.form.value[0] + "" + this.form.value[1] + "" + this.form.detailAddress;
       }
       console.log("地址：",address);
+
+      
 
       this.axios
         .post("/unlock/addUnlock",
@@ -339,6 +373,18 @@ export default {
         .catch((err)=> {
           console.log(err);
         })
+
+      this.$alert('添加成功！', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `添加成功: ${ action }`
+            });
+          }
+        });
+      
+      
       
     },
     returnBtn() {

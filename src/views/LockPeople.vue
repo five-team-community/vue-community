@@ -37,7 +37,7 @@
         <div class="block">
           <el-pagination
             layout="total, prev, pager, next"
-            :page-size="3"
+            :page-size="5"
             :total="totalCount"
             :pager-count="5"
             :current-Page="currentPage"
@@ -72,7 +72,7 @@ export default {
       this.axios
       .post("/unlock/getAll",
       {
-          pageSize:3,
+          pageSize:5,
           currentPage:this.currentPage
       })
       .then((res)=> {
@@ -112,7 +112,7 @@ export default {
               this.axios
                 .post("/unlock/getAll",
                 {
-                    pageSize:3,
+                    pageSize:5,
                     currentPage:this.currentPage
                 })
                 .then((res)=> {
@@ -154,7 +154,10 @@ export default {
           personName:this.search.personName
         })
         .then((res)=> {
-          console.log(res);
+          console.log(res.data.data.data);
+          this.testData = res.data.data.data;
+          this.totalCount = res.data.data.totalCount;
+          this.loading= false;
         })
         .catch((err)=> {
           console.log(err);
@@ -166,7 +169,7 @@ export default {
     this.axios
       .post("/unlock/getAll",
       {
-          pageSize:3,
+          pageSize:5,
           currentPage:this.currentPage
       })
       .then((res)=> {

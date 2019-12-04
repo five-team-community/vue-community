@@ -30,7 +30,7 @@
             </el-row>
             <el-row :gutter="10" v-if="this.tabledata.repairsParts">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">报修部位:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairsParts[0].partName}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairsParts[0]}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">报修内容:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairContent}}</div></el-col>
             </el-row>
@@ -90,7 +90,7 @@ export default {
     };
   },
   methods: {
-    back(){//返回房产信息列表
+    back(){//返回
       this.$router.push({path:'/home/fixMsg'});
     },
     add() {
@@ -113,6 +113,20 @@ export default {
       console.log(fixId);
       var selectStaffId = this.form.value1;
       
+      this.axios
+        .get("/repairInfo/updateByIdToStaOne",
+        {
+          params:{
+            infoId:fixId
+          }
+        })
+        .then((res)=> {
+          console.log(res);
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
+
       // 请求数据
       this.axios
         .get("/repairInfo/setStaff",
@@ -128,6 +142,8 @@ export default {
         .catch((err)=> {
           console.log(err);
         })
+
+      
 
     }
   },
@@ -152,10 +168,24 @@ export default {
         console.log(this.tabledata);
 
         
+        
         if(this.tabledata.repairState == 0) {
           console.log("可以派工");
           this.isShow = false;
         }
+
+        if(this.tabledata.repairState == 0) {
+              this.tabledata.repairState = "未受理"
+            } else if (this.tabledata.repairState == 1) {
+              this.tabledata.repairState = "未处理"
+            } else {
+              this.tabledata.repairState = "已处理"
+            }
+
+        
+
+        
+
       })
       .catch((err)=> {
         console.log(err);

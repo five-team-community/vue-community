@@ -14,9 +14,6 @@
           <el-form-item label="联系电话">
             <el-input v-model="search.telphone" placeholder="请输入用户电话"></el-input>
           </el-form-item>
-          <el-form-item label="登记时间">
-            <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-          </el-form-item>
         </el-form>
       </div>
       <div class="btn">
@@ -142,14 +139,6 @@ export default {
       },
       searchBtn() { // 查询 发送请求数据
         
-        // 时间格式
-        if(this.search.time) {
-          var t = this.search.time;
-          this.startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
-          this.endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
-          console.log("开始时间:",this.startTime1);
-          console.log("结束时间:",this.endTime1);
-        }
         console.log("房号:",this.search.houseNum);
         console.log("电话:",this.search.telphone);
 
@@ -159,13 +148,12 @@ export default {
           {
             housePropertyNo:this.search.houseNum,
             inhabitantPhone: this.search.telphone,
-            
             pageSize:5,
             currentPage:this.currentPage
           })
           .then((res) => {
             console.log(res);
-            this.axios  // 请求数据 渲染列表
+            /* this.axios  // 请求数据 渲染列表
               .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
               {
                 params: {
@@ -183,7 +171,7 @@ export default {
               })
               .catch(err=> {
                 console.log(err)
-              }) 
+              })  */
           })
           .catch(err=> {
             console.log(err)

@@ -29,10 +29,10 @@
           <el-table-column prop="sugState" label="状态"></el-table-column>
           <el-table-column prop="operate" label="操作" >
             <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+              <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
                 <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+              <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
                 <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
               </el-tooltip>
             </template>
@@ -114,6 +114,15 @@ export default {
           this.totalCount = res.data.data.totalCount;
           this.loading = false;
           console.log(this.tableData);
+
+          this.tableData.map((item)=> {
+            console.log(item.sugState);
+            if(item.sugState == 0) {
+              item.sugState = "未读"
+            } else {
+              item.sugState = "已读"
+            }
+          })
         })
         .catch(err=> {
           console.log(err)
@@ -152,27 +161,25 @@ export default {
               beginTime:startTime1,
               endTime:endTime1,
               currentPage:this.currentPage,
-              pageSize:this.pagesize
+              pageSize:5
           })
           .then((res) => {
             console.log(res);
-            this.axios
-              .post("/suggestion/showByLike",
-              {
-                  currentPage:this.currentPage,
-                  pageSize:5  
-              })
-              .then((res) => {
-                console.log(res.data.data);
-                this.tableData = (res.data.data.data);
+            this.tableData = (res.data.data.data);
                 this.totalCount = res.data.data.totalCount;
                 this.loading = false;
                 console.log("数据：",this.tableData);
                 console.log("总数：",this.totalCount);
-              })
-              .catch(err=> {
-                console.log(err)
-              }) 
+                this.tableData.map((item)=> {
+                  console.log(item.sugState);
+                  if(item.sugState == 0) {
+                    item.sugState = "未读"
+                  } else {
+                    item.sugState = "已读"
+                  }
+                })
+
+            
           })
           .catch(err=> {
             console.log(err)
@@ -203,14 +210,26 @@ export default {
               this.axios
                 .post("/suggestion/showByLike",
                 {
-                    pageSize:this.pagesize,
-                    currentPage:this.currentPage
+                    currentPage:this.currentPage,
+                    pageSize:5  
                 })
                 .then((res) => {
-                  console.log(res.data.data.data);
+                  console.log(res.data.data);
                   this.tableData = (res.data.data.data);
+                  this.totalCount = res.data.data.totalCount;
                   this.loading = false;
-                  console.log(this.tableData);
+                  console.log("数据：",this.tableData);
+                  console.log("总数：",this.totalCount);
+                  
+        
+                  this.tableData.map((item)=> {
+                    console.log(item.sugState);
+                    if(item.sugState == 0) {
+                      item.sugState = "未读"
+                    } else {
+                      item.sugState = "已读"
+                    }
+                  })
                 })
                 .catch(err=> {
                   console.log(err)
@@ -243,6 +262,16 @@ export default {
           this.loading = false;
           console.log("数据：",this.tableData);
           console.log("总数：",this.totalCount);
+          
+
+          this.tableData.map((item)=> {
+            console.log(item.sugState);
+            if(item.sugState == 0) {
+              item.sugState = "未读"
+            } else {
+              item.sugState = "已读"
+            }
+          })
         })
         .catch(err=> {
           console.log(err)

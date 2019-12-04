@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="addFixPart">
-        <el-dialog title="添加报修部位" :visible.sync="dialogFormVisible" >
+        <el-dialog title="添加报修部位" :visible.sync="dialogFormVisible">
           <el-divider></el-divider>
           <el-form :model="form" style="margin:10px 0">
             <el-form-item label="名称" :label-width="formLabelWidth">
@@ -51,7 +51,7 @@
         </el-dialog>
       </div>
       <div class="editFixPart">
-        <el-dialog title="修改报修部位" :visible.sync="dialogFormVisible2" >
+        <el-dialog title="修改报修部位" :visible.sync="dialogFormVisible2" destroy-on-close>
           <el-divider></el-divider>
           <el-form :model="form2" style="margin:10px 0">
             <el-form-item label="名称" :label-width="formLabelWidth">
@@ -187,18 +187,18 @@
           })
           .then((res)=> {
             console.log(res);
-            // 重新渲染
             this.axios
-              .get("/repairPart/getAllRepairsParts",
+              .post("/repairPart/getAllRepairsParts",
               {
-                params: {
-                  pageSize: this.pagesize,
+
+                  pageSize: 5,
                   currentPage: this.currentPage
-                }
+
               })
               .then((res) => {
-                console.log(res.data.data.data);
+                console.log(res.data);
                 this.tableData = (res.data.data.data);
+                this.totalCount = res.data.data.totalCount;
                 this.loading=false;
                 console.log(this.tableData);
               })
