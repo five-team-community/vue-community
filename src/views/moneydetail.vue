@@ -82,10 +82,9 @@ export default {
     this.axios
         .post("/pay/xiangqing",{
             payId:str,
-
         }) 
         .then(res => {
-          this.tableData = res.data.data.Pays; 
+          this.tableData = res.data.data.pays; 
           console.log(res.data)
         })
         .catch(err => {

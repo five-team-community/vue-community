@@ -7,7 +7,7 @@
       </div>
     <el-form :inline="true" :model="form" class="demo-form-inline">
       <el-col :span="14">
-        <el-form-item label="活动名称">
+        <el-form-item  label="活动名称">
           <el-input v-model="form.title" placeholder="活动名称"></el-input>
         </el-form-item>
         <el-form-item label="联系人">
@@ -34,19 +34,13 @@
       tooltip-effect="dark"
       style="width: 100%"
       >
-      <el-table-column prop="id" label="社区" width="120"> 易居</el-table-column>
-      <el-table-column prop="activityName" label="活动名称" width="120">  </el-table-column>
-      <el-table-column prop="contactsName" label="联系人" width="120">
-
-      </el-table-column>
-      <el-table-column prop="contactsPhone" label="联系方式" width="120">
-        
-      </el-table-column>
-      <el-table-column prop="description" label="描述" width="120">
-       
-      </el-table-column>
-      <el-table-column prop="activityAddress" label="活动地址" width="120"> </el-table-column>
-      <el-table-column label="操作" align="center" >
+      <el-table-column align="center" prop="id" label="社区" > 易居</el-table-column>
+      <el-table-column align="center" prop="activityName" label="活动名称" >  </el-table-column>
+      <el-table-column align="center" prop="contactsName" label="联系人" ></el-table-column>
+      <el-table-column align="center" prop="contactsPhone" label="联系方式"></el-table-column>
+      <el-table-column align="center" prop="description" label="描述"></el-table-column>
+      <el-table-column align="center" prop="activityAddress" label="活动地址" > </el-table-column>
+      <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="查看活动详情" placement="bottom">
               <el-button

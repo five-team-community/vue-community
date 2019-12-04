@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form"  :model="form" label-width="80px">
           <el-form-item label="资讯标题">
             <el-input v-model="form.ciTitle" prop="ciTitle"></el-input>
           </el-form-item>
@@ -30,7 +30,7 @@
                 type="date"
                 placeholder="发布时间"
                 prop="ciDate"
-                v-model="form.startTime"
+                v-model="form.ciDate"
               ></el-date-picker>
             </el-col>
           </el-form-item>
@@ -38,22 +38,22 @@
             <el-input
               type="textarea"
               v-model="form.ciContent"
+              :autosize="{ minRows: 3, maxRows: 5}"
               prop="ciContent"
             ></el-input>
           </el-form-item>
            <el-form-item class="load" label="上传图片">
     <el-upload
-            name="file"
-            class="avatar-uploader"
-            action="http://172.16.6.67:8080/Announcement/upload"
+            name="photo"
+            class="avatar-uploader"        
+            action="http://172.16.6.63:8080/communityInfo/upload"
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
           >
-            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+            <img v-if="this.imgurl" :src="imgurl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-
     </el-form-item>
     <el-button type="primary" @click="edit">立即创建</el-button>
       <el-button>取消</el-button>
@@ -65,6 +65,7 @@
   </div>
 </template>
 <script>
+/* action="http://172.16.6.67:8080/Announcement/upload" */
 export default {
   data() {
     return {
@@ -84,8 +85,11 @@ export default {
     },
       handleSuccess(res, file) {
       console.log(URL.createObjectURL(file.raw));
-      this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
-      this.imgurl=res.data.filePath;
+      this.imgurl = 'http://172.16.6.63:8080'+"/"+res.data.filePath;
+      this.form.img=res.data.filePath;
+      console.log(res.data.filePath)
+      console.log(this.imgurl)
+      console.log(res.data)
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -99,18 +103,12 @@ export default {
       return isJPG && isLt2M;
     },
     edit() {
-      var str = location.href;
-      var num = str.indexOf("=");
-      str = str.substr(num + 1);
-      str = Number(str);
-
       this.axios
         .post("/communityInfo/add", {
-            ciDate: this.form.startTime,
             ciTitle:this.form.ciTitle,
             ciType: this.form.ciType,
             ciContent: this.form.ciContent,
-            Image:this.imgurl
+            Image:this.form.img
         })
         .then(res => {
           console.log(res.data);
@@ -119,7 +117,7 @@ export default {
           console.log(err);
           return err;
         });
-        
+        console.log(this.form.startTime,this.form.ciTitle,this.form.ciType,this.form.ciContent,this.form.img)
 /*       this.$router.push({ path: "/home/Info" }); */
     }
   },

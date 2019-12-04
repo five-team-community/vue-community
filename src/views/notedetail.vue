@@ -50,7 +50,7 @@
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
           >
-            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+            <img v-if="this.imgurl" :src="imgurl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
     </el-form-item>
@@ -68,13 +68,16 @@
 export default {
   data() {
     return {
-      form: {},
-      activeName: "second"
+      form: {
+        img:''
+      },
+      activeName: "second",
+      imgurl:''
     };
   },
   methods: {
     back() {
-      this.$router.push({ path: "/home/NeedDo" });
+      this.$router.push({ path: "/home/Notice" });
     },
     handleClick(tab, event) {
       console.log(tab, event);
@@ -84,7 +87,6 @@ export default {
       var num = str.indexOf("=");
       str = str.substr(num + 1);
       str = Number(str);
-
       this.axios
         .post("/Announcement/update", {
             announcementsId: str,
@@ -130,7 +132,8 @@ export default {
       })
       .then(res => {
         this.form = res.data.data.Announcement;
-        console.log(res.data);
+        this.imgurl='http://172.16.6.66:8080'+"/"+res.data.data.Announcement.imgs;
+        console.log(this.imgurl);
       })
       .catch(err => {
         console.log(err);

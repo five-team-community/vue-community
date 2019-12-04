@@ -212,17 +212,14 @@ export default {
   },
   created() {
      this.axios
-        .get("/repairInfo/getAllRepairInfo",{
-         params:{
+        .post("/repairInfo/getAllRepairInfo",{
             pageSize:1,
             currentPage:1,
-         }
         }) 
         .then(res => {
         //  res.data = tableData; 
          this.tableData = res.data.data.Pays;
-          console.log(res.data.data)
-          console.log(this.tableData)
+          console.log(res.data)
         })
         .catch(err => {
           console.log(err);

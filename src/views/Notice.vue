@@ -40,10 +40,10 @@
         tooltip-effect="dark"
         style="width: 100%"
       >
-        <el-table-column prop="title" label="标题"></el-table-column>
-        <el-table-column prop="expirydDate" label="创建日期"></el-table-column>
-        <el-table-column prop="content" label="内容"></el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column align="center" prop="title" label="标题"></el-table-column>
+        <el-table-column align="center" prop="expirydDate" label="创建日期"></el-table-column>
+        <el-table-column align="center" prop="content" label="内容"></el-table-column>
+        <el-table-column align="center" label="操作" >
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
               <el-button
@@ -119,6 +119,7 @@ export default {
         })
         .then(res => {
           this.tableData = res.data.data.Announcements;
+          this.totalCount=res.data.data.totalCount;
           this.loading = false;
           console.log(res.data)
         })
@@ -139,7 +140,7 @@ export default {
           });
           this.axios
             .post("/Announcement/deleteAnnouncement", {
-                announcementsId: this.tableData[index].announcementsId
+                announcementsId: [this.tableData[index].announcementsId]
             })
             .then(res => {
               console.log("删除成功", res);
@@ -204,7 +205,7 @@ export default {
   created() {
     this.axios
       .post("/Announcement/showAll", {
-          currentPage: 1,
+          currentPage: this.currentPage,
       })
       .then(res => {
         //  res.data = tableData;
