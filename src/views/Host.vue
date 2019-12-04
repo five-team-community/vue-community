@@ -120,7 +120,7 @@ export default {
           telNum: this.search.telphone
         })
         .then(res => {
-          console.log(res);
+          console.log("aaa",res);
           this.hostData = [];
           this.formateData(res.data.data.data);
           this.totalPage = res.data.data.count;
@@ -132,17 +132,17 @@ export default {
     },
     show(index) {
       //查看
-      index = 5 * (this.currentPage - 1) + index;
+ 
       var id = this.hostData[index].id;
       console.log(id);
       this.$router.push({ path: "/home/showHost/" + id });
     },
     alter(index) {
       //修改
-      index = 5 * (this.currentPage - 1) + index;
+ 
       var id = this.hostData[index].id;
       console.log(id);
-      this.$router.push({ path: "/home/alterHost?id=" + id });
+      this.$router.push({ path: "/home/alterHost/" + id });
     },
     del(index) {
       //***********************************删除**************************************
@@ -152,7 +152,6 @@ export default {
         type: "warning"
       })
         .then(() => {
-          index = 5 * (this.currentPage - 1) + index;
           var id = this.hostData[index].id;
           this.axios
             .post("/inhabitant/removeInhabitant", {
@@ -195,6 +194,24 @@ export default {
     changePage(val) {
       //改变页码
       this.currentPage = val;
+       this.axios
+        .post("/inhabitant/searchInhabitant", {
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          houseNo: this.search.houseNum,
+          name: this.search.host,
+          telNum: this.search.telphone
+        })
+        .then(res => {
+          console.log(res);
+          this.hostData = [];
+          this.formateData(res.data.data.data);
+          this.totalPage = res.data.data.count;
+          this.loading = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     exclude() {
       //导出报表
@@ -227,15 +244,7 @@ export default {
     }
   },
   created() {
-    this.axios
-      .get("/inhabitant/inhabitantAmount", {})
-      .then(res => {
-        console.log(res);
-        this.totalPage = res.data.data.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+   
     this.axios
       .post("/inhabitant/showInhabitants", {
         currentPage: this.currentPage,
@@ -243,6 +252,8 @@ export default {
       })
       .then(res => {
         console.log(res);
+        this.hostData=[];
+        this.totalPage = res.data.data.count;
         this.formateData(res.data.data.data);
         this.loading = false;
       })

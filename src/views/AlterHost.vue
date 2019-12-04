@@ -20,23 +20,19 @@
         <el-button type="primary" size='mini' plain icon='el-icon-close' v-show='form.link' @click="form.link=''">{{form.link}}</el-button>
       </el-form-item>
 
-      <el-form-item label="房产:" prop="no"
-      :rules="{ required: true, message: '请选择一个房产', trigger: ['blur','change']}">
-        <el-button type="warning" size='mini' plain icon='el-icon-user-solid' @click='chooseHouse'>选择房产</el-button>
-        <el-button type="primary" size='mini' plain icon='el-icon-close' v-show='form.no' @click="form.no=''">{{form.no}}</el-button>
-      </el-form-item>
-
-      <el-form-item label="预留手机号:" prop="tel" :rules="[phone,{ required: true, message: '手机号不能为空', trigger: ['blur','change']}]" >
-        <el-input v-model="form.tel" placeholder="请输入预留手机号" :disabled='true'></el-input>
-      </el-form-item>
+     
 
       <el-form-item label="真实姓名:" prop="name"
       :rules="{ required: true, message: '姓名不能为空', trigger: ['blur','change']}">
-        <el-input v-model="form.no" placeholder="请输入姓名" autocomplete="off"></el-input>
+        <el-input v-model="form.no" placeholder="请输入姓名" autocomplete="off" :disabled='true'></el-input>
       </el-form-item>
 
       <el-form-item label="身份证号码:" prop="idCard" :rules="[{ validator: this.validID, trigger: ['blur','change']},{ required: true, message: '身份证号码不能为空', trigger: ['blur','change']}]" >
-        <el-input v-model="form.idCard" placeholder="请输入身份证号码"></el-input>
+        <el-input v-model="form.idCard" placeholder="请输入身份证号码" :disabled='true'></el-input>
+      </el-form-item>
+
+       <el-form-item label="预留手机号:" prop="tel" :rules="[phone,{ required: true, message: '手机号不能为空', trigger: ['blur','change']}]" >
+        <el-input v-model="form.tel" placeholder="请输入预留手机号" ></el-input>
       </el-form-item>
 
       <el-form-item label="性别:">
@@ -69,6 +65,7 @@
       </el-form-item>
     </el-form>
    </div>
+   
   </div>
 </template>
 <script>

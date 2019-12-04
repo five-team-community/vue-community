@@ -9,13 +9,14 @@
       <div class="choose">
         <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
           <el-form-item label="姓名">
-            <el-input v-model="search.houseNum" placeholder="请输入姓名"></el-input>
+            <el-input v-model="search.name" placeholder="请输入姓名"></el-input>
           </el-form-item>
           <el-form-item label="手机号">
-            <el-input v-model="search.ownerPhone" placeholder="请输入手机号"></el-input>
+            <el-input v-model="search.tel" placeholder="请输入手机号"></el-input>
           </el-form-item>
           <el-form-item label="角色">
-            <el-select v-model="search.houseState" placeholder="选择角色">
+            <el-select v-model="search.role" placeholder="选择角色">
+              <el-option label="全部" value=""></el-option>
               <el-option label="管理员" value="管理员"></el-option>
               <el-option label="服务人员" value="服务人员"></el-option>
               <el-option label="普通用户" value="普通用户"></el-option>
@@ -24,205 +25,172 @@
         </el-form>
       </div>
       <!-- 新增和搜索按钮 -->
-      <div class="btn">
-        <div>
-          <el-button icon="el-icon-plus" class="btn-add" @click='add'>新增</el-button>
-          <el-button icon="el-icon-search" class="btn-search" @click='searchMsg'>搜素</el-button>
-        </div>
+      <div class="btn" style="text-align:right;margin-right:30px">
+        <el-button icon="el-icon-upload" class="btn-exclude" @click="exclude">导出报表</el-button>
+        <el-button icon="el-icon-plus" class="btn-add" @click="add">新增</el-button>
+        <el-button icon="el-icon-search" class="btn-search" @click="searchMsg">搜素</el-button>
       </div>
 
       <!-- 表格数据 -->
       <div class="mytable">
-        <el-table :data="getData" border style="width: 100%" v-loading="loading">
-          <el-table-column prop="housePropertyNo" label="用户名"></el-table-column>
-          <el-table-column prop="ownerName" label="真实姓名"></el-table-column>
-          <el-table-column prop="ownerPhone" label="手机号"></el-table-column>
-          <el-table-column prop="ownerTime" label="性别"></el-table-column>
-          <el-table-column prop="houseState" label="角色"></el-table-column>
-          <el-table-column prop="isBilling" label="上次登录时间"></el-table-column>
+        <el-table :data="userData" border style="width: 100%" v-loading="loading">
+          <el-table-column prop="name" label="用户名"></el-table-column>
+          <el-table-column prop="realName" label="真实姓名"></el-table-column>
+          <el-table-column prop="tel" label="手机号"></el-table-column>
+          <el-table-column prop="role" label="角色"></el-table-column>
+          <el-table-column prop="time" label="注册时间"></el-table-column>
 
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
+              
               <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
               <el-button type="info" icon="el-icon-edit-outline" size="mini" class="btn-alter" @click="alter(scope.$index)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini" class="btn-del" @click="del(scope.$index)"></el-button>
             </template>
           </el-table-column>
         </el-table>
 
         <!-- 分页 -->
-        <div class="clearfix" v-show="!loading"><el-pagination background layout="prev, pager, next" :page-size="5" :total="houseData.length" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
+        <div class="clearfix" v-show="!loading"><el-pagination background layout="prev, pager, next" :page-size="5" :total="totalPage" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
       </div>
       
     </div>
 </template>
 <script>
 // 模拟的数据
-var houseData=[
-  {
-    housePropertyId:1,
-    housePropertyNo:"1",
-    ownerName:"aaa",
-    ownerPhone:"12324234",
-    ownerTime:"2018-08-07",
-    houseState:"是",
-    isBilling:"计费",
-    blindNum:3,
-    blindMax:20
-  },
-  {
-    housePropertyId:2,
-    housePropertyNo:"2",
-    ownerName:"aaa",
-    ownerPhone:"12324234",
-    ownerTime:"2018-08-07",
-    houseState:"是",
-    isBilling:"计费",
-    blindNum:3,
-    blindMax:20
-  },
-  {
-    housePropertyId:3,
-    housePropertyNo:"3",
-    ownerName:"aaa",
-    ownerPhone:"12324234",
-    ownerTime:"2018-08-07",
-    houseState:"是",
-    isBilling:"计费",
-    blindNum:3,
-    blindMax:20
-  },
-  {
-    housePropertyId:4,
-    housePropertyNo:"4",
-    ownerName:"aaa",
-    ownerPhone:"12324234",
-    ownerTime:"2018-08-07",
-    houseState:"是",
-    isBilling:"计费",
-    blindNum:3,
-    blindMax:20
-  },
-  {
-    housePropertyId:5,
-    housePropertyNo:"5",
-    ownerName:"aaa",
-    ownerPhone:"12324234",
-    ownerTime:"2018-08-07",
-    houseState:"是",
-    isBilling:"计费",
-    blindNum:3,
-    blindMax:20
-  },
-  {
-    housePropertyId:6,
-    housePropertyNo:"6",
-    ownerName:"aaa",
-    ownerPhone:"12324234",
-    ownerTime:"2018-08-07",
-    houseState:"是",
-    isBilling:"计费",
-    blindNum:3,
-    blindMax:20
-  },
-  {
-    housePropertyId:7,
-    housePropertyNo:"7",
-    ownerName:"aaa",
-    ownerPhone:"12324234",
-    ownerTime:"2018-08-07",
-    houseState:"是",
-    isBilling:"计费",
-    blindNum:3,
-    blindMax:20
-  },{
-    housePropertyId:8,
-    housePropertyNo:"8",
-    ownerName:"aaa",
-    ownerPhone:"12324234",
-    ownerTime:"2018-08-07",
-    houseState:"是",
-    isBilling:"计费",
-    blindNum:3,
-    blindMax:20
-  }
-]
+
 export default {
   data() {
     return {
       loading:true,
+      pageSize: 5,
       currentPage:1,//记录当前页
+      totalPage:0,
       search: {//记录筛选的数据项
-        houseNum: "",
-        ownerName: "",
-        ownerPhone: "",
-        houseState: ""
+        name: "",
+        tel: "",
+        role: "",
       },
-      houseData:[]//表单所以数据
+      userData:[]//表单所以数据
     };
   },
   methods: {
     add(){//新增
       this.$router.push({path:'/home/addUser'});
     },
-    searchMsg(){//搜索
-      console.log(this.search);
+    exclude(){//导出报表
+      window.location.href=this.$store.state.ip+"/staff/excludeExcel";
+    },
+    searchMsg(){//**********************搜索**************************
+      console.log("搜索",this.search);
+      this.currentPage = 1;
+      this.loading =true;
+      this.axios
+      .post("/user/showBySearch", {
+        currentPage:this.currentPage,
+        pageSize:this.pageSize,
+        telNum:this.search.tel,
+        realName:this.search.name,
+        userState:this.search.role
+      })
+      .then(res => {
+        console.log("查询",res);
+        this.userData=this.formateData(res.data.data.data);
+        console.log(this.userData);
+        this.totalPage = res.data.data.count;
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
     },
     show(index){//查看
-      index = 5*(this.currentPage-1)+index;
-      console.log("查看",index);
-      this.$router.push({path:'/home/showUser?id='+index});
+      // index = 5*(this.currentPage-1)+index;
+      var id = this.userData[index].id;
+      this.$router.push({path:'/home/showUser/'+id});
     },
     alter(index){//修改
-      index = 5*(this.currentPage-1)+index;
-      this.$router.push({path:'/home/alterUser?id='+index});
-    },
-    del(index){//删除
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        index = 5*(this.currentPage-1)+index;
-        var housePropertyId= this.housePropertyId;
-        console.log("删除",housePropertyId);
-
-        // ****************************************删除请求**********************************************
-
-
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
-      });
-      
+      // index = 5*(this.currentPage-1)+index;
+      var id = this.userData[index].id;
+      this.$router.push({path:'/home/alterUser/'+id});
     },
     changePage(val){//改变页码
       this.currentPage=val;
       console.log(val);
+      this.loading =true;
+       this.axios
+      .post("/user/showBySearch", {
+        currentPage:this.currentPage,
+        pageSize:this.pageSize,
+        telNum:this.search.tel,
+        realName:this.search.name,
+        userState:this.search.role
+      })
+      .then(res => {
+        console.log("查询",res);
+        this.userData=this.formateData(res.data.data.data);
+        console.log(this.userData);
+        this.totalPage = res.data.data.count;
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    },
+    addZero (v) {
+      return v < 10 ? '0' + v : v
+    },
+    switchTimeFormat (time) {
+      const dateTime = new Date(time)
+      const year = dateTime.getFullYear()
+      const month = dateTime.getMonth() + 1
+      const date = dateTime.getDate()
+
+      return `${year}-${this.addZero(month)}-${this.addZero(date)}`;
+    },
+    formateData(list){
+      var arr=[];
+      for(var i=0;i<list.length;i++){
+        var item={};
+        item.id = list[i].userId;
+        item.name = list[i].userName;
+        item.realName = list[i].realName;
+        item.role = list[i].roleName;
+        item.tel = list[i].telNum;
+        item.time = this.switchTimeFormat(list[i].registerTime);
+        arr.push(item);
+      }
+      return arr;
     }
   },
   created(){
     
     // **************************************获取数据请求*********************************************
-    
-
-
-    this.loading = false;
-    this.houseData=houseData;//创建时获取数据
+    this.axios
+      .post("/user/showUserList", {
+        currentPage:this.currentPage,
+        pageSize:this.pageSize
+      })
+      .then(res => {
+        console.log("查询",res);
+        this.userData=this.formateData(res.data.data.data);
+        console.log(this.userData);
+        this.totalPage = res.data.data.count;
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
-  computed: {
-    getData(){//计算当前页的数据，table绑定该值
-      var start=5*(this.currentPage-1);
-      return this.houseData.slice(start,start+5);
-   }
-  }
+  // computed:{
+  //   getDate(){
+  //     var start = (this.currentPage-1)*this.pageSize;
+  //     // console.log(start,start+this.pageSize,this.userData);
+  //     return this.userData.slice(start,start+this.pageSize);
+  //   }
+  // }
+
 };
 </script>
 <style lang="less" scoped>
@@ -282,12 +250,16 @@ export default {
   width: 90%;
 }
 .btn{
-  height: 40px;
-}
-.btn > div {
-  float: right;
-  margin-right: 30px;
+  margin-left: 30px;
   color: white;
+  .btn-exclude{
+    color:@yellowColor;
+    border-color: @yellowColor;
+    &:hover{
+      color: white;
+      background: @yellowColor;
+    }
+  }
   .btn-add {
     background: @greenColor;
     color: white;
@@ -316,6 +288,5 @@ export default {
 .page{
   float: right;
   margin-top: 20px;
-  
 }
 </style>

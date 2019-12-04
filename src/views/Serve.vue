@@ -1,11 +1,13 @@
 <template>
   <div id="host">
     <div class="content">
+
       <!-- 标题 -->
       <div class="title">
         <i class="el-icon-s-order"></i>
         服务人员信息列表
       </div>
+
       <!-- 筛选数据的输入表单 -->
       <div class="choose">
         <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
@@ -24,7 +26,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <!-- 新增和搜索按钮 -->
+      
       <!-- 新增和搜索按钮 -->
       <div class="btn" style="text-align:right;margin-right:30px">
         <el-button icon="el-icon-upload" class="btn-exclude" @click="exclude">导出报表</el-button>
@@ -42,6 +44,7 @@
           <el-table-column prop="staffType" label="身份"></el-table-column>
           <el-table-column prop="workExperience" label="经验"></el-table-column>
           <el-table-column prop="isFree" label="是否空闲"></el-table-column>
+
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -52,9 +55,8 @@
           </el-table-column>
         </el-table>
 
-
         <!-- 分页 -->
-        <div class="clearfix" v-show="!loading"><el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalPage" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page"></el-pagination></div>
+        <div class="clearfix" v-show="!loading"><el-pagination background layout="prev, pager, next" :page-size="pageSize" :total="totalPage" :pager-count="5" :hide-on-single-page="true" @current-change="changePage" class="page" :current-page="currentPage"></el-pagination></div>
       </div>
       
     </div>
@@ -86,9 +88,11 @@ export default {
     },
     searchMsg(){//搜索
       console.log(this.search);
+      this.currentPage=1;
+      this.loading = true;
 
       // ********************************搜索***************************
-      this.axios.post("/staff/showBySearch", {
+    this.axios.post("/staff/showBySearch", {
       currentPage: this.currentPage,
       pageSize: this.pageSize,
       name: this.search.name,
@@ -106,15 +110,13 @@ export default {
       
     },
     exclude(){//导出报表
-      window.location.href="http://172.16.6.43:8080/staff/excludeExcel";
+      window.location.href=this.$store.state.ip+"/staff/excludeExcel";
     },
     show(index){//查看
-      index = 5*(this.currentPage-1)+index;
       var id=this.serveList[index].staffId;
       this.$router.push({path:'/home/showServe/'+id});
     },
     alter(index){//修改
-      index = 5*(this.currentPage-1)+index;
       var id=this.serveList[index].staffId;
       this.$router.push({path:'/home/alterServe/'+id});
     },
@@ -127,7 +129,6 @@ export default {
         type: "warning"
       })
         .then(() => {
-          index = 5 * (this.currentPage - 1) + index;
           var id = this.serveList[index].staffId;
           this.axios
             .post("/staff/removeStaff", {
@@ -170,26 +171,13 @@ export default {
 
     changePage(val){//改变页码
       this.currentPage=val;
-    },
-
-
-  },
-  created(){
-
-    // ***************************获取数据*****************************
-    this.axios
-      .get("/staff/staffAmount", {})
-      .then(res => {
-        console.log(res);
-        this.totalPage = res.data.data.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-    this.axios.post("/staff/showStaffList", {
+      this.loading=true;
+    this.axios.post("/staff/showBySearch", {
       currentPage: this.currentPage,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
+      name: this.search.name,
+      telNum: this.search.tel,
+      staffType: this.search.identity
     })
     .then(res => {
       console.log(res.data);
@@ -199,8 +187,31 @@ export default {
     .catch(err=> {
       console.log(err);
     })
+    },
+
+
+  },
+  created(){
+
+    // ***************************获取数据*****************************
+    
+    this.axios.post("/staff/showStaffList", {
+      currentPage: this.currentPage,
+      pageSize: this.pageSize
+    })
+    .then(res => {
+      console.log(res.data);
+      this.totalPage = res.data.data.count;
+      this.serveList = res.data.data.data
+      this.loading=false;
+    })
+    .catch(err=> {
+      console.log(err);
+    })
   },
 };
+
+
 </script>
 <style lang="less" scoped>
 @import "../assets/less/base.less";
@@ -208,10 +219,11 @@ export default {
   color: @fontColor;
   background-color: #f3f3f4;
 
-  min-height: 500px;
+  
 }
 .content {
   background: white;
+  min-height: 500px;
 }
 .title {
   padding: 15px 20px;

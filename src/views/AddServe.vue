@@ -271,6 +271,9 @@ export default {
             })
             .then(res => {
               console.log(res.data);
+              if(res.data.code=="add_success"){
+                this.$router.replace("/home/serve" );
+              }
             })
             .catch(err=> {
               console.log(err);

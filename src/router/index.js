@@ -276,7 +276,7 @@ const routes = [
         }
       },
       {
-        path:'adduser',
+        path:'addUser',
         name:"AddUser",
         component: () => import('../views/AddUser.vue'),//用户管理
         meta: {
@@ -284,7 +284,7 @@ const routes = [
         }
       },
       {
-        path:'alteruser/:id',
+        path:'alterUser/:id',
         name:"AlterUser",
         component: () => import('../views/AlterUser.vue'),//用户管理
         meta: {
@@ -292,7 +292,7 @@ const routes = [
         }
       },
       {
-        path:'showuser/:id',
+        path:'showUser/:id',
         name:"ShowUser",
         component: () => import('../views/ShowUser.vue'),//用户管理
         meta: {
@@ -428,6 +428,11 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 // 注册全局守卫
 // 在访问路由之前进行拦截
 // router.beforeEach((to, from, next) => {

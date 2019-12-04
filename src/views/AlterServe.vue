@@ -22,7 +22,7 @@
         ref="ruleForm"
       >
         <el-form-item label="员工头像:" prop="link">
-          <el-avatar shape="square" :size="100" :src="form.img" class="serve-img" style="float:left"></el-avatar>
+          <el-avatar shape="square" :size="100" :src="form.fullimg" class="serve-img" style="float:left"></el-avatar>
           <el-upload
             name="photo"
             class="avatar-uploader"
@@ -41,7 +41,7 @@
           prop="name"
           :rules="{ required: true, message: '姓名不能为空', trigger: ['blur','change']}"
         >
-          <el-input v-model="form.no" placeholder="请输入姓名" autocomplete="off"></el-input>
+          <el-input v-model="form.name" placeholder="请输入姓名" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -75,7 +75,7 @@
           prop="age"
           :rules="{ required: true, message: '年龄不能为空', trigger: ['blur','change']}"
         >
-          <el-input v-model="form.age" placeholder="请输入年龄"></el-input>
+          <el-input v-model="form.age" placeholder="请输入年龄" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -99,7 +99,7 @@
           prop="nation"
           :rules="{ required: true, message: '身份不能为空', trigger: ['blur','change']}"
         >
-          <el-radio-group v-model="form.sex" :disabled="true">
+          <el-radio-group v-model="form.sex">
             <el-radio label="家政"></el-radio>
             <el-radio label="回收"></el-radio>
             <el-radio label="维修"></el-radio>
@@ -154,6 +154,7 @@ export default {
       imageUrl: "",
       fileList: [],
       form: {
+        fullImg:'',
         id: null,
         name: "",
         img: "",
@@ -175,10 +176,12 @@ export default {
     };
   },
   methods: {
-    handleSuccess(res, file) {
-      console.log(URL.createObjectURL(file.raw));
-      this.form.img =
-        this.$.store.state.ip + "/" + URL.createObjectURL(file.raw);
+     handleSuccess(res) {
+      console.log(res.data.filePath);
+      
+      this.form.img = res.data.filePath;
+      this.form.fullimg=this.$store.state.ip+'/'+this.form.img
+      console.log(this.form.fullimg);
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -250,13 +253,15 @@ export default {
               checkInTime: new Date()
             })
             .then(res => {
-              console.log(res.data);
+              console.log("修改",res.data);
+              if(res.data.code=="200"){
+                this.$router.replace("/home/serve" );
+              }
             })
             .catch(err=> {
               console.log(err);
             })
 
-          alert("submit!");
         } else {
           console.log("error submit!!");
           return false;
@@ -269,7 +274,8 @@ export default {
     formateData(item){
       var data = {};
       data.id = item.staffId;
-      data.img = this.$store.state.ip+item.photo;
+      data.img = item.photo;
+      data.fullimg = this.$store.state.ip+'/'+data.img;
       data.name = item.staffName;
       data.sex = item.staffSex;
       data.tel = item.telNum;
