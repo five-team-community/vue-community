@@ -19,9 +19,10 @@
           </el-form-item>
           <el-form-item label="身份：">
              <el-select v-model="search.identity" placeholder="选择身份">
-              <el-option label="家政员工" value="true"></el-option>
-              <el-option label="维修员工" value="false"></el-option>
-              <el-option label="开锁员工" value="false"></el-option>
+               <el-option label="全部" value=""></el-option>
+              <el-option label="家政员工" value="家政"></el-option>
+              <el-option label="维修员工" value="维修"></el-option>
+              <el-option label="回收员工" value="回收"></el-option>
             </el-select>
           </el-form-item>
         </el-form>

@@ -215,6 +215,7 @@ export default {
     },
     exclude() {
       //导出报表
+      
       window.location.href = "http://172.16.6.43:8080/inhabitant/excludeExcel";
     },
     addZero(v) {

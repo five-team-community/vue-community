@@ -142,7 +142,7 @@ const routes = [
       {
         path:'fix',
         name:"Fix",
-        component: () => import('../views/Fix.vue'),//维修部位
+        component: () => import('../views/Fix.vue'),//维修部件
         meta: {
           auth: true
         }
@@ -172,6 +172,14 @@ const routes = [
         }
       },
       {
+        path:'cleanMsgDetail',
+        name:"CleanMsgDetail",
+        component: () => import('../views/CleanMsgDetail.vue'),//家政信息详情
+        meta: {
+          auth: true
+        }
+      },
+      {
         path:'cleanMoney',
         name:"CleanMoney",
         component: () => import('../views/CleanMoney.vue'),//家政收费
@@ -183,6 +191,14 @@ const routes = [
         path:'recycleMsg',
         name:"RecycleMsg",
         component: () => import('../views/RecycleMsg.vue'),//回收信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'recycleMsgDetail',
+        name:"RecycleMsgDetail",
+        component: () => import('../views/RecycleMsgDetail.vue'),//回收信息详情
         meta: {
           auth: true
         }
@@ -236,9 +252,25 @@ const routes = [
         }
       },
       {
+        path:'lockMsgDetail',
+        name:"LockMsgDetail",
+        component: () => import('../views/LockMsgDetail.vue'),//开锁信息详情
+        meta: {
+          auth:true
+        }
+      },
+      {
         path:'lockPeople',
         name:"LockPeople",
         component: () => import('../views/LockPeople.vue'),//开锁信息
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'lockPeopleAdd',
+        name:"LockPeopleAdd",
+        component: () => import('../views/LockPeopleAdd.vue'),//开锁公司添加
         meta: {
           auth: true
         }
@@ -344,6 +376,22 @@ const routes = [
         path:'notedetail',
         name:"notedetail",
         component: () => import('../views/notedetail.vue'),//公告详情
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'suggest',
+        name:"suggest",
+        component: () => import('../views/Suggest.vue'),//建议
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'suggestDetail',
+        name:"suggestDetail",
+        component: () => import('../views/SuggestDetail.vue'),//建议详情
         meta: {
           auth: true
         }  
