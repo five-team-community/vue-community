@@ -14,7 +14,6 @@
           <el-form-item label="联系电话">
             <el-input v-model="search.telphone" placeholder="请输入用户电话"></el-input>
           </el-form-item>
-          
           <el-form-item label="登记时间">
             <el-date-picker v-model="search.time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
           </el-form-item>
@@ -27,7 +26,7 @@
         </div>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
+        <el-table :data="tableData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
           <el-table-column prop="inhabitantName" label="用户姓名" ></el-table-column>
           <el-table-column prop="inhabitantPhone" label="联系电话" ></el-table-column>
@@ -48,12 +47,11 @@
         </el-table>
         <div class="block">
           <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
+          layout="total, prev, pager, next"
+          :total="totalCount"
+          :current-page="currentPage"
           :page-size="5"
-          :page-sizes="[5,10]"
-          layout="total, sizes, prev, pager, next"
-          :total="8"
           :pager-count="5"
           background></el-pagination>
         </div>
@@ -68,7 +66,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pagesize:5,
+      totalCount:0,
       tableData:[],
       search: {//记录筛选的数据项
         houseNum: "",
@@ -110,26 +108,43 @@ export default {
     };
   },
   methods: {
-      handleSizeChange(val) {  //改变页数
-        console.log(`每页 ${val} 条`);
-        this.pagesize = val;
-      },
       handleCurrentChange(val) { //改变页
         this.currentPage=val;
         console.log(val);
+        
+        this.axios  // 请求数据 渲染列表
+        .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
+        {
+          params: {
+            pageSize:this.pagesize,
+            currentPage:this.currentPage
+          }
+        })
+        .then((res) => {
+          console.log(res.data.data);
+          console.log(res.data.data.inhabitantAndStaffVOList);
+          console.log(res.data.data.totalCount);
+          this.tableData = res.data.data.inhabitantAndStaffVOList;
+          this.currentPage = res.data.data.totalCount;
+          this.loading = false;
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
+
+
       },
       showDetail(index) { //查看详情
-        index = (index+(this.pagesize)*(this.currentPage-1));
+        index = (index+(5)*(this.currentPage-1));
         var showId = this.tableData[index].risId;
         console.log("详情",index);
         this.$router.push({path:'/home/cleanMsgDetail?id='+ showId});
       },
       searchBtn() { // 查询 发送请求数据
-        console.log("时间",this.search.time);
+        
         // 时间格式
         if(this.search.time) {
           var t = this.search.time;
-          console.log(t);
           this.startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
           this.endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
           console.log("开始时间:",this.startTime1);
@@ -137,18 +152,38 @@ export default {
         }
         console.log("房号:",this.search.houseNum);
         console.log("电话:",this.search.telphone);
-        console.log("服务人员姓名:",this.search.staffName);
 
+        // 请求
         this.axios
-          .post("InhabitantAndStaff/getAllInfoLike",{
-            housePropertyNo:this.houseNum,
+          .post("InhabitantAndStaff/getAllInfoLike",
+          {
+            housePropertyNo:this.search.houseNum,
             inhabitantPhone: this.search.telphone,
-            staffName:this.search.staffName,
-            beginTime:this.startTime1,
-            endTime:this.endTime1
+            
+            pageSize:5,
+            currentPage:this.currentPage
           })
           .then((res) => {
             console.log(res);
+            this.axios  // 请求数据 渲染列表
+              .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
+              {
+                params: {
+                  pageSize:this.pagesize,
+                  currentPage:this.currentPage
+                }
+              })
+              .then((res) => {
+                console.log(res.data.data);
+                console.log(res.data.data.inhabitantAndStaffVOList);
+                console.log(res.data.data.totalCount);
+                this.tableData = res.data.data.inhabitantAndStaffVOList;
+                this.currentPage = res.data.data.totalCount;
+                this.loading = false;
+              })
+              .catch(err=> {
+                console.log(err)
+              }) 
           })
           .catch(err=> {
             console.log(err)
@@ -178,14 +213,16 @@ export default {
                 .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
                 {
                   params: {
-                    pageSize:this.pagesize,
+                    pageSize:5,
                     currentPage:this.currentPage
                   }
                 })
                 .then((res) => {
                   console.log(res.data.data);
                   console.log(res.data.data.inhabitantAndStaffVOList);
+                  console.log("总数",res.data.data.page.totalCount);
                   this.tableData = res.data.data.inhabitantAndStaffVOList;
+                  this.totalCount = res.data.data.page.totalCount;
                   this.loading = false;
                 })
                 .catch(err=> {
@@ -209,14 +246,16 @@ export default {
         .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
         {
           params: {
-            pageSize:this.pagesize,
+            pageSize:5,
             currentPage:this.currentPage
           }
         })
         .then((res) => {
           console.log(res.data.data);
           console.log(res.data.data.inhabitantAndStaffVOList);
+          console.log("总数",res.data.data.page.totalCount);
           this.tableData = res.data.data.inhabitantAndStaffVOList;
+          this.totalCount = res.data.data.page.totalCount;
           this.loading = false;
         })
         .catch(err=> {

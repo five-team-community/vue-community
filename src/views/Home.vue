@@ -110,6 +110,9 @@
           <el-menu-item-group>
             <el-menu-item index="/home/user">用户管理</el-menu-item>
           </el-menu-item-group>
+          <el-menu-item-group>
+            <el-menu-item index="/home/suggest">建议反馈</el-menu-item>
+          </el-menu-item-group>
 
         </el-submenu>
       </el-menu>

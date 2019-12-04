@@ -16,25 +16,25 @@
           <!-- 基本信息 -->
           <el-tab-pane>
             <span slot="label"><i class="el-icon-s-management"></i> 基本信息</span>
-            <el-row :gutter="10">
+            <el-row :gutter="10" v-if="this.tabledata.houseProperty">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">房号:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg" >{{this.tabledata.houseProperty.housePropertyNo}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">用户名称:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.inhabitant.inhabitantName}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10"  ><div class="msg">{{this.tabledata.inhabitant.inhabitantName}}</div></el-col>
             </el-row>
-            <el-row :gutter="10">
+            <el-row :gutter="10" v-if="this.tabledata.inhabitant">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">联系电话:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.inhabitant.telNum}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">登记时间:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.regDate}}</div></el-col>
             </el-row>
-            <el-row :gutter="10">
+            <el-row :gutter="10" v-if="this.tabledata.repairsParts">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">报修部位:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairsParts[0].partName}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">报修内容:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairContent}}</div></el-col>
             </el-row>
-            <el-row :gutter="10">
+            <el-row :gutter="10" v-if="this.tabledata">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">状态:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairState}}</div></el-col>
               
@@ -45,7 +45,7 @@
         
       </div>
       <div class="btns">
-        <el-button type="primary" id="pg" :disabled="false" @click="add">派工</el-button>
+        <el-button type="primary" id="pg" :class="{showBtn:isShow}" @click="add">派工</el-button>
       </div>
     </div>
     <el-dialog title="选择报修人员" :visible.sync="dialogFormVisible">
@@ -74,6 +74,7 @@ export default {
       options:[],
       tabledata:[],
       value:"",
+      isShow:true,
       form: {
         value1:"",
           name: '',
@@ -137,21 +138,23 @@ export default {
     str = Number(str);
     console.log("报修信息编号",str);
     
+    
     this.axios
-      .get("/repairInfo/getRepairInfoById",
+      .post("/repairInfo/getRepairInfoById",
       {
-        params: {
           infoId:str
-        }
       })
       .then((res)=> {
         console.log(res.data.data.data);
         this.tabledata = res.data.data.data;
         this.loading = false;
+        console.log(this.tabledata.repairState);
         console.log(this.tabledata);
-        if(this.tabledata[0].repairState == false) {
-          console.log("无法派工");
-          this.disabled = true; 
+
+        
+        if(this.tabledata.repairState == 0) {
+          console.log("可以派工");
+          this.isShow = false;
         }
       })
       .catch((err)=> {
@@ -238,5 +241,8 @@ export default {
 }
 .btns {
   padding: 20px;
+}
+.showBtn {
+  display: none;
 }
 </style>

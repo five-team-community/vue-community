@@ -11,24 +11,26 @@
       <el-divider style="margin:0"></el-divider>
       <div class="contentBox">
         <el-row :gutter="10">
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">房号:</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户房号:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.housePropertyNo}}</div></el-col>
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户:</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户名称:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.inhabitantName}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户联系电话:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.inhabitantPhone}}</div></el-col>
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">家政人员:</div></el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">家政人员名称:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.staffName}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
+          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">服务人员类型:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.staffType}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">家政人员电话:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.staffPhone}}</div></el-col>
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">登记时间:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.serviceTime}}</div></el-col>
         </el-row>
         <el-row :gutter="10">
+          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">登记时间:</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.serviceTime}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">状态:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.state}}</div></el-col>
         </el-row>

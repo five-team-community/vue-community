@@ -324,6 +324,21 @@ export default {
         address = this.form.value[0] + "" + this.form.value[1] + "" + this.form.detailAddress;
       }
       console.log("地址：",address);
+
+      this.axios
+        .post("/unlock/addUnlock",
+        {
+          companyName:this.form.companyName,
+          personName:this.form.personName,
+          telNum:this.form.telphone,
+          location:address
+        })
+        .then((res)=> {
+          console.log(res);
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
       
     },
     returnBtn() {

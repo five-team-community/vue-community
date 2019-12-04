@@ -10,7 +10,7 @@
         <el-button type="primary" style="float:right;" @click="dialogFormVisible = true">添加报修部位</el-button>
       </div>
       <div class="content">
-        <el-table :data="showDate" v-loading="loading" border stripe>
+        <el-table :data="tableData" v-loading="loading" border stripe>
         <el-table-column prop="partName" label="报修部位" style="width: 50%">
         </el-table-column>
         <el-table-column prop="operate" label="操作" style="width: 50%">
@@ -28,6 +28,9 @@
       <div class="block">
           <el-pagination
           @current-change="handleCurrentChange"
+          :total="totalCount"
+          :current-page="currentPage"
+          :page-size="5"
           layout="prev, pager, next"
           background></el-pagination>
         </div>
@@ -71,8 +74,8 @@
     data() {
       return {
         tableData: [],
-        pagesize:10,
         currentPage: 1,
+        totalCount:0,
         dialogFormVisible: false,
         dialogFormVisible2: false,
         loading: true,
@@ -99,13 +102,36 @@
       }
     },
     methods: {
-      handleCurrentChange(val) {
+      handleCurrentChange(val) { // 换页
         this.currentPage=val;
-        console.log(val);
+        console.log("切换页面：",this.currentPage);
+        
+        this.axios
+        .post("/repairPart/getAllRepairsParts",
+        {
+          
+            pageSize: 5,
+            currentPage: this.currentPage
+          
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.tableData = (res.data.data.data);
+          this.totalCount = res.data.data.totalCount;
+          this.loading=false;
+          console.log(this.tableData);
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
+
+
+
       },
       okadd() { // 确认添加
         console.log("添加的内容",this.form.name);
         console.log(typeof(this.form.name));
+        // 请求
         this.axios
           .get("/repairPart/addRepairsParts",
             {
@@ -115,17 +141,19 @@
             })
           .then((res) => {
             console.log(res);
+            // 重新渲染
             this.axios
-              .get("/repairPart/getAllRepairsParts",
+              .post("/repairPart/getAllRepairsParts",
               {
-                params: {
-                  pageSize: this.pagesize,
+                
+                  pageSize: 5,
                   currentPage: this.currentPage
-                }
+                
               })
               .then((res) => {
-                console.log(res.data.data.data);
+                console.log(res.data);
                 this.tableData = (res.data.data.data);
+                this.totalCount = res.data.data.totalCount;
                 this.loading=false;
                 console.log(this.tableData);
               })
@@ -159,6 +187,7 @@
           })
           .then((res)=> {
             console.log(res);
+            // 重新渲染
             this.axios
               .get("/repairPart/getAllRepairsParts",
               {
@@ -203,17 +232,19 @@
             })
             .then((res)=> {
               console.log(res)
+              // 重新渲染
               this.axios
-                .get("/repairPart/getAllRepairsParts",
+                .post("/repairPart/getAllRepairsParts",
                 {
-                  params: {
-                    pageSize: this.pagesize,
+
+                    pageSize: 5,
                     currentPage: this.currentPage
-                  }
+
                 })
                 .then((res) => {
-                  console.log(res.data.data.data);
+                  console.log(res.data);
                   this.tableData = (res.data.data.data);
+                  this.totalCount = res.data.data.totalCount;
                   this.loading=false;
                   console.log(this.tableData);
                 })
@@ -239,16 +270,17 @@
     },
     created() {
       this.axios
-        .get("/repairPart/getAllRepairsParts",
+        .post("/repairPart/getAllRepairsParts",
         {
-          params: {
-            pageSize: this.pagesize,
+          
+            pageSize: 5,
             currentPage: this.currentPage
-          }
+          
         })
         .then((res) => {
-          console.log(res.data.data.data);
+          console.log(res.data);
           this.tableData = (res.data.data.data);
+          this.totalCount = res.data.data.totalCount;
           this.loading=false;
           console.log(this.tableData);
         })

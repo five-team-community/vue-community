@@ -33,6 +33,9 @@
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{this.tableData.recycleState}}</div></el-col>
         </el-row>
       </div>
+      <div class="btns">
+        <el-button type="primary" id="pg" :class="{showBtn:isShow}" @click="add">派工</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -41,12 +44,26 @@
 export default {
   data() {
     return {
-      tableData:[]
+      tableData:[],
+      isShow:true,
     }
   },
   methods: {
     returnBtn() {
       this.$router.push({path:'/home/recycleMsg'});
+    },
+    add() {
+      this.axios
+        .post("//updateState",
+        {
+          regenerantId:this.tableData.regenerantId
+        })
+        .then((res)=>{
+          console.log(res);
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
     }
   },
   created() {
@@ -66,6 +83,11 @@ export default {
       .then((res)=> {
         console.log(res.data.data.inhabitantAndRecycleVO);
         this.tableData = res.data.data.inhabitantAndRecycleVO;
+        
+        if(this.tableData.recycleState != "已回收") {
+          console.log("需要改变状态");
+          this.isShow = false;
+        }
       })
       .catch((err)=> {
         console.log(err);
@@ -118,6 +140,12 @@ export default {
           font-size: 14px;
         }
       }
+      .btns {
+        padding: 20px;
+      }
     }
+  }
+  .showBtn {
+    display: none;
   }
 </style>

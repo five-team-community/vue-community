@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
+        <el-table :data="tableData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="houseProperty.housePropertyNo" label="房号"></el-table-column>
           <el-table-column prop="inhabitant.inhabitantName" label="姓名" ></el-table-column>
           <el-table-column prop="staff.telNum" label="联系电话" ></el-table-column>
@@ -51,12 +51,11 @@
         </el-table>
         <div class="block">
           <el-pagination
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :page-sizes="[5,10]"
+            :total="totalCount"
+            :current-page="currentPage"
             :page-size="5"
-            layout="total, sizes, prev, pager, next"
-            :total="8"
+            layout="total, prev, pager, next"
             background></el-pagination>
           </div>
         </div>
@@ -70,7 +69,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pagesize:5,
+      totalCount:0,
       tableData:[],
       search: {//记录查询的数据
         houseNum: "",
@@ -112,13 +111,34 @@ export default {
     };
   },
   methods: {
-    handleSizeChange(val) { //改变页数
-      console.log(val);
-      this.pagesize = val;
-    },
     handleCurrentChange(val) { // 改变页
       this.currentPage=val;
-      console.log("第几页",val);
+      console.log("改变也",this.currentPage);
+
+      console.log("当前每页有",5,"个数据");
+    console.log("当前为第",this.currentPage,"页");
+      
+      this.axios
+        .get("/repairInfo/getAllRepairInfo",
+        {
+          params: {
+            pageSize: 5,
+            currentPage: this.currentPage 
+          }
+        })
+        .then((res) => {
+          console.log(res.data.data.data);
+          this.tableData = (res.data.data.data);
+          this.totalCount = res.data.data.totalCount;
+          this.loading = false;
+          console.log(this.tableData);
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
+
+
+
     },
     showDetail(index) { // 查看详情
       index = 5*(this.currentPage-1)+index;
@@ -159,11 +179,14 @@ export default {
             beginTime:this.startTime1,
             endTime:this.endTime1,
             pageSize: 5,
-            currentPage:1
+            currentPage:this.currentPage
           }
         })
         .then((res) => {
           console.log(res.data.data);
+          this.tableData = (res.data.data.data);
+          this.totalCount = res.data.data.totalCount;
+          this.loading = false;
         })
         .catch(err=> {
           console.log(err)
@@ -184,11 +207,11 @@ export default {
         });
         // 请求数据
         this.axios
-          .get("/repairInfo/deleteRepairInfoById",
+          .post("/repairInfo/deleteRepairInfoById",
           {
-            params: {
+            
               infoId: delId
-            }
+            
           })
           .then((res) => {
             console.log(res);
@@ -196,7 +219,7 @@ export default {
               .get("/repairInfo/getAllRepairInfo",
               {
                 params: {
-                  pageSize: this.pagesize,
+                  pageSize: 5,
                   currentPage: this.currentPage 
                 }
               })
@@ -222,19 +245,20 @@ export default {
     }
   },
   created() {
-    console.log("当前每页有",this.pagesize,"个数据");
+    console.log("当前每页有",5,"个数据");
     console.log("当前为第",this.currentPage,"页");
     this.axios
         .get("/repairInfo/getAllRepairInfo",
         {
           params: {
-            pageSize: this.pagesize,
-            currentPage: this.currentPage 
+            pageSize:5,
+            currentPage:this.currentPage
           }
         })
         .then((res) => {
-          console.log(res.data.data.data);
+          console.log(res.data.data);
           this.tableData = (res.data.data.data);
+          this.totalCount = res.data.data.totalCount;
           this.loading = false;
           console.log(this.tableData);
         })
@@ -243,11 +267,7 @@ export default {
         }) 
   },
   computed: {
-    showData() {
-      
-      var start = (this.pagesize)*(this.currentPage-1);
-      return this.tableData.slice(start,start+(this.pagesize));
-    }
+    
   }
 };
 </script>

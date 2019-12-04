@@ -8,8 +8,8 @@
       <el-divider style="margin:0"></el-divider>
       <div class="searchBox">
        <el-form :inline="true" :model="search" class="demo-form-inline" size="small">
-          <el-form-item label="开锁公司">
-            <el-input v-model="search.unlockCompanyName" placeholder="请输入公司名称"></el-input>
+          <el-form-item label="公司名称">
+            <el-input v-model="search.companyName" placeholder="请输入公司"></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -21,16 +21,13 @@
         </div>
       </div>
       <div class="contentBox" v-loading="loading">
-        <el-table :data="showData" stripe border style="width: 100%">
+        <el-table :data="testData" stripe border style="width: 100%">
           <el-table-column prop="companyName" label="开锁公司名称"></el-table-column>
           <el-table-column prop="personName" label="联系人" ></el-table-column>
           <el-table-column prop="telNum" label="联系电话" ></el-table-column>
           <el-table-column prop="location" label="公司地址" ></el-table-column>
           <el-table-column prop="operate" label="操作" >
             <template slot-scope="scope">
-               <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
-                 <el-button type="primary" icon="el-icon-search" @click="showDetail(scope.$index)" ></el-button>
-               </el-tooltip>
                <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
                  <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
                </el-tooltip>
@@ -39,11 +36,12 @@
         </el-table>
         <div class="block">
           <el-pagination
+            layout="total, prev, pager, next"
+            :page-size="3"
+            :total="totalCount"
+            :pager-count="5"
+            :current-Page="currentPage"
             @current-change="handleCurrentChange"
-            :page-sizes="[5,10]"
-            :page-size="5"
-            layout="total, sizes, prev, pager, next"
-            :total="8"
             background></el-pagination>
         </div>
       </div>
@@ -55,74 +53,133 @@
 export default {
   data() {
     return {
-      pageSize:5,
+      totalCount:0,
       currentPage:1,
       testData:[],
       loading:true,
       search:{
-        unlockCompanyName:""
+        companyName:""
       },
       
       
     }
   },
   methods: {
-    handleCurrentChange(val) {
-      this.currentPage = val
-    },
-    showDetail(index) { // 查看详情
-      console.log("查看的id：",index);
-    },
-    del(index) { // 删除
-      console.log("删除成功!",index);
-      
-      /* this.axios
-      .get("/unlock/removeById",
+    handleCurrentChange(val) { // 换页
+      this.currentPage = val;
+      console.log("当前页数",this.currentPage);
+      // 请求
+      this.axios
+      .post("/unlock/getAll",
       {
-        params:{
-          unkockId:id
-        }
+          pageSize:3,
+          currentPage:this.currentPage
       })
       .then((res)=> {
-        console.log(res.data);
+        this.testData = res.data.data.data;
+        console.log("换页后",this.testData);
+        this.totalCount = res.data.data.totalCount;
+        this.loading= false;
       })
       .then((err)=> {
         console.log(err);
-      }) */
+      })
+      
+    },
+    del(index) { // 删除
+      
+      var delId = this.testData[index].unlockId;
+      console.log("删除的id!",delId);
+
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+
+          // 数据请求
+          this.axios
+            .post("/unlock/removeById",
+            {
+                unlockId:delId
+            })
+            .then((res)=> {
+              console.log("删除成功并输出数据",res.data);
+              this.axios
+                .post("/unlock/getAll",
+                {
+                    pageSize:3,
+                    currentPage:this.currentPage
+                })
+                .then((res)=> {
+                  console.log(res.data.data.data);
+                  this.testData = res.data.data.data;
+                  this.totalCount = res.data.data.totalCount;
+                  this.loading= false;
+                })
+                .then((err)=> {
+                  console.log(err);
+                })
+            })
+            .then((err)=> {
+              console.log(err);
+            })
+          
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+
+      
+      
     },
     addBtn() { // 添加信息
-      console.log("添加成功!");
+      console.log("进入添加页面!");
       this.$router.push({path:"/home/LockPeopleAdd"})
     },
     exportBtn() { // 导出
       console.log("导出成功!");
     },
     searchBtn() { // 查询
-      console.log("查询结果：",this.search.unlockCompanyName);
+      console.log("查询结果：",this.search.companyName);
+      this.axios
+        .post("/unlock/getAllByParam",
+        {
+          personName:this.search.personName
+        })
+        .then((res)=> {
+          console.log(res);
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
     },
     
   },
   created() {
-    this.loading=true;
     this.axios
-      .get("/unlock/getAll",
+      .post("/unlock/getAll",
       {
-        params:{
-          pageSize:this.pageSize,
+          pageSize:3,
           currentPage:this.currentPage
-        }
       })
       .then((res)=> {
-        console.log(res.data);
+        console.log(res.data.data.data);
+        this.testData = res.data.data.data;
+        this.totalCount = res.data.data.totalCount;
+        this.loading= false;
       })
       .then((err)=> {
         console.log(err);
       })
   },
   computed: {
-    showData() {
-      return this.testData;
-    }
   }
 }
 </script>

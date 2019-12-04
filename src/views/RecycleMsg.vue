@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
+        <el-table :data="tableData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
           <el-table-column prop="inhabitantName" label="姓名" ></el-table-column>
           <el-table-column prop="inhabitantPhone" label="用户联系电话" ></el-table-column>
@@ -48,12 +48,11 @@
       <div class="block">
         <el-pagination
           background
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :page-sizes="[5,10]"
           :page-size="5"
-          layout="total, sizes, prev, pager, next"
-          :total="8"
+          :total="totalCount"
+          :current-page="currentPage"
+          layout="total, prev, pager, next"
           >
       </el-pagination>
   </div>
@@ -67,7 +66,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pagesize:5,
+      totalCount:0,
       loading:true,
       value:'',
       tableData:[],
@@ -109,16 +108,14 @@ export default {
     };
   },
   methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pagesize = val;
-      },
-      handleCurrentChange(val) {
+      handleCurrentChange(val) { // 切换页面
         this.currentPage=val;
         console.log(val);
+
+
       },
       showDetail(index) { // 查看详情
-        index = (index+(this.pagesize)*(this.currentPage-1));
+        index = (index+(5)*(this.currentPage-1));
         var showId = this.tableData[index].regenerantId;
         console.log("详情",index);
         this.$router.push({path:'/home/recycleMsgDetail?id='+showId});
@@ -127,16 +124,31 @@ export default {
 
       },
       searchBtn() { // 查询 请求数据
+
+        if(this.search.time) {
+          // 时间格式
+          var t = this.search.time;
+          console.log(t);
+          this.startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
+          this.endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
+          console.log("开始时间:",this.startTime1);
+          console.log("结束时间:",this.endTime1);
+        }
+        console.log("查询的电话：",this.search.telphone);
+        console.log("查询的房号：",this.search.houseNum);
         this.axios
           .post("/InhabitantAndRecycle/getAllInfoLike",{
-            houseNum:this.houseNum,
-            telNum: this.search.telphone,
-            staffName:this.search.staffName,
-            repairState:this.search.stauts,
-            regDate:this.search.time
+            housePropertyNo:this.search.houseNum,
+            inhabitantPhone: this.search.telphone,
+            pageSize:5,
+            currentPage:1
           })
           .then((res) => {
-            console.log(res);
+            console.log(res.data.data);
+            this.tableData = res.data.data.list;
+            this.totalCount = res.data.data.page.totalCount;
+            this.loading = false;
+
           })
           .catch(err=> {
             console.log(err)
@@ -168,13 +180,15 @@ export default {
               this.axios
                 .get("/InhabitantAndRecycle/getAllUnionInfo",{
                   params: {
-                    pageSize: this.pagesize,
+                    pageSize: 5,
                     currentPage: this.currentPage
                   }
                 })
                 .then((res) => {
                   console.log(res.data.data.list);
+                  console.log("总数",res.data.data.page.totalCount);
                   this.tableData = res.data.data.list;
+                  this.totalCount = res.data.data.page.totalCount;
                   this.loading = false;
                 })
                 .catch(err=> {
@@ -196,13 +210,15 @@ export default {
     this.axios
         .get("/InhabitantAndRecycle/getAllUnionInfo",{
           params: {
-            pageSize: this.pagesize,
+            pageSize: 5,
             currentPage: this.currentPage
           }
         })
         .then((res) => {
           console.log(res.data.data.list);
+          console.log("总数",res.data.data.page.totalCount);
           this.tableData = res.data.data.list;
+          this.totalCount = res.data.data.page.totalCount;
           this.loading = false;
         })
         .catch(err=> {

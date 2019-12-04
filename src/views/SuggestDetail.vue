@@ -9,20 +9,20 @@
         </a>
       </div>
       <el-divider style="margin:0"></el-divider>
-      <div class="contentBox">
-        <el-row :gutter="10">
+      <div class="contentBox" >
+        <el-row :gutter="10" v-if="tableData[0]">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">房号:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{tableData[0].housePropertyNo}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{tableData[0].inhabitantName}}</div></el-col>
         </el-row>
-        <el-row :gutter="10">
+        <el-row :gutter="10" v-if="tableData[0]">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">用户联系电话:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{tableData[0].telNum}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">建议内容:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{tableData[0].sugContent}}</div></el-col>
         </el-row>
-        <el-row :gutter="10">
+        <el-row :gutter="10" v-if="tableData[0]">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">登记时间:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{tableData[0].sugDate}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">状态:</div></el-col>
@@ -51,12 +51,12 @@ export default {
         nowStatus = !nowStatus;
         console.log(Number(nowStatus));
         this.axios
-          .get("/suggestion/updateState",
+          .post("/suggestion/updateState",
           {
-            params: {
+            
               id: nowId,
               sugState: nowStatus
-            }
+            
           })
           .then((res)=> {
             console.log(res);
@@ -77,7 +77,7 @@ export default {
     console.log(str);
 
     this.axios
-        .get("/suggestion/showById",
+        .post("/suggestion/showById",
           {
             params: {
               id : str

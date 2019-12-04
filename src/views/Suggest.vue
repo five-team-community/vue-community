@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
+        <el-table :data="tableData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="housePropertyNo" label="房号"></el-table-column>
           <el-table-column prop="inhabitantName" label="姓名" ></el-table-column>
           <el-table-column prop="telNum" label="联系电话" ></el-table-column>
@@ -40,12 +40,12 @@
         </el-table>
         <div class="block">
           <el-pagination
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :page-sizes="[5,10]"
+            :current-Page="currentPage"
+            :total="totalCount"
             :page-size="5"
-            layout="total, sizes, prev, pager, next"
-            :total="8"
+            :pager-count="5"
+            layout="total, prev, pager, next"
             background></el-pagination>
           </div>
         </div>
@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      pagesize:5,
+      totalCount:0,
       tableData:[],
       search: {//记录筛选的数据项
         houseNum: "",
@@ -98,13 +98,26 @@ export default {
     };
   },
   methods: {
-      handleSizeChange(val) {
-        console.log(val);
-        this.pagesize = val;
-      },
       handleCurrentChange(val) {
         this.currentPage=val;
-        console.log(val);
+        this.axios
+        .post("/suggestion/showByLike",
+        {
+          
+            pageSize:5,
+            currentPage:this.currentPage
+          
+        })
+        .then((res) => {
+          console.log(res.data.data.data);
+          this.tableData = (res.data.data.data);
+          this.totalCount = res.data.data.totalCount;
+          this.loading = false;
+          console.log(this.tableData);
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
       },
       
       showDetail(index) { // 查看详情
@@ -115,7 +128,7 @@ export default {
       },
       exportBtn() { // 导出
         this.axios
-          .get("/suggestion/excludeExcel")
+          .post("/suggestion/excludeExcel")
           .then((res)=> {
             console.log(res);
           })
@@ -127,28 +140,39 @@ export default {
         
         // 时间格式
         var t = this.search.time;
-        console.log(t);
-        var startTime = t[0];
-        var endTime = t[1];
         var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
         var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
-        console.log("开始时间:",startTime);
         console.log("开始时间:",startTime1);
-        console.log("结束时间:",endTime);
         console.log("结束时间:",endTime1);
 
         // 发送请求
         this.axios
-          .get("/suggestion/showByLike",{
-            params: {
+          .post("/suggestion/showByLike",
+          {
               beginTime:startTime1,
               endTime:endTime1,
               currentPage:this.currentPage,
               pageSize:this.pagesize
-            }
           })
           .then((res) => {
             console.log(res);
+            this.axios
+              .post("/suggestion/showByLike",
+              {
+                  currentPage:this.currentPage,
+                  pageSize:5  
+              })
+              .then((res) => {
+                console.log(res.data.data);
+                this.tableData = (res.data.data.data);
+                this.totalCount = res.data.data.totalCount;
+                this.loading = false;
+                console.log("数据：",this.tableData);
+                console.log("总数：",this.totalCount);
+              })
+              .catch(err=> {
+                console.log(err)
+              }) 
           })
           .catch(err=> {
             console.log(err)
@@ -170,21 +194,17 @@ export default {
 
           // 数据请求
           this.axios
-            .get("/suggestion/deleteById",
+            .post("/suggestion/deleteById",
             {
-              params:{
                 id: delId
-              }
             })
             .then((res) => {
               console.log(res);
               this.axios
-                .get("/suggestion/showByLike",
+                .post("/suggestion/showByLike",
                 {
-                  params:{
                     pageSize:this.pagesize,
                     currentPage:this.currentPage
-                  }
                 })
                 .then((res) => {
                   console.log(res.data.data.data);
@@ -211,18 +231,18 @@ export default {
   },
   created() {
       this.axios
-        .get("/suggestion/showByLike",
+        .post("/suggestion/showByLike",
         {
-          params:{
-            pageSize:this.pagesize,
-            currentPage:this.currentPage
-          }
+            currentPage:this.currentPage,
+            pageSize:5  
         })
         .then((res) => {
-          console.log(res.data.data.data);
+          console.log(res.data.data);
           this.tableData = (res.data.data.data);
+          this.totalCount = res.data.data.totalCount;
           this.loading = false;
-          console.log(this.tableData);
+          console.log("数据：",this.tableData);
+          console.log("总数：",this.totalCount);
         })
         .catch(err=> {
           console.log(err)
@@ -230,12 +250,7 @@ export default {
         // 需要更新
   },
   computed: {
-    showData() {
-      console.log(this.pagesize);
-      console.log(this.currentPage);
-      var start = (this.pagesize)*(this.currentPage-1);
-      return this.tableData.slice(start,start+(this.pagesize));
-    }
+    
   }
 };
 </script>

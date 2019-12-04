@@ -32,7 +32,7 @@
         </el-row>
       </div>
       <div class="contentBox">
-        <el-table :data="showData" stripe border v-loading="loading" style="width: 100%">
+        <el-table :data="tableData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="orderNo" label="交易号"></el-table-column>
           <el-table-column prop="repairsInfo.inhabitant.inhabitantName" label="用户姓名" ></el-table-column>
           <el-table-column prop="repairsInfo.repairContent" label="报修内容" ></el-table-column>
@@ -43,12 +43,11 @@
       </div>
       <div class="block">
         <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :page-sizes="[5, 10]"
           :page-size="5"
           layout="total, sizes, prev, pager, next"
-          :total="8"
+          :total="totalCount"
+          :current-page="currentPage"
           :pager-count="5"
           background>
       </el-pagination>
@@ -63,7 +62,7 @@ export default {
   data() {
     return {
       currentPage:1,
-      pagesize:5,
+      totalCount:0,
       loading:true,
       tableData: [],
       totalMoney:"",
@@ -72,22 +71,6 @@ export default {
         userName:"",
         time: ""
       },
-      options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
         value: '',
         pickerOptions: {
           shortcuts: [{
@@ -120,13 +103,29 @@ export default {
     };
   },
   methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pagesize = val;
-      },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.currentPage=val;
+
+        this.axios
+          .get("/repairOrder/getAllOrders",
+          {
+            params: {
+              pageSize:5,
+              currentPage: this.currentPage
+            }
+          })
+          .then((res)=> {
+            console.log(res.data.data);
+            console.log(res.data.data.totalMoney);
+            this.totalMoney = res.data.data.totalMoney;
+            this.totalCount = res.data.data.totalCount;
+            this.tableData = res.data.data.data;
+            this.loading= false;
+          })
+          .catch((err)=> {
+            console.log(err);
+          })
       },
       searchBtn() { // 查询
         if(this.search.time) {
@@ -140,7 +139,7 @@ export default {
         }
         console.log("订单编号:",this.search.orderNo);
         console.log("用户名:",this.search.userName);
-        console.log("每页:",this.pagesize);
+        console.log("每页:",5);
         console.log("页数:",this.currentPage);
         // 请求数据
         this.axios
@@ -151,12 +150,15 @@ export default {
               inhabitantName: this.search.userName,
               beginTime:startTime1,
               endTime:endTime1,
-              pageSize:this.pagesize,
+              pageSize:5,
               currentPage:this.currentPage
             }
           })
           .then((res) => {
             console.log(res.data.data);
+            this.totalMoney = res.data.data.totalMoney;
+            this.totalCount = res.data.data.totalCount;
+            this.tableData = res.data.data.data;
           })
           .catch((err) => {
             console.log(err);
@@ -179,14 +181,15 @@ export default {
       .get("/repairOrder/getAllOrders",
       {
         params: {
-          pageSize:this.pagesize,
+          pageSize:5,
           currentPage: this.currentPage
         }
       })
       .then((res)=> {
-        console.log(res.data.data.data);
+        console.log(res.data.data);
         console.log(res.data.data.totalMoney);
         this.totalMoney = res.data.data.totalMoney;
+        this.totalCount = res.data.data.totalCount;
         this.tableData = res.data.data.data;
         this.loading= false;
       })
@@ -195,12 +198,7 @@ export default {
       })
   },
   computed: {
-    showData() {
-      console.log("本页具有几个数据:",this.pagesize);
-      console.log("第几页：",this.currentPage);
-      var start =(this.pagesize) * (this.currentPage-1);
-      return this.tableData.slice(start,start+(this.pagesize));
-    }
+    
   }
 };
 </script>
