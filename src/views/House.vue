@@ -44,6 +44,7 @@
           <el-table-column prop="isFree" label="是否计费"></el-table-column>
           <el-table-column prop="blindNum" label="绑定数"></el-table-column>
           <el-table-column prop="blindMax" label="限制绑定数"></el-table-column>
+          <el-table-column prop="state" label="用户状态"></el-table-column>
 
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
@@ -69,6 +70,7 @@
                 class="btn-del"
                 @click="del(scope.$index)"
               ></el-button>
+             
             </template>
           </el-table-column>
         </el-table>
@@ -204,6 +206,7 @@ export default {
         item.isFree = list[i].isBilling;
         item.blindNum = list[i].count;
         item.blindMax = list[i].maxCount;
+        
         arr.push(item);
       }
       return arr;

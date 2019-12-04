@@ -56,7 +56,7 @@
       </el-form-item>
 
        <el-form-item label="交房时间:" :rules="{ required: true, message: '交房时间不能为空', trigger: ['blur','change']}">
-        <el-date-picker type="date" placeholder="选择日期" v-model="form.time" class="time-input"></el-date-picker>
+        <el-date-picker value-format="timestamp" type="date" placeholder="选择日期" v-model="form.time" class="time-input"></el-date-picker>
       </el-form-item>
 
       <el-form-item label="最大绑定数:" prop='blindMax' :rules="[
@@ -152,7 +152,7 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log("提交");
+            
             this.axios
         .post("/InhabitantAndHouseProperty/addHousePropertyInfo", {
          housePropertyNo: this.form.no,
@@ -166,9 +166,10 @@
          inhabitantName: this.form.host,
          birthplace:this.form.birthplace,
          idCardNo:this.form.idCard
+
         })
         .then(res => {
-          console.log("aaa",res.data.data);
+          console.log("aaa",res);
 
         })
         .catch(err => {

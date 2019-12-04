@@ -14,11 +14,7 @@
 
     <!-- 表单内容 -->
     <el-form :inline="true" :model="form" class="main" size="medium" status-icon label-width="120px" ref="ruleForm">
-      <el-form-item label="用户:" prop="link"
-      :rules="{ required: true, message: '请选择一个用户', trigger: ['blur','change']}">
-        <el-button type="warning" size='mini' plain icon='el-icon-user-solid' @click='chooseUser'>选择用户</el-button>
-        <el-button type="primary" size='mini' plain icon='el-icon-close' v-show='form.link' @click="form.link=''">{{form.link}}</el-button>
-      </el-form-item>
+     
 
      
 
@@ -109,12 +105,6 @@
     methods: {
       back(){//返回房产信息列表
         this.$router.push({path:'/home/host'});
-      },
-      chooseUser(){
-        console.log("选择用户");
-      },
-      chooseHouse(){
-        console.log("选择房产");
       },
       // 身份证验证
       async validID(rule,value,callback)

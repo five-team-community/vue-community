@@ -12,7 +12,7 @@
           <el-button round size='mini' class="back-btn" icon='el-icon-arrow-left' @click="back">返回</el-button>
         </div>
       </div>
-      <div class="main">
+      <div class="main" v-loading="loading">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2">
             <div class="item-title">用户名:</div>
@@ -28,31 +28,48 @@
           </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :xs="24" :sm="6" :md="3" :lg="2">
-            <div class="item-title">性别:</div>
-          </el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10">
-            <div class="msg">{{userData.sex}}</div>
-          </el-col>
+          
           <el-col :xs="24" :sm="6" :md="3" :lg="2">
             <div class="item-title">电话:</div>
           </el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10">
             <div class="msg">{{userData.tel}}</div>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2">
-            <div class="item-title">身份证:</div>
+            <div class="item-title">状态:</div>
           </el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10">
-            <div class="msg">{{userData.idCard}}</div>
+            <div class="msg">{{userData.state}}</div>
           </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          
           <el-col :xs="24" :sm="6" :md="3" :lg="2">
             <div class="item-title">用户类型:</div>
           </el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10">
-            <div class="msg">{{userData.type}}</div>
+            <div class="msg">{{userData.role}}</div>
+          </el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="2">
+            <div class="item-title">注册时间:</div>
+          </el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10">
+            <div class="msg">{{userData.registerTime}}</div>
+          </el-col>
+        </el-row>
+          <el-row :gutter="10">
+          
+          <el-col :xs="24" :sm="6" :md="3" :lg="2">
+            <div class="item-title">上次登录时间:</div>
+          </el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10">
+            <div class="msg">{{userData.loginTime}}</div>
+          </el-col>
+          <el-col :xs="24" :sm="6" :md="3" :lg="2">
+            <div class="item-title">上次退出时间:</div>
+          </el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="10">
+            <div class="msg">{{userData.logoutTime}}</div>
           </el-col>
         </el-row>
       </div>
@@ -66,6 +83,7 @@
 export default {
   data() {
     return {  
+      loading: true,
       houseData: {},//房产信息
       userList:[],//绑定用户
       dialogFormVisible: false,
@@ -82,24 +100,49 @@ export default {
     searchUserTel(){
       console.log(this.userData.data);
     },
-    addBind(){
-      if(!this.userData.state){
-        this.$message.error("请输入要绑定的用户手机号");
-      }
-      else if(this.userData.state==200){
-        console.log(this.userData.data.id);
-        this.userData={};
-        this.form.tel="";
-        this.dialogFormVisible = false;
-      }
-      else{
-        this.$message.error(this.userData.msg);
-      }
+     addZero(v) {
+      return v < 10 ? "0" + v : v;
+    },
+    switchTimeFormat(time) {
+      const dateTime = new Date(time);
+      const year = dateTime.getFullYear();
+      const month = dateTime.getMonth() + 1;
+      const date = dateTime.getDate();
+
+      return `${year}-${this.addZero(month)}-${this.addZero(date)}`;
+    },
+    formateData(item){
+      var data={};
+      data.name=item.userName;
+      data.realName = item.realName;
+      if (item.userState == 1) {
+          data.state = "正常";
+        } else {
+          data.state = "禁用";
+        }
+
+      data.tel = item.telNum;
+      data.role = item.roleName;
+      data.registerTime = item.registerTime;
+      data.loginTime = this.switchTimeFormat(item.loginTime);
+      data.logoutTime = this.switchTimeFormat(item.logoutTime)||"无";
+      return data;
     }
+
   },
   created() {//创建时获取数据
-    // this.houseData = houseData;
-    // this.userList = userList;
+    this.axios
+      .post("/user/showSingle", {
+        userId:this.$route.params.id
+      })
+      .then(res => {
+        console.log("查询", res);
+        this.userData = this.formateData(res.data.data.data);
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   computed: {}
 };

@@ -165,8 +165,8 @@
             <el-dropdown>
               <i class="el-icon-s-custom" style="margin-left: 15px">{{user.name}}</i>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click="mydata">个人中心</el-dropdown-item>
-                <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+                <el-dropdown-item><div @click="mydata">个人中心</div></el-dropdown-item>
+                <el-dropdown-item><div @click="logout">退出登录</div></el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -200,7 +200,6 @@ export default {
     },
     change() {
       this.isCollapse = !this.isCollapse;
-
       if (this.navWidth == "200px") {
         this.navWidth = "65px";
       } else if (this.navWidth == "65px") {
@@ -223,6 +222,7 @@ export default {
     this.user.role="超级管理员"
   }
 };
+
 </script>
 <style lang="less" scoped>
 @import "../assets/less/base.less";
