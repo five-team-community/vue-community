@@ -1,52 +1,45 @@
 <template>
-  <div id="mynote">
+   <div id="mynote">
     <div class="content">
     <div class="title">
         <i class="el-icon-s-order"></i>
-        <span>社区资讯</span>
+        <span>社区活动报名表</span>
       </div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline">
-      <el-col :span="16">
-        <el-form-item label="标题">
-          <el-input v-model="formInline.user" placeholder="标题"></el-input>
+    <el-form :inline="true" :model="form" class="demo-form-inline">
+      <el-col :span="14">
+        <el-form-item label="活动名称">
+          <el-input v-model="form.title" placeholder="活动名称"></el-input>
         </el-form-item>
-        <el-form-item class="block">
-            <span class="demonstration">选择时间：</span>
-            <el-date-picker
-              v-model="value2"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </el-form-item>
-          </el-col>
-          <el-col :span="8">
-        <el-form-item>
+        <el-form-item label="联系人">
+          <el-select v-model="form.contactsName" placeholder="请选择联系人">
+            <el-option v-for="item in options" :key="item.activityId" :label="item.contactsName" :value="item.contactsName"></el-option>
+          </el-select>
+        </el-form-item>
+       
+      </el-col>
+      <el-col :span="10">
+        <el-row>
           <el-button type="primary" @click="onSubmit" icon="el-icon-search"
             >查询</el-button
           >
-          <el-button type="primary" icon="el-icon-edit"  @click="putout">新建</el-button>
-        </el-form-item>
-
+          <el-button type="primary" icon="el-icon-edit" @click="handleEdit">新建</el-button>
+        </el-row>
       </el-col>
     </el-form>
     <el-table
       ref="multipleTable"
       :data="tableData"
-      v-loading='loading'
+      v-loading="loading"
       tooltip-effect="dark"
       style="width: 100%"
-     >
-      <el-table-column prop="ciTitle" label="标题" > </el-table-column>
-      <el-table-column prop="ciDate" label="发布日期" >
+      >
+      <el-table-column prop="id" label="社区" width="120"> 易居</el-table-column>
+      <el-table-column prop="activityName" label="活动名称" width="120">  </el-table-column>
+      <el-table-column prop="contactsName" label="姓名" width="120">
       </el-table-column>
-      <el-table-column prop="ciType" label="类别" >
+      <el-table-column prop="contactsPhone" label="联系电话" width="120">        
       </el-table-column>
-      <el-table-column prop="ciContent" label="文章内容" >
-      </el-table-column>
+      <el-table-column prop="activityAddress" label="家庭地址" width="120"> </el-table-column>
       <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
@@ -55,7 +48,16 @@
                 icon="el-icon-search"
                 size="mini"
                 class="btn-show"
-                @click="gotomoneydetail(scope.$index)"
+                @click="gotoactivitydetail(scope.$index)"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="查看报名详情" placement="bottom">
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                size="mini"
+                class="btn-show"
+                @click="applydetail(scope.$index)"
               ></el-button>
             </el-tooltip>
               <el-button
@@ -64,7 +66,7 @@
                 icon="el-icon-delete"
                 size="mini"
                 class="btn-del"
-                @click="open"
+                @click="handleDelete(scope.$index)"
               ></el-button>
           </template>
         </el-table-column>
@@ -87,11 +89,12 @@
 export default {
   data() {
     return {
-      formInline: {
+      form: {
         user: "",
         region: ""
+
       },
-      value2:'',
+      options:{},
       tableData: [
         /* {
           listname: "物业投诉",
@@ -140,8 +143,27 @@ export default {
     };
   },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    handleEdit() {
+      this.$router.push({
+        path: "/home/addActivity" 
+      });
+    },
+    changePage(val) {
+      console.log(this.currentPage)
+      this.currentPage = val;
+      this.axios
+      .post("/activity/showAll", {      
+          currentPage:this.currentPage,
+      })
+      .then(res => {
+        this.tableData = res.data.data.Pays;
+        console.log(res.data);
+        this.loading =false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      
     },
     handleDelete(index) {
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
@@ -155,21 +177,21 @@ export default {
             message: "删除成功!"
           });
           this.axios
-            .post("/communityInfo/deleteById", {
-                id: this.tableData[index].ciId
+            .post("/activity/deleteActivity", {
+                activityId: [this.tableData[index].activityId]
             })
             .then(res => {
               console.log("删除成功", res);
               this.axios
-                .post("/communityInfo/showByLike", {
-                    currentPage: 1,
-                    pageSize: 5
-                })
+                .post("/activity/showAll", {
+        pageIndex:1,
+        pageSize:5,
+        online:true,
+      })
                 .then(res => {
                   //  res.data = tableData;
-                  this.tableData = res.data.data.Announcements;
+                  this.tableData = res.data.data.Activity;
                   this.loading = false;
-                  
                 })
                 .catch(err => {
                   console.log(err);
@@ -189,33 +211,9 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    open(){
-      console.log('open');
-    },
-    putout () {
-      this.$router.push('/home/putinf')
-    },
-    changePage(val) {
-      this.currentPage=val;
-      this.axios
-      .post("/Announcement/showAll", {
-          currentPage: this.currentPage,
-      })
-      .then(res => {
-        //  res.data = tableData;
-        this.tableData = res.data.data.data;
-        this.totalCount=res.data.data.data.totalCount;
-        this.loading = false;
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    },
     onSubmit() {
-       if(this.value2){
+      if(this.value2){
          var t = this.value2;
-      console.log(this.formInline.user);
       var startTime1 =
         t[0].getFullYear() + "-" + (t[0].getMonth() + 1) + "-" + t[0].getDate();
       var endTime1 =
@@ -223,16 +221,19 @@ export default {
       console.log("开始时间:", startTime1);
       console.log("结束时间:", endTime1);
       }
-     
+      if(this.form.contactsName){
+        var contactsName=this.form.contactsName
+      }
+     console.log(this.form.title,this.form.contactsName,this.currentPage)
       this.axios
-        .post("/communityInfo/showByLike", {
-            ciTitle: this.formInline.user,
-            currentPage:this.currentPage,
-            startTime: startTime1,
-            endTime: endTime1
+        .post("/activity/showAll", {
+            activityName: this.form.title,
+            pageIndex:this.currentPage,
+            pageSize:5,
+            contactsName,
         })
         .then(res => {
-          this.tableData = res.data.data.data;
+          this.tableData = res.data.data.Activity;
           this.loading = false;
           console.log(res.data)
         })
@@ -240,26 +241,35 @@ export default {
           console.log(err);
         });
     },
-    gotomoneydetail(index){
+    gotoactivitydetail(index) {
       this.$router.push({
-        path: "/home/infdetail?id=" + this.tableData[index].ciId
+        path: "/home/activitydetail?id=" + this.tableData[index].activityId
+      });
+      console.log("跳转", this.tableData[index].activityId);
+    },
+    applydetail(index){
+      this.$router.push({
+        path: "/home/applydetail?id=" + this.tableData[index].activityId
       });
     }
   },
-  created() {
+   created() {
     this.axios
-        .post("/communityInfo/showByLike"  ,{
-          currentPage:this.currentPage,
-          pageSize:5
-        } ) 
-        .then(res => {
-        console.log(res.data.data)
-        this.tableData = res.data.data.data; 
-        this.loading=false
-        })
-        .catch(err => {
-          console.log(err);
-        })
+      .post("/activity/showAll", {
+        pageIndex:1,
+        pageSize:5,
+        online:true,
+      })
+      .then(res => {
+        //  res.data = tableData;
+        this.tableData = res.data.data.Activity;
+        this.options=res.data.data.Activity;
+        console.log(this.options);
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
@@ -288,6 +298,33 @@ export default {
       padding: 5px;
     }
   }
+}
+.el-header,
+.el-footer {
+  background-color: #b3c0d1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+
+.el-aside {
+  background-color: #d3dce6;
+  color: #333;
+  text-align: center;
+  line-height: 300px;
+}
+
+.el-main {
+  background-color: #e9eef3;
+  color: #333;
+  text-align: center;
+  h1 {
+    margin-bottom: 15px;
+  }
+}
+
+body > .el-container {
+  margin-bottom: 40px;
 }
 
 .el-container:nth-child(5) .el-aside,

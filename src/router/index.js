@@ -319,7 +319,7 @@ const routes = [
       {
         path:'fixdetail',
         name:"fixdetail",
-        component: () => import('../views/fixdetail.vue'),//维修
+        component: () => import('../views/fixdetail.vue'),//维修详情
         meta: {
           auth: true
         }
@@ -327,7 +327,7 @@ const routes = [
       {
         path:'moneydetail',
         name:"moneydetail",
-        component: () => import('../views/moneydetail.vue'),//维修
+        component: () => import('../views/moneydetail.vue'),//收费详情
         meta: {
           auth: true
         }
@@ -335,7 +335,7 @@ const routes = [
       {
         path:'putnote',
         name:"putnote",
-        component: () => import('../views/putnote.vue'),//维修
+        component: () => import('../views/putnote.vue'),//发布公告
         meta: {
           auth: true
         }  
@@ -343,7 +343,7 @@ const routes = [
       {
         path:'notedetail',
         name:"notedetail",
-        component: () => import('../views/notedetail.vue'),//维修
+        component: () => import('../views/notedetail.vue'),//公告详情
         meta: {
           auth: true
         }  
@@ -368,7 +368,32 @@ const routes = [
       {
         path:'addActivity',
         name:"addActivity",
-        component: () => import('../views/addActivity.vue'),//活动详情
+        component: () => import('../views/addActivity.vue'),//新增活动
+        meta: {
+          auth: true
+        }  
+      }
+      ,
+      {
+        path:'infdetail',
+        name:"infdetail",
+        component: () => import('../views/infdetail.vue'),//资讯详情
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'putinf',
+        name:"putinf",
+        component: () => import('../views/putinf.vue'),//发布资讯
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'applydetail',
+        name:"applydetail",
+        component: () => import('../views/applydetail.vue'),//报名详情
         meta: {
           auth: true
         }  

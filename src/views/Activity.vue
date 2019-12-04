@@ -8,7 +8,7 @@
     <el-form :inline="true" :model="form" class="demo-form-inline">
       <el-col :span="14">
         <el-form-item label="活动名称">
-          <el-input v-model="form.user" placeholder="活动名称"></el-input>
+          <el-input v-model="form.title" placeholder="活动名称"></el-input>
         </el-form-item>
         <el-form-item label="联系人">
           <el-select v-model="form.contactsName" placeholder="请选择联系人">
@@ -29,10 +29,10 @@
     <el-table
       ref="multipleTable"
       :data="tableData"
+      v-loading="loading"
       tooltip-effect="dark"
       style="width: 100%"
       >
-      <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column prop="id" label="社区" width="120"> 易居</el-table-column>
       <el-table-column prop="activityName" label="活动名称" width="120">  </el-table-column>
       <el-table-column prop="contactsName" label="联系人" width="120">
@@ -47,13 +47,22 @@
       <el-table-column prop="activityAddress" label="活动地址" width="120"> </el-table-column>
       <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
-            <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+            <el-tooltip class="item" effect="dark" content="查看活动详情" placement="bottom">
               <el-button
                 type="primary"
                 icon="el-icon-search"
                 size="mini"
                 class="btn-show"
                 @click="gotoactivitydetail(scope.$index)"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="查看报名详情" placement="bottom">
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="mini"
+                class="btn-show"
+                @click="applydetail(scope.$index)"
               ></el-button>
             </el-tooltip>
               <el-button
@@ -71,8 +80,9 @@
         background
         layout="prev, pager, next"
         :page-size="5"
-        :total="10"
+        :total="totalCount"
         :pager-count="5"
+        :current-page="currentPage"
         :hide-on-single-page="true"
         @current-change="changePage"
         class="page"
@@ -132,7 +142,9 @@ export default {
           state: "待处理"
         } */
       ],
-      loading: true
+      loading: true,
+      currentPage:1,
+      totalCount:0
     };
   },
   methods: {
@@ -145,8 +157,8 @@ export default {
       console.log(this.currentPage)
       this.currentPage = val;
       this.axios
-      .post("/pay/leibie", {      
-          currentPage:val,
+      .post("/activity/showAll", {      
+          currentPage:this.currentPage,
       })
       .then(res => {
         this.tableData = res.data.data.Pays;
@@ -205,7 +217,34 @@ export default {
       console.log(tab, event);
     },
     onSubmit() {
-      console.log("submit!");
+      if(this.value2){
+         var t = this.value2;
+      var startTime1 =
+        t[0].getFullYear() + "-" + (t[0].getMonth() + 1) + "-" + t[0].getDate();
+      var endTime1 =
+        t[1].getFullYear() + "-" + (t[1].getMonth() + 1) + "-" + t[1].getDate();
+      console.log("开始时间:", startTime1);
+      console.log("结束时间:", endTime1);
+      }
+      if(this.form.contactsName){
+        var contactsName=this.form.contactsName
+      }
+     console.log(this.form.title,this.form.contactsName,this.currentPage)
+      this.axios
+        .post("/activity/showAll", {
+            activityName: this.form.title,
+            pageIndex:this.currentPage,
+            pageSize:5,
+            contactsName,
+        })
+        .then(res => {
+          this.tableData = res.data.data.Activity;
+          this.loading = false;
+          console.log(res.data)
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     gotoactivitydetail(index) {
       this.$router.push({
@@ -213,6 +252,11 @@ export default {
       });
       console.log("跳转", this.tableData[index].activityId);
     },
+    applydetail(index){
+      this.$router.push({
+        path: "/home/applydetail?id=" + this.tableData[index].activityId
+      });
+    }
   },
    created() {
     this.axios

@@ -4,7 +4,7 @@
       <div class="content">
         <div class="title">
           <i class="el-icon-s-order"></i>
-          <span>查看公告详情</span>
+          <span>查看活动详情</span>
           <div class="back">
             <el-button
               round
@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" :model="form" v-loading='loading' label-width="80px">
           <el-form-item label="活动名称">
             <el-input v-model="form.activityName" prop="activityName"></el-input>
           </el-form-item>
@@ -44,6 +44,17 @@
             </el-col>
           </el-form-item>
           </el-form-item>
+          <el-row :gutter="20">
+  <el-col :span="12"><div class="grid-content bg-purple"><el-form-item label="联系人">
+            <el-input v-model="form.contactsName" prop="contactsName"></el-input>
+          </el-form-item></div></el-col>
+  <el-col :span="12"><div class="grid-content bg-purple"><el-form-item label="联系方式">
+            <el-input v-model="form.contactsPhone" prop="contactsPhone"></el-input>
+          </el-form-item></div></el-col>
+</el-row>
+        
+          
+          
           <el-form-item label="活动描述">
             <el-input v-model="form.description" prop="description"></el-input>
           </el-form-item>
@@ -55,9 +66,21 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="报名人数">
-            <el-input v-model="form.count" prop="count" disabled="true" ></el-input>
+            <el-input v-model="form.count" prop="count" disabled ></el-input>
           </el-form-item>
-          <el-button type="file" icon="el-icon-submit">上传图片</el-button>
+           <el-form-item class="load" label="图片">
+    <el-upload
+            name="file"
+            class="avatar-uploader"
+            action="http://172.16.6.67:8080/Announcement/upload"
+            :show-file-list="false"
+            :on-success="handleSuccess"
+            :before-upload="beforeUpload"
+          >
+            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+    </el-form-item>
         </el-form>
         <div class="change" >
           <el-button type="button" icon="el-icon-edit" @click="edit"
@@ -72,8 +95,12 @@
 export default {
   data() {
     return {
-      form: {},
-      activeName: "second"
+      form: {
+        img:''
+      },
+      activeName: "second",
+      imgurl:'',
+      loading:true,
     };
   },
   methods: {
@@ -82,6 +109,22 @@ export default {
     },
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+      handleSuccess(res, file) {
+      console.log(URL.createObjectURL(file.raw));
+      this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
+      this.imgurl=res.data.filePath;
+    },
+    beforeUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     },
     edit() {
       var str = location.href;
@@ -97,7 +140,8 @@ export default {
             endTime: this.form.endTime,
             startTime:this.form.startTime,
             content: this.form.content,
-            description:this.form.description,
+            contactsName:this.form.contactsName,
+            contactsPhone:this.form.contactsPhone,
             count:this.form.count,
         })
         .then(res => {
@@ -121,7 +165,9 @@ export default {
       })
       .then(res => {
         this.form = res.data.data.Activity;
+        this.form.img=res.data.data.Activity.img;
         console.log(res.data);
+        this.loading=false
       })
       .catch(err => {
         console.log(err);
@@ -193,21 +239,31 @@ export default {
   float: right;
   margin-top: 20px;
 }
-.el-form {
-  padding: 50px 30px;
-}
-.el-form-item {
-  height: 40px;
-}
+
+
 .notedetail {
   .el-input {
     height: 100px;
   }
 }
 .change .el-button {
-  float: right;
-  margin: 20px;
+
   background-color: @darkGreenColor;
   color: @navChoose;
+  margin-left: 80px;
+}
+.avatar{
+  width: 200px;
+  height: 200px;
+}
+
+.avatar-uploader-icon{
+  font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+    border: 1px solid black;
 }
 </style>

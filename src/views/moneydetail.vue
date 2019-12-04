@@ -16,38 +16,38 @@
                 <div class="grid-content bg-purple">社区：易居社区</div>
               </el-col>
               <el-col :span="12">
-                <div class="grid-content bg-purple-light">房号：{{tableData[0].inhabitantAndHousePropertyVO.housePropertyNo}}</div>
+                <div class="grid-content bg-purple-light">房号：{{tableData.inhabitantAndHousePropertyVO.housePropertyNo}}</div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <div class="grid-content bg-purple">业主姓名：{{tableData[0].inhabitantAndHousePropertyVO.inhabitant.inhabitantName}}</div>
+                <div class="grid-content bg-purple">业主姓名：{{tableData.inhabitantAndHousePropertyVO.inhabitant.inhabitantName}}</div>
               </el-col>
               <el-col :span="12">
-                <div class="grid-content bg-purple-light">发票订单号：{{tableData[0].payOrder}}</div>
+                <div class="grid-content bg-purple-light">发票订单号：{{tableData.payOrder}}</div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <div class="grid-content bg-purple">支付时间：{{tableData[0].payDate}}</div>
+                <div class="grid-content bg-purple">支付时间：{{tableData.payDate}}</div>
               </el-col>
               <el-col :span="12">
-                <div class="grid-content bg-purple-light">剩余金额：￥{{tableData[0].payMoney}}</div>
+                <div class="grid-content bg-purple-light">剩余金额：￥{{tableData.payMoney}}</div>
               </el-col>
             </el-row>
             <el-row>
               
               <el-col :span="12">
-                <div class="grid-content bg-purple-light">支付方式：{{tableData[0].payTheWay}}</div>
+                <div class="grid-content bg-purple-light">支付方式：{{tableData.payTheWay}}</div>
               </el-col>
               <el-col :span="12">
-                <div class="grid-content bg-purple">缴费类型：{{tableData[0].payProject}}</div>
+                <div class="grid-content bg-purple">缴费类型：{{tableData.payProject}}</div>
               </el-col>
             </el-row>
              <el-row>
               
               <el-col :span="12">
-                <div class="grid-content bg-purple-light">缴费公司：{{tableData[0].company.companyName}}</div>
+                <div class="grid-content bg-purple-light">缴费公司：{{tableData.company.companyName}}</div>
               </el-col>
               <el-col :span="12">
                 <div class="grid-content bg-purple">备注：</div>

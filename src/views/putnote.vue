@@ -23,6 +23,19 @@
     <el-form-item class="notedetail" label="公告内容">
       <el-input type="textarea"  v-model="form.desc" ></el-input>
     </el-form-item>
+    <el-form-item class="load" label="上传图片">
+    <el-upload
+            name="file"
+            class="avatar-uploader"
+            action="http://172.16.6.67:8080/Announcement/upload"
+            :show-file-list="false"
+            :on-success="handleSuccess"
+            :before-upload="beforeUpload"
+          >
+            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">立即创建</el-button>
       <el-button>取消</el-button>
@@ -45,14 +58,32 @@ export default {
         delivery: false,
         type: [],
         resource: "",
-        desc: ""
-      }
+        desc: "",
+        img:''
+      },
+      imgurl:''
     };
   },
   methods: {
-    back(){//返回房产信息列表
+    back(){
         this.$router.push({path:'/home/Notice'});
       },
+      handleSuccess(res, file) {
+      console.log(URL.createObjectURL(file.raw));
+      this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
+      this.imgurl=res.data.filePath;
+    },
+    beforeUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
     onSubmit() {
       var t = this.form.date1;
         var startTime = t;
@@ -65,6 +96,7 @@ export default {
           expirydDate:startTime1,
           content:this.form.desc,
           push:this.form.delivery,
+          imgs:this.imgurl
         }) 
         .then(res => {
           console.log('点击提交成功',res)
@@ -144,14 +176,25 @@ export default {
 .el-form{
     padding:  50px 30px;
 }
-.el-form-item{
-    height: 40px;
-    
-}
+
 .notedetail{
   .el-input{
   height: 100px;
   }
 
+}
+.avatar{
+  width: 200px;
+  height: 200px;
+}
+
+.avatar-uploader-icon{
+  font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+    border: 1px solid black;
 }
 </style>

@@ -41,6 +41,19 @@
               prop="content"
             ></el-input>
           </el-form-item>
+          <el-form-item class="load" label="上传图片">
+    <el-upload
+            name="file"
+            class="avatar-uploader"
+            action="http://172.16.6.67:8080/Announcement/upload"
+            :show-file-list="false"
+            :on-success="handleSuccess"
+            :before-upload="beforeUpload"
+          >
+            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+    </el-form-item>
         </el-form>
         <div class="change">
           <el-button type="button" icon="el-icon-edit" @click="edit"
@@ -90,7 +103,22 @@ export default {
           return err;
         });
       this.$router.push({ path: "/home/Notice" });
-    }
+    } ,handleSuccess(res, file) {
+      console.log(URL.createObjectURL(file.raw));
+      this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
+      this.imgurl=res.data.filePath;
+    },
+    beforeUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    },
   },
   created() {
     var str = location.href;
@@ -98,10 +126,8 @@ export default {
     str = str.substr(num + 1);
     str = Number(str);
     this.axios
-      .get("/Announcement/showOne", {
-        params: {
+      .post("/Announcement/showOne", {
           announcementsId: str
-        }
       })
       .then(res => {
         this.form = res.data.data.Announcement;
@@ -180,18 +206,28 @@ export default {
 .el-form {
   padding: 50px 30px;
 }
-.el-form-item {
-  height: 40px;
-}
+
 .notedetail {
   .el-input {
     height: 100px;
   }
 }
 .change .el-button {
-  float: right;
-  margin: 20px;
+  margin-left: 100px;
   background-color: @darkGreenColor;
   color: @navChoose;
+}.avatar{
+  width: 200px;
+  height: 200px;
+}
+
+.avatar-uploader-icon{
+  font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+    border: 1px solid black;
 }
 </style>

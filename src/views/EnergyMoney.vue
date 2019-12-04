@@ -15,7 +15,7 @@
           <el-form-item label>
             <div class="block">
               <span class="demonstration">选择时间：</span>
-              <el-date-picker
+               <el-date-picker
       v-model="value2"
       type="daterange"
       align="right"
@@ -23,7 +23,7 @@
       range-separator="至"
       start-placeholder="开始日期"
       end-placeholder="结束日期">
-    </el-date-picker>
+    </el-date-picker> 
             </div>
           </el-form-item>
           <el-form-item>
@@ -31,14 +31,13 @@
           </el-form-item>
         </el-col>
       </el-form>
-      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%">
+      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" v-loading='loading' >
         <el-table-column prop="inhabitantAndHousePropertyVO.housePropertyNo" label="房号"></el-table-column>
         <el-table-column prop="inhabitantAndHousePropertyVO.inhabitant.inhabitantName" label="业主姓名"></el-table-column>
         <el-table-column prop="payMoney" label="剩余金额"></el-table-column>
         <el-table-column prop="payOrder" label="缴费订单号"></el-table-column>
         <el-table-column prop="payDate" label="缴费时间"></el-table-column>
-        <el-table-column label="支付方式">
-          <template>支付宝</template>
+        <el-table-column prop="payProject" label="支付类型">
         </el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
@@ -66,8 +65,9 @@
         background
         layout="prev, pager, next"
         :page-size="1"
-        :total="2"
+        :total="totalCount"
         :pager-count="5"
+        :current-page="currentPage"
         :hide-on-single-page="true"
         @current-change="changePage"
         class="page"
@@ -84,10 +84,10 @@ export default {
         user: "",
         region: ""
       },
-      loading: false,
+      loading: true,
       tableData: [],
-      value1: '',
-      value2: ''
+      value2: '',
+      totalCount:0
     };
   },
   methods: {
@@ -111,20 +111,23 @@ export default {
     },
     gotomoneydetail(index) {
       this.$router.push({
-        path: "/home/moneydetail?id=" + this.tableData[index].payOrder
+        path: "/home/moneydetail?id=" + this.tableData[index].payId
       });
       console.log("跳转", this.tableData[index].payOrder);
     },
     changePage(val) {
+      console.log(this.currentPage)
       this.currentPage = val;
       this.axios
       .post("/pay/leibie", {      
           payProject: "电费",
-          currentPage:val,
+          currentPage:this.currentPage,
       })
       .then(res => {
         this.tableData = res.data.data.Pays;
-        console.log(res);
+        this.totalCount=res.data.data.totalCount;
+        console.log(res.data);
+        this.loading =false;
       })
       .catch(err => {
         console.log(err);
@@ -173,20 +176,27 @@ export default {
         });
     },
     onSubmit() {
-      var t = this.value2;
+      if(this.value2){
+         var t = this.value2;
       console.log(this.formInline.user)
         var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
         var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
         console.log("开始时间:",startTime1);
-        console.log("结束时间:",endTime1);
+        console.log("结束时间:",endTime1); 
+      }
+      console.log(this.formInline.user)
       this.axios
-      .get("/pay/leibie", {
+      .post("/pay/moname", {
+          payProject:'电费',
+          inhabitantName:this.formInline.user,
           starttime:startTime1,
-          endtime:endTime1,
-          userName:this.formInline.user
+          endtime:endTime1,  
       })
       .then(res => {
-        this.tableData = res.data.data.Pays;
+        this.tableData = res.data.data.pays;
+        console.log(res.data.data);
+        console.log(this.tableData);
+        this.loading =false;
       })
       .catch(err => {
         console.log(err);
@@ -197,15 +207,17 @@ export default {
     this.axios
       .post("/pay/leibie", {      
           payProject: "电费",
-          currentPage:this.currentPage,
+          pageIndex:1,
+
       })
       .then(res => {
-        this.tableData = res.data.data.Pays;
+        this.tableData = res.data.data.pays;
+        this.loading =false;
       })
       .catch(err => {
         console.log(err);
       });
-  }, 
+  },
   /* this.axios
       .post("/pay/jiemian", {
 

@@ -68,8 +68,9 @@
         background
         layout="prev, pager, next"
         :page-size="5"
-        :total="10"
+        :total="totalCount"
         :pager-count="5"
+        :current-page="currentPage"
         :hide-on-single-page="true"
         @current-change="changePage"
         class="page"
@@ -87,7 +88,9 @@ export default {
       },
       tableData: [],
       loading: true,
-      value2: ""
+      value2: "",
+      currentPage:1,
+      totalCount:0
     };
   },
   methods: {
@@ -134,10 +137,8 @@ export default {
             message: "删除成功!"
           });
           this.axios
-            .get("/Announcement/deleteAnnouncement", {
-              params: {
+            .post("/Announcement/deleteAnnouncement", {
                 announcementsId: this.tableData[index].announcementsId
-              }
             })
             .then(res => {
               console.log("删除成功", res);
@@ -173,8 +174,22 @@ export default {
     putout() {
       this.$router.push("/home/putnote");
     },
-    changePage() {
-      console.log("changePage");
+    changePage(val) {
+      this.currentPage=val;
+      this.axios
+      .post("/Announcement/showAll", {
+          currentPage: this.currentPage,
+      })
+      .then(res => {
+        //  res.data = tableData;
+        this.tableData = res.data.data.Announcements;
+        this.totalCount=res.data.data.totalCount;
+        this.loading = false;
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     },
     gotomoneydetail(index) {
       this.$router.push({
@@ -193,6 +208,7 @@ export default {
       .then(res => {
         //  res.data = tableData;
         this.tableData = res.data.data.Announcements;
+        this.totalCount=res.data.data.totalCount;
         this.loading = false;
         console.log(res.data);
       })

@@ -65,8 +65,9 @@
         background
         layout="prev, pager, next"
         :page-size="1"
-        :total="5"
+        :total="totalCount"
         :pager-count="5"
+        :current-page="currentPage"
         :hide-on-single-page="true"
         @current-change="changePage"
         class="page"
@@ -86,6 +87,7 @@ export default {
       loading: true,
       tableData: [],
       value2: '',
+      totalCount:0
     };
   },
   methods: {
@@ -119,10 +121,11 @@ export default {
       this.axios
       .post("/pay/leibie", {      
           payProject: "水费",
-          currentPage:val,
+          currentPage:this.currentPage,
       })
       .then(res => {
         this.tableData = res.data.data.Pays;
+        this.totalCount=res.data.data.totalCount;
         console.log(res.data);
         this.loading =false;
       })
@@ -173,18 +176,21 @@ export default {
         });
     },
     onSubmit() {
-       var t = this.value2;
+      if(this.value2){
+         var t = this.value2;
       console.log(this.formInline.user)
         var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
         var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
         console.log("开始时间:",startTime1);
         console.log("结束时间:",endTime1); 
+      }
+      console.log(this.formInline.user)
       this.axios
       .post("/pay/moname", {
           payProject:'水费',
-           starttime:startTime1,
-          endtime:endTime1, 
-          userName:this.formInline.user
+          inhabitantName:this.formInline.user,
+          starttime:startTime1,
+          endtime:endTime1,  
       })
       .then(res => {
         this.tableData = res.data.data.pays;
@@ -201,10 +207,11 @@ export default {
     this.axios
       .post("/pay/leibie", {      
           payProject: "水费",
-          currentPage:this.currentPage,
+          pageIndex:1,
+
       })
       .then(res => {
-        this.tableData = res.data.data.Pays;
+        this.tableData = res.data.data.pays;
         this.loading =false;
       })
       .catch(err => {

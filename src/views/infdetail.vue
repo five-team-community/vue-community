@@ -4,7 +4,7 @@
       <div class="content">
         <div class="title">
           <i class="el-icon-s-order"></i>
-          <span>新增活动</span>
+          <span>查看资讯详情</span>
           <div class="back">
             <el-button
               round
@@ -18,46 +18,30 @@
         </div>
 
         <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="活动名称">
-            <el-input v-model="form.activityName" prop="activityName"></el-input>
+          <el-form-item label="资讯标题">
+            <el-input v-model="form.ciTitle" prop="ciTitle"></el-input>
           </el-form-item>
-          <el-form-item label="活动地址">
-            <el-input v-model="form.activityAddress" prop="activityAddress"></el-input>
+          <el-form-item label="资讯类型">
+            <el-input v-model="form.ciType" prop="ciType"></el-input>
           </el-form-item>
-          <el-form-item label="开始时间">
+          <el-form-item label="发布时间">
             <el-col :span="11">
               <el-date-picker
                 type="date"
-                placeholder="开始时间"
-                prop="startTime"
-                v-model="form.startTime"
-              ></el-date-picker>
-            </el-col>
-            <el-form-item label="结束时间">
-            <el-col :span="11">
-              <el-date-picker
-                type="date"
-                placeholder="结束时间"
-                prop="endtime"
-                v-model="form.endTime"
+                placeholder="发布时间"
+                prop="ciDate"
+                v-model="form.ciDate"
               ></el-date-picker>
             </el-col>
           </el-form-item>
-          </el-form-item>
-          <el-form-item label="活动描述">
-            <el-input v-model="form.description" prop="description"></el-input>
-          </el-form-item>
-          <el-form-item class="notedetail" label="活动内容">
+          <el-form-item class="notedetail" label="资讯内容">
             <el-input
               type="textarea"
-              v-model="form.content"
-              prop="content"
+              v-model="form.ciContent"
+              prop="ciContent"
             ></el-input>
           </el-form-item>
-          <el-form-item label="可报名数">
-            <el-input v-model="form.count" prop="count"  ></el-input>
-          </el-form-item>
-          <el-form-item class="load" label="上传图片">
+           <el-form-item class="load" label="上传图片">
     <el-upload
             name="file"
             class="avatar-uploader"
@@ -72,11 +56,8 @@
     </el-form-item>
         </el-form>
         <div class="change" >
-            <el-button type="button" icon="el-icon-edit" @click="back"
-            >取消</el-button
-          >
           <el-button type="button" icon="el-icon-edit" @click="edit"
-            >确定</el-button
+            >修改</el-button
           >
         </div>
       </div>
@@ -96,38 +77,12 @@ export default {
   },
   methods: {
     back() {
-      this.$router.push({ path: "/home/activity" });
+      this.$router.push({ path: "/home/InfO" });
     },
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    edit() {
-      var str = location.href;
-      var num = str.indexOf("=");
-      str = str.substr(num + 1);
-      str = Number(str);
-
-      this.axios
-        .post("/activity/addActivity", {
-            activityName: this.form.activityName,
-            activityAddress: this.form.activityAddress,
-            endTime: this.form.endTime,
-            startTime:this.form.startTime,
-            content: this.form.content,
-            description:this.form.description,
-            count:this.form.count,
-            img:this.imgurl
-        })
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-          return err;
-        });
-      this.$router.push({ path: "/home/Activity" });
-    },
-    handleSuccess(res, file) {
+      handleSuccess(res, file) {
       console.log(URL.createObjectURL(file.raw));
       this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
       this.imgurl=res.data.filePath;
@@ -143,9 +98,49 @@ export default {
       }
       return isJPG && isLt2M;
     },
+    edit() {
+      var str = location.href;
+      var num = str.indexOf("=");
+      str = str.substr(num + 1);
+      str = Number(str);
+
+      this.axios
+        .post("/communityInfo/updateById", {
+            ciId: str,
+            ciDate: this.form.ciDate,
+            activityAddress: this.form.activityAddress,
+            ciContent: this.form.ciContent,
+            description:this.form.description,
+        })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+          return err;
+        });
+      this.$router.push({ path: "/home/Info" });
+    }
   },
   created() {
-   
+    var str = location.href;
+    var num = str.indexOf("=");
+    str = str.substr(num + 1);
+    str = Number(str);
+    this.axios
+      .post("/communityInfo/showById", {
+          id: str
+      })
+      .then(res => {
+        this.form = res.data.data.data;
+        this.form.img=res.data.data.data.Image;
+        console.log(res.data.data.data);
+        this.loading=false
+      })
+      .catch(err => {
+        console.log(err);
+        return err;
+      });
   }
 };
 </script>
@@ -222,11 +217,10 @@ export default {
   }
 }
 .change .el-button {
-  
+margin-left: 100px;
   margin: 20px;
   background-color: @darkGreenColor;
   color: @navChoose;
-  margin-left: 100px;
 }
 .avatar{
   width: 200px;
