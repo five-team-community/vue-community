@@ -30,7 +30,7 @@
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
           >
-            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+            <img v-if="this.form.img" :src="this.$store.state.ip+'/'+this.form.img" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
@@ -40,7 +40,7 @@
           prop="name"
           :rules="{ required: true, message: '姓名不能为空', trigger: ['blur','change']}"
         >
-          <el-input v-model="form.no" placeholder="请输入姓名" autocomplete="off"></el-input>
+          <el-input v-model="form.name" placeholder="请输入姓名" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -48,7 +48,7 @@
           prop="tel"
           :rules="[phone,{ required: true, message: '手机号不能为空', trigger: ['blur','change']}]"
         >
-          <el-input v-model="tel" placeholder="请输入手机号"></el-input>
+          <el-input v-model="form.tel" placeholder="请输入手机号"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -78,32 +78,32 @@
           <el-input v-model="form.education" placeholder="请输入从业/就读单位"></el-input>
         </el-form-item>
 
-        <el-form-item label="身份:" prop="nation" :rules="{ required: true, message: '身份不能为空', trigger: ['blur','change']}">
-          <el-radio-group v-model="form.sex" :disabled="true" >
+        <el-form-item label="身份:" prop="identity" :rules="{ required: true, message: '身份不能为空', trigger: ['blur','change']}">
+          <el-radio-group v-model="form.identity" >
             <el-radio label="家政"></el-radio>
             <el-radio label="回收"></el-radio>
             <el-radio label="维修"></el-radio>
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="经验:" prop="education" :rules="{ required: true, message: '经验不能为空', trigger: ['blur','change']}">
-          <el-input v-model="form.education" placeholder="请输入从业/就读单位"></el-input>
+        <el-form-item label="经验:" prop="experience" :rules="{ required: true, message: '经验不能为空', trigger: ['blur','change']}">
+          <el-input v-model="form.experience" placeholder="请输入经验,例如:2年"></el-input>
         </el-form-item>
 
-        <el-form-item label="家庭住址:" prop="education" :rules="{ required: true, message: '家庭住址不能为空', trigger: ['blur','change']}">
-          <el-input v-model="form.education" placeholder="请输入从业/就读单位"></el-input>
+        <el-form-item label="家庭住址:" prop="address" :rules="{ required: true, message: '家庭住址不能为空', trigger: ['blur','change']}">
+          <el-input v-model="form.address" placeholder="请输入家庭住址"></el-input>
         </el-form-item>
 
-        <el-form-item label="服务内容:" prop="nation" :rules="{ required: true, message: '服务内容不能为空', trigger: ['blur','change']}">
-          <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-form-item label="服务内容:" prop="serve" :rules="{ required: true, message: '服务内容不能为空', trigger: ['blur','change']}">
+          <el-input type="textarea" v-model="form.serve" placeholder="请输入服务内容"></el-input>
         </el-form-item>
 
-        <el-form-item label="工作经验:" prop="nation" >
-          <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-form-item label="工作经历:" prop="work" >
+          <el-input type="textarea" v-model="form.work" placeholder="请输入工作经历"></el-input>
         </el-form-item>
 
-        <el-form-item label="培训经历:" prop="nation" >
-          <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-form-item label="培训经历:" prop="train" >
+          <el-input type="textarea" v-model="form.train" placeholder="请输入培训经历"></el-input>
         </el-form-item>
 
         <el-form-item class="control">
@@ -151,13 +151,6 @@ export default {
         work: "",
         train: "",
       },
-      userList: [
-        { id: 1, name: "aaa", tel: "12324" },
-        { id: 2, name: "bbb", tel: "222222" },
-        { id: 3, name: "aaa", tel: "12324" },
-        { id: 4, name: "aaa", tel: "12324" },
-        { id: 5, name: "aaa", tel: "12324" }
-      ],
       phone: { validator: checkPhone, trigger: ["blur", "change"] },
       area: {
         11: "北京",
@@ -200,8 +193,9 @@ export default {
   },
   methods: {
     handleSuccess(res, file) {
+      console.log(res.data.filePath);
       console.log(URL.createObjectURL(file.raw));
-      this.form.img = this.$.store.state.ip+"/"+URL.createObjectURL(file.raw);
+      this.form.img = res.data.filePath;
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -246,11 +240,44 @@ export default {
       if (sex % 2 === 0) sex = "女";
       else sex = "男";
       this.form.sex = sex;
+      var myDate = new Date();
+      var month = myDate.getMonth() + 1;
+      var day = myDate.getDate();
+      var age = myDate.getFullYear() - iden.substring(6, 10) - 1;
+      if (iden.substring(10, 12) < month || iden.substring(10, 12) == month && iden.substring(12, 14) <= day) {
+      age++;
+      }
+      this.form.age = age;
     },
      submitForm(formName) {
+      //  *******************************新增****************************
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            this.axios.post("/staff/addStaff", {
+              photo: this.form.img,
+              staffName: this.form.name,
+              telNum: this.form.tel,
+              idCardNo: this.form.idCard,
+              staffSex: this.form.sex,
+              staffNation: this.form.nation,
+              education: this.form.education,
+              staffType: this.form.identity,
+              workExperience: this.form.experience,
+              staffAddr: this.form.address,
+              serviceItem: this.form.serve,
+              experienceInfo: this.form.work,
+              trainInfo: this.form.train,
+              checkInTime: new Date()
+            })
+            .then(res => {
+              console.log(res.data);
+              if(res.data.code=="add_success"){
+                this.$router.replace("/home/serve" );
+              }
+            })
+            .catch(err=> {
+              console.log(err);
+            })
           } else {
             console.log('error submit!!');
             return false;

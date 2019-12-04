@@ -14,16 +14,14 @@
 
     <!-- 表单内容 -->
     <el-form :inline="true" :model="form" class="main" size="medium" status-icon label-width="120px" ref="ruleForm">
-      <el-form-item label="用户:" prop="link"
-      :rules="{ required: true, message: '请选择一个用户', trigger: ['blur','change']}">
-        <el-button type="warning" size='mini' plain icon='el-icon-user-solid' @click='chooseUser'>选择用户</el-button>
-        <el-button type="primary" size='mini' plain icon='el-icon-close' v-show='form.link' @click="form.link=''">{{form.link}}</el-button>
-      </el-form-item>
 
-      <el-form-item label="房产:" prop="no"
+      <el-form-item label="房产:" prop="no" style="width:100%"
       :rules="{ required: true, message: '请选择一个房产', trigger: ['blur','change']}">
         <el-button type="warning" size='mini' plain icon='el-icon-user-solid' @click='chooseHouse'>选择房产</el-button>
-        <el-button type="primary" size='mini' plain icon='el-icon-close' v-show='form.no' @click="form.no=''">{{form.no}}</el-button>
+        <div style="display: inline-block; margin-left:10px;" v-show="form.houseList.length>0">
+          <el-button type="primary" size='mini' plain icon='el-icon-close' v-for="(item,index) in form.houseList" :key="index" @click="delHouse(index)">{{item.houseName}}</el-button>
+        </div>
+        
       </el-form-item>
 
       <el-form-item label="预留手机号:" prop="tel" :rules="[phone,{ required: true, message: '手机号不能为空', trigger: ['blur','change']}]" >
@@ -68,6 +66,18 @@
         <el-button type="primary" @click="submitForm('ruleForm')" icon="el-icon-document-add">保存</el-button>
       </el-form-item>
     </el-form>
+
+    <el-dialog title="新增绑定" :visible.sync="dialogFormVisible" :center="true" width="400px">
+      <el-form :model="form" :inline="true">
+        <el-form-item label="房号:">
+          <el-input v-model="houseNo" aria-placeholder="请输入需要绑定的房产房号"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addBind">确 定</el-button>
+      </div>
+    </el-dialog>
    </div>
   </div>
 </template>
@@ -87,8 +97,10 @@
         }
       };
       return {
+        houseNo:'',
+        dialogFormVisible:false,
         form: {
-          no:"",
+          houseList:[{},{}],
           name:"",
           tel:"11111",
           sex:'',
@@ -112,49 +124,42 @@
       back(){//返回房产信息列表
         this.$router.push({path:'/home/host'});
       },
-      chooseUser(){
-        console.log("选择用户");
+      delHouse(index){
+        this.form.houseList.splice(index,1);
       },
       chooseHouse(){
         console.log("选择房产");
+        this.dialogFormVisible=true
       },
       // 身份证验证
       async validID(rule,value,callback)
       {
         // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X 
-        let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+        let reg = /(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
         if (reg.test(value)) {
-          await this.go(value.length);
+          await this.go();
           callback()
         } else {
           callback(new Error('身份证号码不正确'))
         }
       },
+      addBind(){
+        console.log(this.houseNo);
+        this.dialogFormVisible=false;
+      },
       
       // 实现自动生成生日，性别，年龄
-      go(val) {
+      go() {
         let iden = this.form.idCard;
         let sex = null;
         let birth = null;
         let myDate = new Date();
         let month = myDate.getMonth() + 1;
         let day = myDate.getDate();
-  
- 
-        if(val===18){
-         
+        
           sex = iden.substring(16,17);
           birth = iden.substring(6,10)+"-"+iden.substring(10,12)+"-"+iden.substring(12,14);
           if (iden.substring(10, 12) < month || iden.substring(10, 12) == month && iden.substring(12, 14) <= day) ;
- 
-        }
-        if(val===15){
-    
-          sex = iden.substring(13,14);
-          birth = "19"+iden.substring(6,8)+"-"+iden.substring(8,10)+"-"+iden.substring(10,12);
-          if (iden.substring(8, 10) < month || iden.substring(8, 10) == month && iden.substring(10, 12) <= day) ;
-        }
- 
         if(sex%2 === 0)
           sex = '女';
         else
@@ -184,7 +189,7 @@
 @import "../assets/less/base.less";
 .addHouse {
   color: @fontColor;
-  background-color: #f3f3f4;
+  background-color: white;
   min-height: 500px;
 }
 .content {

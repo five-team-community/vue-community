@@ -36,7 +36,7 @@ const routes = [
         }
       },
       {
-        path:'showHouse',
+        path:'showHouse/:id',
         name:"ShowHouse",
         component: () => import('../views/ShowHouse.vue'),//房产管理
         meta: {
@@ -52,7 +52,7 @@ const routes = [
         }
       },
       {
-        path:'alterHouse',
+        path:'alterHouse/:id',
         name:"AlterHouse",
         component: () => import('../views/AlterHouse.vue'),//房产管理
         meta: {
@@ -76,7 +76,7 @@ const routes = [
         }
       },
       {
-        path:'showhost',
+        path:'showhost/:id',
         name:"ShowHost",
         component: () => import('../views/ShowHost.vue'),//业主管理
         meta: {
@@ -84,7 +84,7 @@ const routes = [
         }
       },
       {
-        path:'alterhost',
+        path:'alterhost/:id',
         name:"AlterHost",
         component: () => import('../views/AlterHost.vue'),//业主管理
         meta: {
@@ -108,7 +108,7 @@ const routes = [
         }
       },
       {
-        path:'showServe',
+        path:'showServe/:id',
         name:"ShowServe",
         component: () => import('../views/ShowServe.vue'),//服务人员管理
         meta: {
@@ -116,7 +116,7 @@ const routes = [
         }
       },
       {
-        path:'alterServe',
+        path:'alterServe/:id',
         name:"AlterServe",
         component: () => import('../views/AlterServe.vue'),//服务人员管理
         meta: {
@@ -308,7 +308,7 @@ const routes = [
         }
       },
       {
-        path:'adduser',
+        path:'addUser',
         name:"AddUser",
         component: () => import('../views/AddUser.vue'),//用户管理
         meta: {
@@ -316,7 +316,7 @@ const routes = [
         }
       },
       {
-        path:'alteruser',
+        path:'alterUser/:id',
         name:"AlterUser",
         component: () => import('../views/AlterUser.vue'),//用户管理
         meta: {
@@ -324,7 +324,7 @@ const routes = [
         }
       },
       {
-        path:'showuser',
+        path:'showUser/:id',
         name:"ShowUser",
         component: () => import('../views/ShowUser.vue'),//用户管理
         meta: {
@@ -351,7 +351,15 @@ const routes = [
       {
         path:'fixdetail',
         name:"fixdetail",
-        component: () => import('../views/fixdetail.vue'),//维修
+        component: () => import('../views/fixdetail.vue'),//维修详情
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path:'moneydetail',
+        name:"moneydetail",
+        component: () => import('../views/moneydetail.vue'),//收费详情
         meta: {
           auth: true
         }
@@ -359,7 +367,15 @@ const routes = [
       {
         path:'putnote',
         name:"putnote",
-        component: () => import('../views/putnote.vue'),//维修
+        component: () => import('../views/putnote.vue'),//发布公告
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'notedetail',
+        name:"notedetail",
+        component: () => import('../views/notedetail.vue'),//公告详情
         meta: {
           auth: true
         }  
@@ -387,6 +403,48 @@ const routes = [
         meta: {
           auth: true
         }  
+      },
+      {
+        path:'activitydetail',
+        name:"activitydetail",
+        component: () => import('../views/activitydetail.vue'),//活动详情
+        meta: {
+          auth: true
+        }  
+      }
+      ,
+      {
+        path:'addActivity',
+        name:"addActivity",
+        component: () => import('../views/addActivity.vue'),//新增活动
+        meta: {
+          auth: true
+        }  
+      }
+      ,
+      {
+        path:'infdetail',
+        name:"infdetail",
+        component: () => import('../views/infdetail.vue'),//资讯详情
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'putinf',
+        name:"putinf",
+        component: () => import('../views/putinf.vue'),//发布资讯
+        meta: {
+          auth: true
+        }  
+      },
+      {
+        path:'applydetail',
+        name:"applydetail",
+        component: () => import('../views/applydetail.vue'),//报名详情
+        meta: {
+          auth: true
+        }  
       }
     ]
   },
@@ -402,6 +460,14 @@ const routes = [
     meta: {
       auth: true
     }  
+  },
+  {
+    path:'/demo',
+    name:"putnote",
+    component: () => import('../views/demo.vue'),//维修
+    meta: {
+      auth: true
+    }  
   }
 ]
 
@@ -410,6 +476,11 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 // 注册全局守卫
 // 在访问路由之前进行拦截
 // router.beforeEach((to, from, next) => {

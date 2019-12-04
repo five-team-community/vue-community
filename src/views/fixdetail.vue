@@ -188,7 +188,7 @@ export default {
   }
   .back {
     float: right;
-    .back-btn{
+    .back-btn {
       padding: 5px;
     }
   }

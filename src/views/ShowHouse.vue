@@ -90,66 +90,7 @@
 <script>
 import UserItem from '../components/UserItem'
 // 模拟数据
-var houseData = {
-  housePropertyId:1,
-  housePropertyNo:"111",
-  houseName:"瑞通生活社区东1幢1单元RTSH-FJ-001室",
-  houseNature:"商用",
-  houseArea:99.00,
-  houseStyle:"三居室",
-  ownerName:"林海",
-  ownerPhone:"16832428374",
-  ownerTime:"2018-08-09"
-};
-var userList=[
-  {
-    inhabitantId:1,
-    inhabitantName:"aaa",
-    ownerName:"bbb",
-    telNum:"12324",
-    checkInTime:"2019-08-07"
-  },
-   {
-    inhabitantId:2,
-    inhabitantName:"aaa",
-    ownerName:"bbb",
-    telNum:"12324",
-    checkInTime:"2019-08-07"
-  },
-   {
-    inhabitantId:3,
-    inhabitantName:"aaa",
-    ownerName:"bbb",
-    telNum:"12324",
-    checkInTime:"2019-08-07"
-  },
-   {
-    inhabitantId:4,
-    inhabitantName:"aaa",
-    ownerName:"bbb",
-    telNum:"12324",
-    checkInTime:"2019-08-07"
-  },
-   {
-    inhabitantId:5,
-    inhabitantName:"aaa",
-    ownerName:"bbb",
-    telNum:"12324",
-    checkInTime:"2019-08-07"
-  }
-]
 
-
-var usermsg={
-    state:200,
-    msg:"查询失败！",
-    data:{
-      id:1,
-      name:"aa",
-      tel:"123",
-    }
-
-}
 export default {
   data() {
     return {  
@@ -170,7 +111,7 @@ export default {
       this.$router.push({path:'/home/house'});
     },
     searchUserTel(){
-      this.usermsg=usermsg;
+
       console.log(this.usermsg.data);
     },
     addBind(){
@@ -189,8 +130,18 @@ export default {
     }
   },
   created() {//创建时获取数据
-    this.houseData = houseData;
-    this.userList = userList;
+  console.log(this.$route.params.id);
+    this.axios
+        .get("/InhabitantAndHouseProperty/selectById", {params:{
+         housePropertyId: this.$route.params.id
+        }})
+        .then(res => {
+          console.log("aaa",res.data.data);
+
+        })
+        .catch(err => {
+          console.log(err);
+        });
   },
   computed: {}
 };

@@ -22,7 +22,7 @@
         ref="ruleForm"
       >
         <el-form-item label="员工头像:" prop="link">
-          <el-avatar shape="square" :size="100" :src="form.img" class="serve-img" style="float:left"></el-avatar>
+          <el-avatar shape="square" :size="100" :src="form.fullimg" class="serve-img" style="float:left"></el-avatar>
           <el-upload
             name="photo"
             class="avatar-uploader"
@@ -41,7 +41,7 @@
           prop="name"
           :rules="{ required: true, message: '姓名不能为空', trigger: ['blur','change']}"
         >
-          <el-input v-model="form.no" placeholder="请输入姓名" autocomplete="off"></el-input>
+          <el-input v-model="form.name" placeholder="请输入姓名" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -49,7 +49,7 @@
           prop="tel"
           :rules="[phone,{ required: true, message: '手机号不能为空', trigger: ['blur','change']}]"
         >
-          <el-input v-model="tel" placeholder="请输入手机号"></el-input>
+          <el-input v-model="form.tel" placeholder="请输入手机号"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -75,7 +75,7 @@
           prop="age"
           :rules="{ required: true, message: '年龄不能为空', trigger: ['blur','change']}"
         >
-          <el-input v-model="form.age" placeholder="请输入年龄"></el-input>
+          <el-input v-model="form.age" placeholder="请输入年龄" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -99,43 +99,31 @@
           prop="nation"
           :rules="{ required: true, message: '身份不能为空', trigger: ['blur','change']}"
         >
-          <el-radio-group v-model="form.sex" :disabled="true">
+          <el-radio-group v-model="form.sex">
             <el-radio label="家政"></el-radio>
             <el-radio label="回收"></el-radio>
             <el-radio label="维修"></el-radio>
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item
-          label="经验:"
-          prop="education"
-          :rules="{ required: true, message: '经验不能为空', trigger: ['blur','change']}"
-        >
-          <el-input v-model="form.education" placeholder="请输入从业/就读单位"></el-input>
+         <el-form-item label="经验:" prop="experience" :rules="{ required: true, message: '经验不能为空', trigger: ['blur','change']}">
+          <el-input v-model="form.experience" placeholder="请输入经验,例如:2年"></el-input>
         </el-form-item>
 
-        <el-form-item
-          label="家庭住址:"
-          prop="education"
-          :rules="{ required: true, message: '家庭住址不能为空', trigger: ['blur','change']}"
-        >
-          <el-input v-model="form.education" placeholder="请输入从业/就读单位"></el-input>
+        <el-form-item label="家庭住址:" prop="address" :rules="{ required: true, message: '家庭住址不能为空', trigger: ['blur','change']}">
+          <el-input v-model="form.address" placeholder="请输入家庭住址"></el-input>
         </el-form-item>
 
-        <el-form-item
-          label="服务内容:"
-          prop="nation"
-          :rules="{ required: true, message: '服务内容不能为空', trigger: ['blur','change']}"
-        >
-          <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-form-item label="服务内容:" prop="serve" :rules="{ required: true, message: '服务内容不能为空', trigger: ['blur','change']}">
+          <el-input type="textarea" v-model="form.serve" placeholder="请输入服务内容"></el-input>
         </el-form-item>
 
-        <el-form-item label="工作经验:" prop="nation">
-          <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-form-item label="工作经历:" prop="work" >
+          <el-input type="textarea" v-model="form.work" placeholder="请输入工作经历"></el-input>
         </el-form-item>
 
-        <el-form-item label="培训经历:" prop="nation">
-          <el-input type="textarea" v-model="form.desc"></el-input>
+        <el-form-item label="培训经历:" prop="train" >
+          <el-input type="textarea" v-model="form.train" placeholder="请输入培训经历"></el-input>
         </el-form-item>
 
         <el-form-item class="control">
@@ -148,26 +136,6 @@
   </div>
 </template>
 <script>
-var serveData = {
-  id: 1,
-  name: "aaa",
-  img: require("@/assets/img/logo.png"),
-  // img:"http://172.16.6.43:8080/test/img1.jpg",
-  tel: "12324234",
-  sex: "男",
-  age: "30",
-  idCard: "513022199802168027",
-  identity: "家政",
-  experience: "2年",
-  serve: "厨房打扫",
-  address: "四川省成都市",
-  isEmpty: "空闲",
-  nation: "汉族",
-  education: "高中",
-  work:
-    "fdskfhkajfhkashfkasjhfkjashfkasfkjjjjjasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  train: "assssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-};
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -186,6 +154,7 @@ export default {
       imageUrl: "",
       fileList: [],
       form: {
+        fullImg:'',
         id: null,
         name: "",
         img: "",
@@ -203,58 +172,16 @@ export default {
         work: "",
         train: "",
       },
-      userList: [
-        { id: 1, name: "aaa", tel: "12324" },
-        { id: 2, name: "bbb", tel: "222222" },
-        { id: 3, name: "aaa", tel: "12324" },
-        { id: 4, name: "aaa", tel: "12324" },
-        { id: 5, name: "aaa", tel: "12324" }
-      ],
       phone: { validator: checkPhone, trigger: ["blur", "change"] },
-      area: {
-        11: "北京",
-        12: "天津",
-        13: "河北",
-        14: "山西",
-        15: "内蒙古",
-        21: "辽宁",
-        22: "吉林",
-        23: "黑龙江",
-        31: "上海",
-        32: "江苏",
-        33: "浙江",
-        34: "安徽",
-        35: "福建",
-        36: "江西",
-        37: "山东",
-        41: "河南",
-        42: "湖北",
-        43: "湖南",
-        44: "广东",
-        45: "广西",
-        46: "海南",
-        50: "重庆",
-        51: "四川",
-        52: "贵州",
-        53: "云南",
-        54: "西藏",
-        61: "陕西",
-        62: "甘肃",
-        63: "青海",
-        64: "宁夏",
-        65: "新疆",
-        71: "台湾",
-        81: "香港",
-        82: "澳门",
-        91: "国外"
-      }
     };
   },
   methods: {
-    handleSuccess(res, file) {
-      console.log(URL.createObjectURL(file.raw));
-      this.form.img =
-        this.$.store.state.ip + "/" + URL.createObjectURL(file.raw);
+     handleSuccess(res) {
+      console.log(res.data.filePath);
+      
+      this.form.img = res.data.filePath;
+      this.form.fullimg=this.$store.state.ip+'/'+this.form.img
+      console.log(this.form.fullimg);
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -277,7 +204,7 @@ export default {
       // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
       let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
       if (reg.test(value)) {
-        await this.go(value.length);
+        await this.go();
         callback();
       } else {
         callback(new Error("身份证号码不正确"));
@@ -285,25 +212,56 @@ export default {
     },
 
     // 实现自动生成生日，性别，年龄
-    go(val) {
+     go() {
       let iden = this.form.idCard;
       let sex = null;
-
-      if (val === 18) {
         sex = iden.substring(16, 17);
-      }
-      if (val === 15) {
         sex = iden.substring(13, 14);
-      }
+  
 
       if (sex % 2 === 0) sex = "女";
       else sex = "男";
       this.form.sex = sex;
+      var myDate = new Date();
+      var month = myDate.getMonth() + 1;
+      var day = myDate.getDate();
+      var age = myDate.getFullYear() - iden.substring(6, 10) - 1;
+      if (iden.substring(10, 12) < month || iden.substring(10, 12) == month && iden.substring(12, 14) <= day) {
+      age++;
+      }
+      this.form.age = age;
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          // ************************************修改***********************************
+            this.axios.post("/staff/modifySingle", {
+              staffId: this.form.id,
+              photo: this.form.img,
+              staffName: this.form.name,
+              telNum: this.form.tel,
+              idCardNo: this.form.idCard,
+              staffSex: this.form.sex,
+              staffNation: this.form.nation,
+              education: this.form.education,
+              staffType: this.form.identity,
+              workExperience: this.form.experience,
+              staffAddr: this.form.address,
+              serviceItem: this.form.serve,
+              experienceInfo: this.form.work,
+              trainInfo: this.form.train,
+              checkInTime: new Date()
+            })
+            .then(res => {
+              console.log("修改",res.data);
+              if(res.data.code=="200"){
+                this.$router.replace("/home/serve" );
+              }
+            })
+            .catch(err=> {
+              console.log(err);
+            })
+
         } else {
           console.log("error submit!!");
           return false;
@@ -312,6 +270,28 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    formateData(item){
+      var data = {};
+      data.id = item.staffId;
+      data.img = item.photo;
+      data.fullimg = this.$store.state.ip+'/'+data.img;
+      data.name = item.staffName;
+      data.sex = item.staffSex;
+      data.tel = item.telNum;
+      data.idCard = item.idCardNo;
+      data.identity = item.staffType;
+      data.experience = item.workExperience;
+      data.serve = item.serviceItem;
+      data.address = item.staffAddr;
+      data.isEmpty = item.isFree;
+      data.nation = item.staffNation;
+      data.education = item.education;
+      data.work = item.experienceInfo||"无";
+      data.train = item.trainInfo||"无";
+      data.link = item.user.userName;
+      console.log(data);
+      return data;
     }
   },
   computed: {
@@ -327,11 +307,24 @@ export default {
   },
   created() {
     //创建时获取数据
-    this.form = serveData;
+    this.axios.post("/staff/showSingle", {
+      id:this.$route.params.id
+    })
+    .then(res => {
+      console.log(res.data);
+      
+      this.form = this.formateData(res.data.data.data);
+      this.go();
+      console.log(this.form);
+    })
+    .catch(err=> {
+      console.log(err);
+    })
   }
 };
 </script>
-<style lang="less" >
+
+<style lang="less" scoped>
 @import "../assets/less/base.less";
 
 .addHouse {

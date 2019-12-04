@@ -17,6 +17,7 @@
   </div>
 </template>
 <script>
+import crypto from 'crypto'
 export default {
   name: "Login",
   data(){
@@ -28,6 +29,9 @@ export default {
   methods: {
     login(){
       console.log("你点击了登录",this.username,this.password);
+      const md5 = crypto.createHash("md5"); // md5 加密，不可逆加密
+      const newPass = md5.update(this.password).digest("hex"); // 加密
+      console.log(newPass);
 
       // *********************登录******************************
 
@@ -37,7 +41,7 @@ export default {
       })
       .then((res) => {
         console.log(res)
-        if(res.data.code == "200") {
+        if(res.data.code == "success") {
 
           // 保存token
           var token = res.data.data.token;
@@ -45,7 +49,12 @@ export default {
           sessionStorage.setItem("validateId",validateId);
           sessionStorage.setItem("token", token);
 
-         
+
+          sessionStorage.setItem('userId',res.data.data.user.userId);
+          sessionStorage.setItem('userName',res.data.data.user.userName);
+          sessionStorage.setItem('userRole',res.data.data.user.roles[0].roleName);
+
+
           //获取参数（未登录时想访问的路由）
           var url = this.$route.query.redirect;
 
@@ -53,7 +62,8 @@ export default {
           // 切换路由
           this.$router.replace(url)
         } else {
-          console.log("登陆失败")
+          console.log(res.data.message);
+          this.$message.error(res.data.message);
         }
       })
       .catch(err=> {

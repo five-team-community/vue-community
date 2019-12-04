@@ -12,12 +12,12 @@
           <el-button round size='mini' class="back-btn" icon='el-icon-arrow-left' @click="back">返回</el-button>
         </div>
       </div>
-      <div class="main">
+      <div class="main" v-show="houseData" v-loading="!houseData">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">绑定用户:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.link}}</div></el-col>
           <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">绑定房产:</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg">{{houseData.no}}</div></el-col>
+          <el-col :xs="24" :sm="18" :md="9" :lg="9" ><div class="msg"><span v-for="(item,index) in houseData.houseList" :key="index">{{item.houseName}}</span></div></el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">真实姓名:</div></el-col>
@@ -49,21 +49,6 @@
 </template>
 <script>
 
-// 模拟数据
-var houseData = {
-  id:1,
-  no:"1",
-  name:"aaa",
-  tel:"1232434",
-  sex:'男',
-  idCard:'513022199802168027',
-  time:"2019-08-07",
-  link:'bbb',
-  birthday:'1998-03-08',
-  birthplace:'四川',
-  work:'aaa',
-  workPlace:'ccc',
-};
 export default {
   data() {
     return {  
@@ -99,13 +84,56 @@ export default {
       else{
         this.$message.error(this.usermsg.msg);
       }
+    },
+    addZero (v) {
+      return v < 10 ? '0' + v : v
+    },
+    switchTimeFormat (time) {
+      const dateTime = new Date(time)
+      const year = dateTime.getFullYear()
+      const month = dateTime.getMonth() + 1
+      const date = dateTime.getDate()
+
+      return `${year}-${this.addZero(month)}-${this.addZero(date)}}`;
+    },
+    // 实现自动生成生日，性别，年龄
+      getBirth(iden) {
+        return iden.substring(6,10)+"-"+iden.substring(10,12)+"-"+iden.substring(12,14);
+      },
+    formateData(item){
+      var houseData={};
+      houseData.id=item.inhabitantId;
+      houseData.link=item.user.userName;
+      houseData.houseList=item.housePropertyList;
+      houseData.name=item.inhabitantName;
+      houseData.tel=item.telNum;
+      houseData.sex=item.inhabitantSex;
+      houseData.idCard=item.idCardNo;
+      houseData.birthday=this.getBirth(item.idCardNo)
+      houseData.sex=item.inhabitantSex;
+      houseData.birthplace=item.birthplace;
+      houseData.work=item.career;
+      houseData.workPlace=item.workingUnit;
+      houseData.time=this.switchTimeFormat(item.checkInTime);
+      console.log(houseData);
+  
+      return houseData;
     }
   },
-  created() {//创建时获取数据
-    this.houseData = houseData;
+  mounted() {//创建时获取数据
+    console.log(this.$route.params.id);
 
+    this.axios.post("/inhabitant/showSingle", {
+      id:this.$route.params.id
+    })
+    .then((res) => {
+      console.log(res);
+      this.houseData=this.formateData(res.data.data.data);
+    })
+    .catch(err=> {
+      console.log(err)
+    })
   },
-  computed: {}
 };
 </script>
 <style lang="less" scoped>
@@ -113,7 +141,6 @@ export default {
 #show-house {
   color: @fontColor;
   background-color: #f3f3f4;
-
   min-height: 500px;
 }
 .content {
