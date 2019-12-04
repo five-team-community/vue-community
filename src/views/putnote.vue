@@ -70,7 +70,7 @@ export default {
       },
       handleSuccess(res, file) {
       console.log(URL.createObjectURL(file.raw));
-      this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
+      this.form.img = 'http://172.16.6.66:8080'+"/"+res.data.filePath;
       this.imgurl=res.data.filePath;
     },
     beforeUpload(file) {

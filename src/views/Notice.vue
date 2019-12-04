@@ -5,7 +5,7 @@
         <i class="el-icon-s-order"></i>
         <span>社区公告</span>
       </div>
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form :inline="true" border :model="formInline" class="demo-form-inline">
         <el-col :span="18">
           <el-form-item label="标题">
             <el-input v-model="formInline.user" placeholder="标题"></el-input>
@@ -34,6 +34,7 @@
       </el-form>
       <el-table
         ref="multipleTable"
+        border
         :data="tableData"
         v-loading="loading"
         tooltip-effect="dark"

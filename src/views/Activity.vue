@@ -28,6 +28,7 @@
     </el-form>
     <el-table
       ref="multipleTable"
+      border
       :data="tableData"
       v-loading="loading"
       tooltip-effect="dark"
@@ -45,7 +46,7 @@
        
       </el-table-column>
       <el-table-column prop="activityAddress" label="活动地址" width="120"> </el-table-column>
-      <el-table-column label="操作" align="center" width="250">
+      <el-table-column label="操作" align="center" >
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="查看活动详情" placement="bottom">
               <el-button
@@ -158,10 +159,12 @@ export default {
       this.currentPage = val;
       this.axios
       .post("/activity/showAll", {      
-          currentPage:this.currentPage,
+          pageIndex:this.currentPage,
+          pageSize:5,
+        online:true,
       })
       .then(res => {
-        this.tableData = res.data.data.Pays;
+        this.tableData = res.data.data.Activity;
         console.log(res.data);
         this.loading =false;
       })
@@ -261,7 +264,7 @@ export default {
    created() {
     this.axios
       .post("/activity/showAll", {
-        pageIndex:1,
+        pageIndex:this.currentPage,
         pageSize:5,
         online:true,
       })
@@ -269,6 +272,7 @@ export default {
         //  res.data = tableData;
         this.tableData = res.data.data.Activity;
         this.options=res.data.data.Activity;
+        this.totalCount=res.data.data.totalCount;
         console.log(this.options);
         this.loading = false;
       })

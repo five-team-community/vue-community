@@ -33,42 +33,12 @@
       tooltip-effect="dark"
       style="width: 100%"
       >
-      <el-table-column prop="id" label="社区" width="120"> 易居</el-table-column>
-      <el-table-column prop="activityName" label="活动名称" width="120">  </el-table-column>
-      <el-table-column prop="contactsName" label="姓名" width="120">
+      <el-table-column prop="id" label="社区" > 易居</el-table-column>
+      <el-table-column prop="contactsName" label="姓名" >
       </el-table-column>
-      <el-table-column prop="contactsPhone" label="联系电话" width="120">        
+      <el-table-column prop="contactsPhone" label="联系电话">        
       </el-table-column>
-      <el-table-column prop="activityAddress" label="家庭地址" width="120"> </el-table-column>
-      <el-table-column label="操作" align="center" width="250">
-          <template slot-scope="scope">
-            <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                size="mini"
-                class="btn-show"
-                @click="gotoactivitydetail(scope.$index)"
-              ></el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="查看报名详情" placement="bottom">
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                size="mini"
-                class="btn-show"
-                @click="applydetail(scope.$index)"
-              ></el-button>
-            </el-tooltip>
-              <el-button
-                type="danger"
-                slot="reference"
-                icon="el-icon-delete"
-                size="mini"
-                class="btn-del"
-                @click="handleDelete(scope.$index)"
-              ></el-button>
-          </template>
+      <el-table-column prop="activityAddress" label="家庭地址">    
         </el-table-column>
     </el-table>
       <el-pagination
@@ -254,17 +224,21 @@ export default {
     }
   },
    created() {
+      var str = location.href;
+    var num = str.indexOf("=");
+    str = str.substr(num + 1);
+    str = Number(str);
     this.axios
-      .post("/activity/showAll", {
+      .post("/activity/showActivityUser", {
         pageIndex:1,
         pageSize:5,
-        online:true,
+        activityId: str,
       })
       .then(res => {
         //  res.data = tableData;
-        this.tableData = res.data.data.Activity;
-        this.options=res.data.data.Activity;
-        console.log(this.options);
+        this.tableData = res.data.data.userList;
+        this.totalCount=res.data.data.totalCount;
+        console.log(res.data.data);
         this.loading = false;
       })
       .catch(err => {
