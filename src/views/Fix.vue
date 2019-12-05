@@ -16,10 +16,10 @@
         <el-table-column prop="operate" label="操作" style="width: 50%">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="修改" placement="bottom-end">
-              <el-button type="primary" icon="el-icon-edit" @click="edit(scope.$index)"></el-button>
+              <el-button type="primary" size="mini" icon="el-icon-edit" @click="edit(scope.$index)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="删除" placement="bottom-end">
-              <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+              <el-button type="danger" size="mini" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
             </el-tooltip>
             
           </template>
@@ -328,5 +328,12 @@
   .el-divider--horizontal {
     margin: 0;
   }
+  .el-divider--horizontal {
+  margin: 0;
+}
+.el-button--mini,
+.el-button--mini.is-round {
+  padding: 3px;
+}
   
 </style>

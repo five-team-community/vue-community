@@ -29,7 +29,7 @@
           <el-table-column prop="operate" label="操作" >
             <template slot-scope="scope">
                <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-                 <el-button type="danger" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
+                 <el-button type="danger" size="mini" icon="el-icon-delete" @click="del(scope.$index)"></el-button>
                </el-tooltip>
             </template>
           </el-table-column>
@@ -149,12 +149,16 @@ export default {
     searchBtn() { // 查询
       console.log("查询结果：",this.search.companyName);
       this.axios
-        .post("/unlock/getAllByParam",
+        .get("/unlock/getAllByParam",
         {
-          personName:this.search.personName
+          params:{
+            companyName:this.search.companyName,
+          pageSize:5,
+          currentPage:this.currentPage
+          }
         })
         .then((res)=> {
-          console.log(res.data.data.data);
+          console.log(res.data);
           this.testData = res.data.data.data;
           this.totalCount = res.data.data.totalCount;
           this.loading= false;
@@ -253,5 +257,11 @@ export default {
       margin: 0;
     }
   }
-
+.el-divider--horizontal {
+  margin: 0;
+}
+.el-button--mini,
+.el-button--mini.is-round {
+  padding: 3px;
+}
 </style>

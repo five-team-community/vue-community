@@ -27,7 +27,16 @@
         <el-form-item label="详细地址">
           <el-input v-model="form.detailAddress" placeholder="请输入详细地址"></el-input>
         </el-form-item>
-        <el-form-item label="头像上传" class="load">
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">添加</el-button>
+        </el-form-item>
+        
+        <!-- <el-form-item>
+          <el-button type="primary" >上传头像</el-button>
+        </el-form-item> -->
+      </el-form>
+      <el-form  label-width="180px">
+        <el-form-item label="头像" class="load">
           <el-upload
             name="file"
             class="avatar-uploader"
@@ -39,9 +48,6 @@
             <img v-if="this.form.img" :src="this.form.img" class="avatar"/>
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">添加</el-button>
         </el-form-item>
       </el-form>
       </div>
@@ -327,6 +333,7 @@ export default {
       console.log(URL.createObjectURL(file.raw));
       this.form.img = 'http://172.16.6.65:8080' + "/" + res.data.filePath;
       this.imgurl = res.data.filePath;
+      console.log(res.data);
     },
     beforeUpload(file) { // 图片判断
       const isJPG = file.type === "image/jpeg";
@@ -342,6 +349,20 @@ export default {
     handleChange(value) {
       console.log(value);
     },
+    /* upPic() {
+      console.log("图片",this.imgurl);
+      this.axios
+        .post("/unlock/loadHeadImg",
+        {
+            file:this.imgurl
+        })
+        .then((res)=> {
+          console.log(res);
+        })
+        .catch((err)=> {
+          console.log(err);
+        })
+    }, */
     onSubmit() { //确认
       console.log('公司!',this.form.companyName);
       console.log('联系人',this.form.personName);
@@ -357,7 +378,7 @@ export default {
       }
       console.log("地址：",address);
 
-      
+      console.log("ssssssss",this.imgurl)
 
       this.axios
         .post("/unlock/addUnlock",
@@ -365,7 +386,8 @@ export default {
           companyName:this.form.companyName,
           personName:this.form.personName,
           telNum:this.form.telphone,
-          location:address
+          location:address,
+          file:this.imgurl
         })
         .then((res)=> {
           console.log(res);
@@ -432,5 +454,19 @@ export default {
     .el-divider--horizontal {
       margin: 0;
     }
+    .avatar{
+  width: 200px;
+  height: 200px;
+}
+
+.avatar-uploader-icon{
+  font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+    border: 1px solid black;
+}
   }
 </style>
