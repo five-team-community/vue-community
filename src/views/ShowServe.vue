@@ -11,7 +11,7 @@
           <el-button round size="mini" class="back-btn" icon="el-icon-arrow-left" @click="back">返回</el-button>
         </div>
       </div>
-      <div class="main">
+      <div class="main" v-loading="!houseData">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2">
             <div class="item-title">头像:</div>
@@ -136,6 +136,7 @@
 export default {
   data() {
     return {
+      loading: true,  //加载标识符
       serveData: {}
     };
   },
@@ -158,7 +159,7 @@ export default {
     formateData(item){
       var data = {};
       data.id = item.staffId;
-      data.img = this.$store.state.ip+item.photo;
+      data.img = this.$store.state.ip+'/'+item.photo;
       data.name = item.staffName;
       data.sex = item.staffSex;
       data.tel = item.telNum;
@@ -188,12 +189,11 @@ export default {
       console.log(res.data);
       
       this.serveData = this.formateData(res.data.data.data)
-      // this.loading=false;
+      this.loading=false;
     })
     .catch(err=> {
       console.log(err);
     })
-    // this.serveData = serveData;
   }
 };
 </script>
@@ -201,9 +201,8 @@ export default {
 @import "../assets/less/base.less";
 #show-serve {
   color: @fontColor;
-  background-color: #f3f3f4;
-  padding: 20px 10px;
-  min-height: 500px;
+  background-color: white;
+  height: 100%;
 }
 .content {
   background: white;

@@ -142,14 +142,14 @@ export default {
     altermsg() {
       console.log("aaa");
       var id=sessionStorage.getItem("userId");
-      id=21;
+      id=26;
       this.$router.push({ path: "/home/alterUser/"+id });
     },
     alterPwd() {
       console.log("bbb",this.mdPwd(this.ruleForm.oldPass),this.mdPwd(this.ruleForm.pass));
       this.$refs["ruleForm"].validate(valid => {
         if (valid) {
-           this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+           this.$confirm("此操作将永久修改密码, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -158,7 +158,7 @@ export default {
           this.axios
             .post("/user/changePassword", {
               // userId: sessionStorage.getItem("userId"),
-              userId:21,
+              userId:26,
               oldPassword:this.mdPwd(this.ruleForm.oldPass),
               newPassword:this.mdPwd(this.ruleForm.pass)
             })
@@ -169,6 +169,11 @@ export default {
             type: "error",
             message: res.data.message
           });
+              }else{
+                this.$message({
+            type: "success",
+            message: "修改成功"
+              })
               }
             })
             .catch(err => {
@@ -178,11 +183,9 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消修改"
           });
         });
-
-
         } else {
           console.log("error submit!!");
           return false;
@@ -232,7 +235,7 @@ export default {
     this.axios
       .post("/user/showSingle", {
         // userId:sessionStorage.getItem("userId")
-        userId:21
+        userId:26
       })
       .then(res => {
         console.log("查询", res);

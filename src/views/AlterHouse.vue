@@ -167,12 +167,25 @@ export default {
               idCardNo: this.form.idCard
             })
             .then(res => {
+              this.$message({
+                  type: "success",
+                  message: "修改成功!"
+                });
+                this.back();
               console.log("aaa", res);
             })
             .catch(err => {
               console.log(err);
+               this.$message({
+                type: "error",
+                message: "修改失败!"
+              });
             });
         } else {
+          this.$message({
+            type: "error",
+            message: "有输入不合规范!"
+          });
           console.log("error submit!!");
           return false;
         }

@@ -8,7 +8,7 @@
         <span>房产信息详情</span>
 
         <!-- 返回按钮 -->
-        <div class="back">
+        <div class="back" v-loading="loading">
           <el-button round size='mini' class="back-btn" icon='el-icon-arrow-left' @click="back">返回</el-button>
         </div>
       </div>
@@ -84,6 +84,7 @@ import UserItem from '../components/UserItem'
 export default {
   data() {
     return {  
+      loading: true,
       houseData: {},//房产信息
       userList:[],//绑定用户
       dialogFormVisible: false,
@@ -105,18 +106,6 @@ export default {
       console.log(this.usermsg.data);
     },
     addBind(){
-      // if(!this.usermsg.state){
-      //   this.$message.error("请输入要绑定的用户手机号");
-      // }
-      // else if(this.usermsg.state==200){
-      //   console.log(this.usermsg.data.id);
-      //   this.usermsg={};
-      //   this.form.tel="";
-      //   this.dialogFormVisible = false;
-      // }
-      // else{
-      //   this.$message.error(this.usermsg.msg);
-      // }
        this.axios
     .get("/InhabitantAndHouseProperty/addInhabitantToHouseProperty", {params:{
       housePropertyId: this.$route.params.id,

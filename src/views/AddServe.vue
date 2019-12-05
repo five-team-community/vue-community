@@ -249,49 +249,62 @@ export default {
       }
       this.form.age = age;
     },
-     submitForm(formName) {
+    submitForm(formName) {
       //  *******************************新增****************************
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.axios.post("/staff/addStaff", {
-              photo: this.form.img,
-              staffName: this.form.name,
-              telNum: this.form.tel,
-              idCardNo: this.form.idCard,
-              staffSex: this.form.sex,
-              staffNation: this.form.nation,
-              education: this.form.education,
-              staffType: this.form.identity,
-              workExperience: this.form.experience,
-              staffAddr: this.form.address,
-              serviceItem: this.form.serve,
-              experienceInfo: this.form.work,
-              trainInfo: this.form.train,
-              checkInTime: new Date()
-            })
-            .then(res => {
-              console.log(res.data);
-              if(res.data.code=="add_success"){
-                this.$router.replace("/home/serve" );
-              }
-            })
-            .catch(err=> {
-              console.log(err);
-            })
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      }
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.axios.post("/staff/addStaff", {
+            photo: this.form.img,
+            staffName: this.form.name,
+            telNum: this.form.tel,
+            idCardNo: this.form.idCard,
+            staffSex: this.form.sex,
+            staffNation: this.form.nation,
+            education: this.form.education,
+            staffType: this.form.identity,
+            workExperience: this.form.experience,
+            staffAddr: this.form.address,
+            serviceItem: this.form.serve,
+            experienceInfo: this.form.work,
+            trainInfo: this.form.train,
+            checkInTime: new Date()
+          })
+          .then(res => {
+            console.log(res.data);
+            if(res.data.code=="add_success"){
+              this.$message({
+                type: "success",
+                message: "新增成功!"
+              });
+              this.$router.replace("/home/serve" );
+            }
+          })
+          .catch(err=> {
+            this.$message({
+                type: "error",
+                message: "新增失败!"
+              });
+            console.log(err);
+          })
+        } else {
+          this.$message({
+            type: "error",
+            message: "输入格式不正确!"
+          });
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    }
   }
 };
 </script>
 <style lang="less" >
 @import "../assets/less/base.less";
+
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -318,13 +331,11 @@ export default {
 </style>
 <style lang="less" scoped>
 @import "../assets/less/base.less";
-
-.addHouse {
-  color: @fontColor;
-  background-color: #f3f3f4;
-
-  min-height: 500px;
+.addserve{
+  background: white;
+  height: 100%;
 }
+
 .content {
   background: white;
 }

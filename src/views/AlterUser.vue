@@ -1,5 +1,5 @@
 <template>
-  <div class="addserve">
+  <div class="alterUser">
     <div class="content">
       <!-- 标题 -->
       <div class="title">
@@ -20,14 +20,13 @@
         label-width="100px"
         ref="ruleForm"
       >
-       <el-form-item
+        <el-form-item
           label="用户名:"
           prop="name"
           :rules="{ required: true, message: '用户名不能为空', trigger: ['blur','change']}"
         >
           <el-input v-model="form.name" placeholder="真实请输入用户名" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
-        
 
         <el-form-item
           label="真实姓名:"
@@ -75,7 +74,7 @@
   </div>
 </template>
 <script>
-import crypto from 'crypto'
+import crypto from "crypto";
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -103,8 +102,8 @@ export default {
       this.$router.push({ path: "/home/user" });
     },
     resetPwd() {
-const md5 = crypto.createHash("md5"); // md5 加密，不可逆加密
-      var n= md5.update("123456").digest("hex"); // 加密
+      const md5 = crypto.createHash("md5"); // md5 加密，不可逆加密
+      var n = md5.update("123456").digest("hex"); // 加密
       console.log(n);
       this.$confirm("此操作会将密码重置为123456, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -145,19 +144,39 @@ const md5 = crypto.createHash("md5"); // md5 加密，不可逆加密
           // ************************************修改***********************************
           this.axios
             .post("/user/modifyUser", {
-              userId:this.$route.params.id,
+              userId: this.$route.params.id,
               realName: this.form.realName,
               roleName: this.form.role,
-              telNum:this.form.tel,
+              telNum: this.form.tel
             })
             .then(res => {
+
               console.log("修改", res.data);
-             
+              if (res.data.code == "modify_success") {
+                this.$message({
+                  type: "success",
+                  message: "修改成功!"
+                });
+                this.back();
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "修改失败!"
+                });
+              }
             })
             .catch(err => {
+              this.$message({
+                type: "error",
+                message: "修改失败!"
+              });
               console.log(err);
             });
         } else {
+           this.$message({
+            type: "error",
+            message: "有输入不合规范!"
+          });
           console.log("error submit!!");
           return false;
         }
@@ -217,11 +236,10 @@ const md5 = crypto.createHash("md5"); // md5 加密，不可逆加密
 <style lang="less" scoped>
 @import "../assets/less/base.less";
 
-.addHouse {
+.alterUser {
   color: @fontColor;
-  background-color: #f3f3f4;
-
-  min-height: 500px;
+  background-color: white;
+  height: 100%;
 }
 .resetPwd {
   background: @yellowColor;

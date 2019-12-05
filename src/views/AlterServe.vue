@@ -185,6 +185,7 @@ export default {
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
+      const isPNG = file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!(isJPG||isPNG)) {
@@ -277,6 +278,10 @@ export default {
             })
 
         } else {
+          this.$message({
+            type: "error",
+            message: "输入存在不合法!"
+          });
           console.log("error submit!!");
           return false;
         }
@@ -326,7 +331,6 @@ export default {
     })
     .then(res => {
       console.log(res.data);
-      
       this.form = this.formateData(res.data.data.data);
       this.go();
       console.log(this.form);
