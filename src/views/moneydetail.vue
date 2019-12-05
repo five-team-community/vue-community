@@ -10,7 +10,7 @@
           </div>
         </div>
 
-        <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tabs v-model="activeName" v-loading='loading' @tab-click="handleClick">
             <el-row>
               <el-col :span="12">
                 <div class="grid-content bg-purple">社区：易居社区</div>
@@ -63,7 +63,8 @@ export default {
   data() {
     return {
       tableData: [],
-      activeName: "second"
+      activeName: "second",
+      loading:true
     };
   },
   methods: {
@@ -86,6 +87,7 @@ export default {
         .then(res => {
           this.tableData = res.data.data.pays; 
           console.log(res.data)
+          this.loading=false
         })
         .catch(err => {
           return err;

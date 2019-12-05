@@ -238,7 +238,7 @@ export default {
       })
       .then(res => {
         this.tableData = res.data.data.pays;
-        this.totalCount = res.data.data.totalCount;
+        this.totalCount = res.data.data.length;
         this.loading = false;
         console.log(res.data);
       })

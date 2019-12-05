@@ -240,7 +240,10 @@ export default {
       })
       .then(res => {
         this.tableData = res.data.data.pays;
+        this.totalCount=res.data.data.length;
         this.loading = false;
+        console.log(res.data)
+        console.log(this.totalCount)
       })
       .catch(err => {
         console.log(err);
