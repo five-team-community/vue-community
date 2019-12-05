@@ -18,7 +18,7 @@
       </div>
       <div class="btn">
         <div>
-          <el-button icon="el-icon-tickets" class="btn-daochu" >导出</el-button>
+          <el-button icon="el-icon-tickets" class="btn-daochu" @click="exportBtn">导出</el-button>
           <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
@@ -107,7 +107,6 @@ export default {
   methods: {
       handleCurrentChange(val) { //改变页
         this.currentPage=val;
-        console.log(val);
         
         this.axios  // 请求数据 渲染列表
         .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
@@ -118,14 +117,10 @@ export default {
           }
         })
         .then((res) => {
-          console.log(res.data.data);
-          console.log(res.data.data.inhabitantAndStaffVOList);
-          console.log("总数",res.data.data.page.totalCount);
           this.tableData = res.data.data.inhabitantAndStaffVOList;
           this.totalCount = res.data.data.page.totalCount;
           this.loading = false;
           if(this.tableData.map((item)=> {
-            console.log(item.state);
             if(item.state == 0) {
               item.state = "未处理";
             } else {
@@ -135,21 +130,19 @@ export default {
           
         })
         .catch(err=> {
-          console.log(err)
+          return err;
         }) 
 
 
       },
       showDetail(index) { //查看详情
         var showId = this.tableData[index].risId;
-        console.log("详情",index);
         this.$router.push({path:'/home/cleanMsgDetail?id='+ showId});
       },
+      exportBtn() { //导出报表
+        window.location.href=this.$store.state.ip+"/InhabitantAndStaff/";
+      },
       searchBtn() { // 查询 发送请求数据
-        
-        console.log("房号:",this.search.houseNum);
-        console.log("电话:",this.search.telphone);
-
         // 请求
         this.axios
           .post("InhabitantAndStaff/getAllInfoLike",
@@ -160,17 +153,14 @@ export default {
             currentPage:this.currentPage
           })
           .then((res) => {
-            console.log(res.data.data.list);
-            console.log(res.data.data.page.totalCount);
             this.tableData = res.data.data.list;
             this.totalCount = res.data.data.page.totalCount;
           })
           .catch(err=> {
-            console.log(err)
+            return err;
           }) 
     },
       del(index) { // 删除 发送请求
-        console.log("删除的id",this.tableData[index].risId);
         var delId = this.tableData[index].risId;
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -187,8 +177,7 @@ export default {
                 risId: delId
               }
             })
-            .then((res) => {
-              console.log(res);
+            .then(() => {
               this.axios  // 请求数据 渲染列表
                 .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
                 {
@@ -198,14 +187,10 @@ export default {
                   }
                 })
                 .then((res) => {
-                  console.log(res.data.data);
-                  console.log(res.data.data.inhabitantAndStaffVOList);
-                  console.log("总数",res.data.data.page.totalCount);
                   this.tableData = res.data.data.inhabitantAndStaffVOList;
                   this.totalCount = res.data.data.page.totalCount;
                   this.loading = false;
                   if(this.tableData.map((item)=> {
-                    console.log(item.state);
                     if(item.state == 0) {
                       item.state = "未处理";
                     } else {
@@ -215,12 +200,12 @@ export default {
 
                 })
                 .catch(err=> {
-                  console.log(err)
+                  return err;
                 }) 
 
             })
             .catch(err=> {
-              console.log(err)
+              return err;
             }) 
         }).catch(() => {
           this.$message({
@@ -240,14 +225,10 @@ export default {
           }
         })
         .then((res) => {
-          console.log(res.data.data);
-          console.log(res.data.data.inhabitantAndStaffVOList);
-          console.log("总数",res.data.data.page.totalCount);
           this.tableData = res.data.data.inhabitantAndStaffVOList;
           this.totalCount = res.data.data.page.totalCount;
           this.loading = false;
           if(this.tableData.map((item)=> {
-            console.log(item.state);
             if(item.state == 0) {
               item.state = "未处理";
             } else {
@@ -257,7 +238,7 @@ export default {
           
         })
         .catch(err=> {
-          console.log(err)
+          return err;
         }) 
   },
   computed: {

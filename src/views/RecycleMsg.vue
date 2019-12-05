@@ -117,8 +117,8 @@ export default {
         console.log("详情",index);
         this.$router.push({path:'/home/recycleMsgDetail?id='+showId});
       },
-      exportBtn() {
-
+      exportBtn() { //导出
+        window.location.href=this.$store.state.ip+"/InhabitantAndRecycle/";
       },
       searchBtn() { // 查询 请求数据
         console.log("查询的电话：",this.search.telphone);

@@ -30,7 +30,7 @@
             </el-row>
             <el-row :gutter="10" v-if="this.tabledata.repairsParts">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">报修部位:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairsParts[0]}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairsParts[0].partName}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">报修内容:</div></el-col>
               <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{this.tabledata.repairContent}}</div></el-col>
             </el-row>
@@ -98,52 +98,46 @@ export default {
       this.axios 
         .get("/staff/getRepairPersonList")
         .then((res)=>{
-          console.log(res.data.data.data);
           this.options = res.data.data.data;
         })
         .catch((err)=> {
-          console.log(err);
+          return err;
         })
     },
     okBtn() {
-      console.log(this.form.value1);
-      
       this.dialogFormVisible = false;
       var fixId = this.tabledata.infoId;
-      console.log(fixId);
       var selectStaffId = this.form.value1;
-      
-      this.axios
-        .get("/repairInfo/updateByIdToStaOne",
-        {
-          params:{
-            infoId:fixId
-          }
-        })
-        .then((res)=> {
-          console.log(res);
-        })
-        .catch((err)=> {
-          console.log(err);
-        })
 
       // 请求数据
       this.axios
-        .get("/repairInfo/setStaff",
+        .post("/repairInfo/setStaff",
         {
-          params:{
-            infoId:fixId,
-            staffId:selectStaffId
-          }
+          infoId:fixId,
+          staffId:selectStaffId
         })
-        .then((res)=> {
-          console.log(res);
+        .then(()=> {
+
         })
         .catch((err)=> {
-          console.log(err);
+          return err;
         })
 
+        
       
+      this.axios
+        .post("/repairInfo/updateByIdToStaOne",
+        {
+          
+            infoId:fixId
+          
+        })
+        .then(()=> {
+          
+        })
+        .catch((err)=> {
+          return err;
+        })
 
     }
   },
@@ -151,9 +145,7 @@ export default {
     var str = location.href;
     var num = str.indexOf("=");
     str = str.substr(num+1);
-    str = Number(str);
-    console.log("报修信息编号",str);
-    
+    str = Number(str);   
     
     this.axios
       .post("/repairInfo/getRepairInfoById",
@@ -161,16 +153,10 @@ export default {
           infoId:str
       })
       .then((res)=> {
-        console.log(res.data.data.data);
         this.tabledata = res.data.data.data;
         this.loading = false;
-        console.log(this.tabledata.repairState);
-        console.log(this.tabledata);
-
-        
         
         if(this.tabledata.repairState == 0) {
-          console.log("可以派工");
           this.isShow = false;
         }
 

@@ -25,19 +25,13 @@
           <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
-      <div class="totalMoney">
-        <el-row :gutter="10">
-          <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="TMtitle">订单总额：</div></el-col>
-          <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="TMmoney">￥{{this.totalMoney}}.00</div></el-col>
-        </el-row>
-      </div>
+      
       <div class="contentBox">
         <el-table :data="tableData" stripe border v-loading="loading" style="width: 100%">
           <el-table-column prop="orderNo" label="交易号"></el-table-column>
           <el-table-column prop="repairsInfo.inhabitant.inhabitantName" label="用户姓名" ></el-table-column>
           <el-table-column prop="repairsInfo.repairContent" label="报修内容" ></el-table-column>
           <el-table-column prop="payDate" label="订单创建时间" ></el-table-column>
-          <el-table-column prop="orderMoney" label="支付金额" ></el-table-column>
           <el-table-column prop="orderStatus" label="支付状态" >已完成</el-table-column>
         </el-table>
       </div>
@@ -65,7 +59,7 @@ export default {
       totalCount:0,
       loading:true,
       tableData: [],
-      totalMoney:"",
+      
       search: {//记录筛选的数据项
         orderNo: "",
         userName:"",
@@ -108,17 +102,13 @@ export default {
         this.currentPage=val;
 
         this.axios
-          .get("/repairOrder/getAllOrders",
+          .post("/repairOrder/getAllOrders",
           {
-            params: {
               pageSize:5,
               currentPage: this.currentPage
-            }
           })
           .then((res)=> {
             console.log(res.data.data);
-            console.log(res.data.data.totalMoney);
-            this.totalMoney = res.data.data.totalMoney;
             this.totalCount = res.data.data.totalCount;
             this.tableData = res.data.data.data;
             this.loading= false;
@@ -126,7 +116,7 @@ export default {
           .catch((err)=> {
             console.log(err);
           })
-      },
+          },
       searchBtn() { // 查询
         if(this.search.time) {
           // 时间格式
@@ -143,58 +133,42 @@ export default {
         console.log("页数:",this.currentPage);
         // 请求数据
         this.axios
-          .get("/repairOrder/getAllOrdersByParam",
+          .post("/repairOrder/getAllOrdersByParam",
           {
-            params: {
               orderNo: this.search.orderNo,
               inhabitantName: this.search.userName,
               beginTime:startTime1,
               endTime:endTime1,
               pageSize:5,
               currentPage:this.currentPage
-            }
           })
           .then((res) => {
-            console.log(res.data.data);
-            this.totalMoney = res.data.data.totalMoney;
             this.totalCount = res.data.data.totalCount;
             this.tableData = res.data.data.data;
           })
           .catch((err) => {
-            console.log(err);
+            return err;
           })
       },
       exportBnt() { // 导出
-        this.axios
-          .get("/repairOrder/exportOrder")
-          .then((res)=> {
-            console.log(res);
-          })
-          .catch((err)=> {
-            console.log(err);
-          })
+        window.location.href=this.$store.state.ip+"/repairOrder/exportOrder";
       }
   },
   
   created() {
     this.axios
-      .get("/repairOrder/getAllOrders",
+      .post("/repairOrder/getAllOrders",
       {
-        params: {
           pageSize:5,
           currentPage: this.currentPage
-        }
       })
       .then((res)=> {
-        console.log(res.data.data);
-        console.log(res.data.data.totalMoney);
-        this.totalMoney = res.data.data.totalMoney;
         this.totalCount = res.data.data.totalCount;
         this.tableData = res.data.data.data;
         this.loading= false;
       })
       .catch((err)=> {
-        console.log(err);
+        return err;
       })
   },
   computed: {
@@ -246,17 +220,6 @@ export default {
               }
             }
           }
-      }
-      .totalMoney {
-        padding: 5px 20px;
-        font-size: 16px;
-        color: #676a6c;
-        .TMtitle {
-          font-weight: 600;
-        }
-        .TMmoney {
-          color: red;
-        }
       }
       .contentBox {
         padding: 20px 20px;

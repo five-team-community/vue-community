@@ -104,7 +104,6 @@
     methods: {
       handleCurrentChange(val) { // 换页
         this.currentPage=val;
-        console.log("切换页面：",this.currentPage);
         
         this.axios
         .post("/repairPart/getAllRepairsParts",
@@ -115,22 +114,15 @@
           
         })
         .then((res) => {
-          console.log(res.data);
           this.tableData = (res.data.data.data);
           this.totalCount = res.data.data.totalCount;
           this.loading=false;
-          console.log(this.tableData);
         })
         .catch(err=> {
-          console.log(err)
+          return err;
         }) 
-
-
-
       },
       okadd() { // 确认添加
-        console.log("添加的内容",this.form.name);
-        console.log(typeof(this.form.name));
         // 请求
         this.axios
           .get("/repairPart/addRepairsParts",
@@ -139,8 +131,7 @@
                 partName: this.form.name
               }
             })
-          .then((res) => {
-            console.log(res);
+          .then(() => {
             // 重新渲染
             this.axios
               .post("/repairPart/getAllRepairsParts",
@@ -151,18 +142,16 @@
                 
               })
               .then((res) => {
-                console.log(res.data);
                 this.tableData = (res.data.data.data);
                 this.totalCount = res.data.data.totalCount;
                 this.loading=false;
-                console.log(this.tableData);
               })
               .catch(err=> {
-                console.log(err)
+                return err;
               }) 
           })
           .catch((err) => {
-            console.log(err);
+            return err;
           })
         /* var newName = this.form.name; */
         /* tableData.push({"partName":newName}); */
@@ -170,8 +159,6 @@
         
       },
       okedit() { // 确认修改
-        console.log("修改的内容：",this.form2.name);
-        console.log("要修改的id：",this.form2.ind);
         var news = this.form2.name;
         var ind = this.form2.ind;
         var editId = this.tableData[ind].partId;
@@ -185,8 +172,7 @@
               partName: news
             }
           })
-          .then((res)=> {
-            console.log(res);
+          .then(()=> {
             this.axios
               .post("/repairPart/getAllRepairsParts",
               {
@@ -196,18 +182,16 @@
 
               })
               .then((res) => {
-                console.log(res.data);
                 this.tableData = (res.data.data.data);
                 this.totalCount = res.data.data.totalCount;
                 this.loading=false;
-                console.log(this.tableData);
               })
               .catch(err=> {
-                console.log(err)
+                return err;
               }) 
           })
           .catch((err)=> {
-            console.log(err);
+            return err;
           })
       },
       del(index) { //删除
@@ -265,7 +249,6 @@
       edit(index) { //修改
         this.dialogFormVisible2 = true;
         this.form2.ind = index;
-        console.log("选择的id",index);
       }
     },
     created() {
@@ -278,14 +261,12 @@
           
         })
         .then((res) => {
-          console.log(res.data);
           this.tableData = (res.data.data.data);
           this.totalCount = res.data.data.totalCount;
           this.loading=false;
-          console.log(this.tableData);
         })
         .catch(err=> {
-          console.log(err)
+          return err;
         }) 
     },
     computed: {

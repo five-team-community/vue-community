@@ -156,14 +156,7 @@ export default {
       this.$router.push({path:'/home/fixdetail?id='+fixId});
     },
     exportBtn() { // 导出
-      this.axios
-        .post("/repairInfo/exportInfo")
-        .then((res)=> {
-          console.log(res);
-        })
-        .catch((err)=> {
-          console.log(err);
-        })
+      window.location.href=this.$store.state.ip+"/repairInfo/exportInfo";
     },
     searchBtn() { // 查询 请求数据
       if(this.search.time) {

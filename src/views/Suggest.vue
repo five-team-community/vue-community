@@ -134,14 +134,7 @@ export default {
         this.$router.push({path:'/home/SuggestDetail?id='+showId});
       },
       exportBtn() { // 导出
-        this.axios
-          .post("/suggestion/excludeExcel")
-          .then((res)=> {
-            console.log(res);
-          })
-          .catch((err)=> {
-            console.log(err);
-          })
+        window.location.href=this.$store.state.ip+"/suggestion/excludeExcel";
       },
       searchBtn() { // 查询
         
