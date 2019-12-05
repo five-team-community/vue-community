@@ -30,7 +30,7 @@
         </el-row>
         
       </div>
-      <el-button class="btns" type="primary" icon="el-icon-edit" :class="{showBtn:isShow}" @click="changeStatus" >已查看</el-button>
+      <el-button class="btns" type="primary" icon="el-icon-edit" :class="{showBtn:isShow}" @click="changeStatus" >查看</el-button>
     </div>
   </div>
 </template>

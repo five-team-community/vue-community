@@ -45,7 +45,7 @@
             :total="totalCount"
             :page-size="5"
             :pager-count="5"
-            layout="total, prev, pager, next"
+            layout="prev, pager, next"
             background></el-pagination>
           </div>
         </div>
@@ -101,36 +101,34 @@ export default {
       handleCurrentChange(val) {
         this.currentPage=val;
         this.axios
-        .post("/suggestion/showByLike",
-        {
-          
-            pageSize:5,
-            currentPage:this.currentPage
-          
-        })
-        .then((res) => {
-          console.log(res.data.data.data);
-          this.tableData = (res.data.data.data);
-          this.totalCount = res.data.data.totalCount;
-          this.loading = false;
-          console.log(this.tableData);
-
-          this.tableData.map((item)=> {
-            console.log(item.sugState);
-            if(item.sugState == 0) {
-              item.sugState = "未读"
-            } else {
-              item.sugState = "已读"
-            }
+          .post("/suggestion/showByLike",
+          {
+              currentPage:this.currentPage,
+              pageSize:5  
           })
-        })
-        .catch(err=> {
-          console.log(err)
-        }) 
+          .then((res) => {
+            console.log(res.data.data);
+            this.tableData = (res.data.data.data);
+            this.totalCount = res.data.data.totalCount;
+            this.loading = false;
+            console.log("数据：",this.tableData);
+            console.log("总数：",this.totalCount);
+
+
+            this.tableData.map((item)=> {
+              if(item.sugState == 0) {
+                item.sugState = "未读"
+              } else {
+                item.sugState = "已读"
+              }
+            })
+          })
+          .catch(err=> {
+            console.log(err)
+          }) 
       },
       
       showDetail(index) { // 查看详情
-        index = 5*(this.currentPage-1)+index;
         var showId = this.tableData[index].sugId;
         console.log("详情",index);
         this.$router.push({path:'/home/SuggestDetail?id='+showId});
@@ -178,8 +176,6 @@ export default {
                     item.sugState = "已读"
                   }
                 })
-
-            
           })
           .catch(err=> {
             console.log(err)
@@ -345,14 +341,7 @@ export default {
           float: right;
         }
       }
-      .block {
-        width: 100%;
-        height: 30px;
-        padding: 10px 0;
-        .el-pagination {
-          float: right;
-        }
-      }
+      
     }
   }
 .el-divider--horizontal {

@@ -387,7 +387,7 @@ export default {
           personName:this.form.personName,
           telNum:this.form.telphone,
           location:address,
-          file:this.imgurl
+          headImg:this.imgurl
         })
         .then((res)=> {
           console.log(res);

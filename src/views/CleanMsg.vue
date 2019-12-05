@@ -45,7 +45,7 @@
         <div class="block">
           <el-pagination
           @current-change="handleCurrentChange"
-          layout="total, prev, pager, next"
+          layout="prev, pager, next"
           :total="totalCount"
           :current-page="currentPage"
           :page-size="5"
@@ -113,17 +113,26 @@ export default {
         .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
         {
           params: {
-            pageSize:this.pagesize,
+            pageSize:5,
             currentPage:this.currentPage
           }
         })
         .then((res) => {
           console.log(res.data.data);
           console.log(res.data.data.inhabitantAndStaffVOList);
-          console.log(res.data.data.totalCount);
+          console.log("总数",res.data.data.page.totalCount);
           this.tableData = res.data.data.inhabitantAndStaffVOList;
-          this.currentPage = res.data.data.totalCount;
+          this.totalCount = res.data.data.page.totalCount;
           this.loading = false;
+          if(this.tableData.map((item)=> {
+            console.log(item.state);
+            if(item.state == 0) {
+              item.state = "未处理";
+            } else {
+              item.state = "已处理";
+            }
+          }));
+          
         })
         .catch(err=> {
           console.log(err)
@@ -132,7 +141,6 @@ export default {
 
       },
       showDetail(index) { //查看详情
-        index = (index+(5)*(this.currentPage-1));
         var showId = this.tableData[index].risId;
         console.log("详情",index);
         this.$router.push({path:'/home/cleanMsgDetail?id='+ showId});
@@ -152,26 +160,10 @@ export default {
             currentPage:this.currentPage
           })
           .then((res) => {
-            console.log(res);
-            /* this.axios  // 请求数据 渲染列表
-              .get("/InhabitantAndStaff/getAllInhabitantAndStaffInfo",
-              {
-                params: {
-                  pageSize:this.pagesize,
-                  currentPage:this.currentPage
-                }
-              })
-              .then((res) => {
-                console.log(res.data.data);
-                console.log(res.data.data.inhabitantAndStaffVOList);
-                console.log(res.data.data.totalCount);
-                this.tableData = res.data.data.inhabitantAndStaffVOList;
-                this.currentPage = res.data.data.totalCount;
-                this.loading = false;
-              })
-              .catch(err=> {
-                console.log(err)
-              })  */
+            console.log(res.data.data.list);
+            console.log(res.data.data.page.totalCount);
+            this.tableData = res.data.data.list;
+            this.totalCount = res.data.data.page.totalCount;
           })
           .catch(err=> {
             console.log(err)
@@ -212,6 +204,15 @@ export default {
                   this.tableData = res.data.data.inhabitantAndStaffVOList;
                   this.totalCount = res.data.data.page.totalCount;
                   this.loading = false;
+                  if(this.tableData.map((item)=> {
+                    console.log(item.state);
+                    if(item.state == 0) {
+                      item.state = "未处理";
+                    } else {
+                      item.state = "已处理";
+                    }
+                  }));
+
                 })
                 .catch(err=> {
                   console.log(err)
@@ -245,18 +246,21 @@ export default {
           this.tableData = res.data.data.inhabitantAndStaffVOList;
           this.totalCount = res.data.data.page.totalCount;
           this.loading = false;
+          if(this.tableData.map((item)=> {
+            console.log(item.state);
+            if(item.state == 0) {
+              item.state = "未处理";
+            } else {
+              item.state = "已处理";
+            }
+          }));
+          
         })
         .catch(err=> {
           console.log(err)
         }) 
   },
   computed: {
-    showData() {
-      console.log("本页具有几个数据:",this.pagesize);
-      console.log("第几页：",this.currentPage);
-      var start =(this.pagesize) * (this.currentPage-1);
-      return this.tableData.slice(start,start+(this.pagesize));
-    }
   }
 };
 </script>

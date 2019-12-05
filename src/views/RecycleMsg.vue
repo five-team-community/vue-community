@@ -113,7 +113,6 @@ export default {
 
       },
       showDetail(index) { // 查看详情
-        index = (index+(5)*(this.currentPage-1));
         var showId = this.tableData[index].regenerantId;
         console.log("详情",index);
         this.$router.push({path:'/home/recycleMsgDetail?id='+showId});

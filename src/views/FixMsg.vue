@@ -55,7 +55,7 @@
             :total="totalCount"
             :current-page="currentPage"
             :page-size="5"
-            layout="total, prev, pager, next"
+            layout="prev, pager, next"
             background></el-pagination>
           </div>
         </div>
@@ -119,12 +119,12 @@ export default {
       console.log("当前为第",this.currentPage,"页");
       
       this.axios
-        .get("/repairInfo/getAllRepairInfo",
+        .post("/repairInfo/getAllRepairInfo",
         {
-          params: {
+          
             pageSize: 5,
             currentPage: this.currentPage 
-          }
+          
         })
         .then((res) => {
           console.log(res.data.data.data);
@@ -151,14 +151,13 @@ export default {
 
     },
     showDetail(index) { // 查看详情
-      index = 5*(this.currentPage-1)+index;
       var fixId = this.tableData[index].infoId;
       console.log("详情",index);
       this.$router.push({path:'/home/fixdetail?id='+fixId});
     },
     exportBtn() { // 导出
       this.axios
-        .get("/repairInfo/exportInfo")
+        .post("/repairInfo/exportInfo")
         .then((res)=> {
           console.log(res);
         })
@@ -181,8 +180,8 @@ export default {
       console.log("服务人员姓名:",this.search.staffName);
 
       this.axios
-        .get("/repairInfo/getAllRepairInfoByParam",{
-          params:{
+        .post("/repairInfo/getAllRepairInfoByParam",{
+          
             housePropertyNo:this.search.houseNum,
             telNum: this.search.telphone,
             staffName:this.search.staffName,
@@ -190,7 +189,7 @@ export default {
             endTime:this.endTime1,
             pageSize: 5,
             currentPage:this.currentPage
-          }
+          
         })
         .then((res) => {
           console.log(res.data.data);
@@ -236,12 +235,12 @@ export default {
           .then((res) => {
             console.log(res);
             this.axios
-              .get("/repairInfo/getAllRepairInfo",
+              .post("/repairInfo/getAllRepairInfo",
               {
-                params: {
+                
                   pageSize: 5,
                   currentPage: this.currentPage 
-                }
+                
               })
               .then((res) => {
                 console.log(res.data.data.data);
@@ -279,12 +278,10 @@ export default {
     console.log("当前每页有",5,"个数据");
     console.log("当前为第",this.currentPage,"页");
     this.axios
-        .get("/repairInfo/getAllRepairInfo",
-        {
-          params: {
-            pageSize:5,
-            currentPage:this.currentPage
-          }
+        .post("/repairInfo/getAllRepairInfo",
+        {      
+          pageSize:5,
+          currentPage:this.currentPage
         })
         .then((res) => {
           console.log(res.data);

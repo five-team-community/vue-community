@@ -45,7 +45,7 @@
         <el-pagination
           @current-change="handleCurrentChange"
           :page-size="5"
-          layout="total, sizes, prev, pager, next"
+          layout="prev, pager, next"
           :total="totalCount"
           :current-page="currentPage"
           :pager-count="5"
