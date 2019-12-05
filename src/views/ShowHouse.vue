@@ -157,6 +157,9 @@ export default {
 .content {
   background: white;
 }
+.msg{
+  height: 40px;
+}
 .title {
   padding: 15px 20px;
   border-top: 3px solid #e7eaec;

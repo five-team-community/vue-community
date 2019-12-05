@@ -37,17 +37,18 @@
       ref="multipleTable"
       :data="tableData"
       v-loading='loading'
+      border
       tooltip-effect="dark"
       style="width: 100%"
      >
-      <el-table-column prop="ciTitle" label="标题" > </el-table-column>
-      <el-table-column prop="ciDate" label="发布日期" >
+      <el-table-column align='center' prop="ciTitle" label="标题" > </el-table-column>
+      <el-table-column align='center' prop="ciDate" label="发布日期" >
       </el-table-column>
-      <el-table-column prop="ciType" label="类别" >
+      <el-table-column align='center' prop="ciType" label="类别" >
       </el-table-column>
-      <el-table-column prop="ciContent" label="文章内容" >
+      <el-table-column align='center' prop="ciContent" label="文章内容" :show-overflow-tooltip='true' >
       </el-table-column>
-      <el-table-column label="操作" align="center" width="250">
+      <el-table-column align='center' label="操作"  width="250">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
               <el-button
@@ -64,7 +65,7 @@
                 icon="el-icon-delete"
                 size="mini"
                 class="btn-del"
-                @click="open"
+                @click="handleDelete(scope.$index)"
               ></el-button>
           </template>
         </el-table-column>
@@ -93,46 +94,6 @@ export default {
       },
       value2:'',
       tableData: [
-        /* {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        } */
       ],
       loading: true,
       currentPage:1,
@@ -162,14 +123,15 @@ export default {
               console.log("删除成功", res);
               this.axios
                 .post("/communityInfo/showByLike", {
-                    currentPage: 1,
+                    currentPage: this.currentPage,
                     pageSize: 5
                 })
                 .then(res => {
                   //  res.data = tableData;
-                  this.tableData = res.data.data.Announcements;
+                  this.tableData = res.data.data;
+                  this.totalCount=res.data.totalCount;
                   this.loading = false;
-                  
+                  console.log(res.data.data)
                 })
                 .catch(err => {
                   console.log(err);
@@ -205,6 +167,7 @@ export default {
         //  res.data = tableData;
         this.tableData = res.data.data.data;
         this.totalCount=res.data.data.data.totalCount;
+        this.tableData.ciContents=res.data.data.data.ciContent.substring(0,10);
         this.loading = false;
         console.log(res.data);
       })

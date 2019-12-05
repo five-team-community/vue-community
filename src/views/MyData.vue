@@ -50,42 +50,8 @@
               <div class="msg">{{userData.type}}</div>
             </el-col>
           </el-row>
-          <el-row :gutter="10">
-            <el-col :xs="24" :sm="12">
-              <el-button type="primary" size="medium" icon="el-icon-edit" @click="altermsg">修改信息</el-button>
-            </el-col>
-            <el-col :xs="24" :sm="12">
-              <el-button
-                type="danger"
-                size="medium"
-                icon="el-icon-key"
-                @click="openDialog"
-              >修改密码</el-button>
-            </el-col>
-          </el-row>
-          <el-dialog title="修改密码" :visible.sync="dialogFormVisible" :center="true" width="400px">
-            <el-form :model="ruleForm" label-width="80px" :rules="rules" ref="ruleForm" status-icon>
-              <el-form-item label="密码" prop="pass">
-              <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="checkPass">
-              <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-            </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="conclePwd">取 消</el-button>
-              <el-button type="primary" @click="alterPwd">确 定</el-button>
-            </div>
-          </el-dialog>
-        </div>
-      </div>
-      <div class="part2" style="margin-top:20px">
-      <!-- 标题 -->
-        <div class="title">
-          <i class="el-icon-s-order"></i>
-          <span>详细资料</span>
-        </div>
-        <div class="main">
+           <div class="part2">
+
           <el-row :gutter="10">
             <el-col :xs="24" :sm="6" :md="3" :lg="2">
               <div class="item-title">用户名:</div>
@@ -128,12 +94,41 @@
               <div class="msg">{{userData.type}}</div>
             </el-col>
           </el-row>
+      </div>
+          <el-row :gutter="10">
+            <el-col :xs="24" :sm="12">
+              <el-button type="primary" size="medium" icon="el-icon-edit" @click="altermsg">修改信息</el-button>
+            </el-col>
+            <el-col :xs="24" :sm="12">
+              <el-button
+                type="danger"
+                size="medium"
+                icon="el-icon-key"
+                @click="openDialog"
+              >修改密码</el-button>
+            </el-col>
+          </el-row>
+          <el-dialog title="修改密码" :visible.sync="dialogFormVisible" :center="true" width="400px">
+            <el-form :model="ruleForm" label-width="80px" :rules="rules" ref="ruleForm" status-icon>
+              <el-form-item label="密码" prop="pass">
+              <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" prop="checkPass">
+              <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+            </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="conclePwd">取 消</el-button>
+              <el-button type="primary" @click="alterPwd">确 定</el-button>
+            </div>
+          </el-dialog>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+
 // 模拟数据
 var userData = {
   id: 1,
@@ -167,10 +162,11 @@ export default {
         }
       };
     return {
-       ruleForm: {
-          pass: '',
-          checkPass: ''
-        },
+      role:'',
+      ruleForm: {
+        pass: '',
+        checkPass: ''
+      },
       userData: {},
       dialogFormVisible: false,
       rules: {
@@ -212,6 +208,7 @@ export default {
   created() {
     //创建时获取数据
     this.userData = userData;
+
   },
   computed: {}
 };

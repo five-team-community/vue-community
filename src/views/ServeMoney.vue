@@ -31,13 +31,13 @@
           </el-form-item>
         </el-col>
       </el-form>
-      <el-table ref="multipleTable" :data="tableData" tooltip-effect="dark" style="width: 100%" v-loading='loading' >
-        <el-table-column prop="inhabitantAndHousePropertyVO.housePropertyNo" label="房号"></el-table-column>
-        <el-table-column prop="inhabitantAndHousePropertyVO.inhabitant.inhabitantName" label="业主姓名"></el-table-column>
-        <el-table-column prop="payMoney" label="剩余金额"></el-table-column>
-        <el-table-column prop="payOrder" label="缴费订单号"></el-table-column>
-        <el-table-column prop="payDate" label="缴费时间"></el-table-column>
-        <el-table-column prop="payProject" label="支付类型">
+      <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark" style="width: 100%" v-loading='loading' >
+        <el-table-column align='center' prop="inhabitantAndHousePropertyVO.housePropertyNo" label="房号"></el-table-column>
+        <el-table-column align='center' prop="inhabitantAndHousePropertyVO.inhabitant.inhabitantName" label="业主姓名"></el-table-column>
+        <el-table-column align='center' prop="payMoney" label="剩余金额"></el-table-column>
+        <el-table-column align='center' prop="payOrder" label="缴费订单号"></el-table-column>
+        <el-table-column align='center' prop="payDate" label="缴费时间"></el-table-column>
+        <el-table-column align='center' prop="payProject" label="支付类型">
         </el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
@@ -193,7 +193,7 @@ export default {
           endtime:endTime1,  
       })
       .then(res => {
-        this.tableData = res.data.data.pays;
+        this.tableData = res.data.data.Pays;
         console.log(res.data.data);
         console.log(this.tableData);
         this.loading =false;
@@ -208,10 +208,9 @@ export default {
       .post("/pay/leibie", {      
           payProject: "物业费",
           pageIndex:1,
-
       })
       .then(res => {
-        this.tableData = res.data.data.pays;
+        this.tableData = res.data.data.Pays;
         this.loading =false;
       })
       .catch(err => {

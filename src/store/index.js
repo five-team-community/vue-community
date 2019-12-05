@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    ip:'http://172.16.6.66:8080'
+    ip:'http://172.16.6.63:8080'
   },
   mutations: {
   },

@@ -47,7 +47,7 @@
       </el-form-item>
 
        <el-form-item label="交房时间:">
-        <el-date-picker type="date" placeholder="选择日期" v-model="form.time" class="time-input"></el-date-picker>
+        <el-date-picker value-format="timestamp" type="date" placeholder="选择日期" v-model="form.time" class="time-input"></el-date-picker>
       </el-form-item>
 
       <el-form-item label="最大绑定数:" prop='blindMax' :rules="[
@@ -121,6 +121,28 @@ var formData={
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('submit!');
+this.axios
+        .post("/InhabitantAndHouseProperty/addHousePropertyInfo", {
+          housePropertyId: this.$route.params.id,
+         housePropertyNo: this.form.no,
+         houseArea: this.form.area,
+         houseStyle: this.form.type,
+         houseNature: this.form.nature,
+         ownerTime: this.form.time,
+         maxCount: this.form.blindMax,
+         houseState: this.form.isEmpty,
+         telNum: this.form.tel,
+         inhabitantName: this.form.host,
+         birthplace:this.form.birthplace,
+         idCardNo:this.form.idCard
+        })
+        .then(res => {
+          console.log("aaa",res);
+
+        })
+        .catch(err => {
+          console.log(err);
+        });
           } else {
             console.log('error submit!!');
             return false;

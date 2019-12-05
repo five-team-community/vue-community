@@ -27,12 +27,12 @@
     <el-upload
             name="file"
             class="avatar-uploader"
-            action="http://172.16.6.67:8080/Announcement/upload"
+            action="http://172.16.6.66:8080/Announcement/upload"
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
           >
-            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+            <img v-if="this.form.img" :src="this.imgurl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
     </el-form-item>
@@ -85,11 +85,11 @@ export default {
       return isJPG && isLt2M;
     },
     onSubmit() {
-      var t = this.form.date1;
-        var startTime = t;
+      if(this.form.data1){
+var t = this.form.date1;
         var startTime1 = t.getFullYear()+ "-" + (t.getMonth()+1) + "-" +t.getDate();
-        console.log("开始时间1:",startTime1);
-        console.log(startTime);
+      }
+      
       this.axios
         .post("/Announcement/addAnnouncement",{
           title:this.form.name,

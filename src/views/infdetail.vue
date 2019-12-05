@@ -39,18 +39,19 @@
               type="textarea"
               v-model="form.ciContent"
               prop="ciContent"
+              :autosize="{ minRows: 2, maxRows: 10}"
             ></el-input>
           </el-form-item>
            <el-form-item class="load" label="上传图片">
     <el-upload
             name="file"
             class="avatar-uploader"
-            action="http://172.16.6.67:8080/Announcement/upload"
+            action="http://172.16.6.63:8080/Announcement/upload"
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
           >
-            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+            <img v-if="this.imgurl" :src="imgurl" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
     </el-form-item>
@@ -58,6 +59,9 @@
         <div class="change" >
           <el-button type="button" icon="el-icon-edit" @click="edit"
             >修改</el-button
+          >
+          <el-button type="button"  @click="back"
+            >取消</el-button
           >
         </div>
       </div>
@@ -84,8 +88,8 @@ export default {
     },
       handleSuccess(res, file) {
       console.log(URL.createObjectURL(file.raw));
-      this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
-      this.imgurl=res.data.filePath;
+      this.imgurl = 'http://172.16.6.63:8080'+"/"+res.data.filePath;
+      this.form.img=res.data.filePath;
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -103,14 +107,13 @@ export default {
       var num = str.indexOf("=");
       str = str.substr(num + 1);
       str = Number(str);
-
       this.axios
         .post("/communityInfo/updateById", {
-            ciId: str,
-            ciDate: this.form.ciDate,
-            activityAddress: this.form.activityAddress,
+            id:str,
+            ciTitle:this.form.ciTitle,
+            ciType: this.form.ciType,
             ciContent: this.form.ciContent,
-            description:this.form.description,
+            Image:this.form.img
         })
         .then(res => {
           console.log(res.data);
@@ -133,8 +136,9 @@ export default {
       })
       .then(res => {
         this.form = res.data.data.data;
-        this.form.img=res.data.data.data.Image;
+        this.form.img=res.data.data.data.ciImage;
         console.log(res.data.data.data);
+        this.imgurl='http://172.16.6.63:8080'+"/"+this.form.img
         this.loading=false
       })
       .catch(err => {

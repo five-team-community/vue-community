@@ -6,86 +6,79 @@
           <i class="el-icon-s-order"></i>
           <span>查看活动详情</span>
           <div class="back">
-            <el-button
-              round
-              size="mini"
-              class="back-btn"
-              icon="el-icon-arrow-left"
-              @click="back"
-              >返回</el-button
-            >
+            <el-button round size="mini" class="back-btn" icon="el-icon-arrow-left" @click="back">返回</el-button>
           </div>
         </div>
 
-        <el-form ref="form" :model="form" v-loading='loading' label-width="80px">
+        <el-form  ref="form" :model="form" v-loading="loading"  label-width="80px">
+          <el-row>
+                <el-col span="12">
           <el-form-item label="活动名称">
             <el-input v-model="form.activityName" prop="activityName"></el-input>
           </el-form-item>
-          <el-form-item label="活动地址">
-            <el-input v-model="form.activityAddress" prop="activityAddress"></el-input>
+             </el-col>
+             <el-col span="12">
+          <el-form-item label="活动地址"  >
+            <el-input v-model="form.activityAddress" prop="activityAddress" ></el-input>
           </el-form-item>
+             </el-col>
+            </el-row>
+            <el-row>
+                <el-col span="12">
           <el-form-item label="开始时间">
-            <el-col :span="11">
-              <el-date-picker
-                type="date"
-                placeholder="开始时间"
-                prop="startTime"
-                v-model="form.startTime"
-              ></el-date-picker>
+            <el-date-picker type="date" placeholder="开始时间"  prop="startTime" v-model="form.startTime" ></el-date-picker>
+            </el-form-item>
             </el-col>
+            <el-col span="12">
             <el-form-item label="结束时间">
-            <el-col :span="11">
-              <el-date-picker
-                type="date"
-                placeholder="结束时间"
-                prop="endtime"
-                v-model="form.endTime"
-              ></el-date-picker>
-            </el-col>
-          </el-form-item>
-          </el-form-item>
-          <el-row :gutter="20">
-  <el-col :span="12"><div class="grid-content bg-purple"><el-form-item label="联系人">
+              <el-date-picker type="date" placeholder="结束时间" prop="endtime" v-model="form.endTime"></el-date-picker>
+            </el-form-item>
+          </el-col>
+            </el-row>
+            <el-row>
+                <el-col span="12">
+          <el-form-item label="联系人">
             <el-input v-model="form.contactsName" prop="contactsName"></el-input>
-          </el-form-item></div></el-col>
-  <el-col :span="12"><div class="grid-content bg-purple"><el-form-item label="联系方式">
+          </el-form-item>
+                </el-col>
+                <el-col span="12">
+          <el-form-item label="联系方式">
             <el-input v-model="form.contactsPhone" prop="contactsPhone"></el-input>
-          </el-form-item></div></el-col>
-</el-row>
-        
-          
-          
+          </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col span="12">
           <el-form-item label="活动描述">
             <el-input v-model="form.description" prop="description"></el-input>
           </el-form-item>
-          <el-form-item class="notedetail" label="活动内容">
-            <el-input
-              type="textarea"
-              v-model="form.content"
-              prop="content"
-            ></el-input>
-          </el-form-item>
+                </el-col>
+                <el-col span="12">
           <el-form-item label="报名人数">
-            <el-input v-model="form.count" prop="count" disabled ></el-input>
+            <el-input v-model="form.count" prop="count" disabled></el-input>
           </el-form-item>
-           <el-form-item class="load" label="图片">
-    <el-upload
-            name="file"
-            class="avatar-uploader"
-            action="http://172.16.6.67:8080/Announcement/upload"
-            :show-file-list="false"
-            :on-success="handleSuccess"
-            :before-upload="beforeUpload"
-          >
-            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-    </el-form-item>
+                </el-col>
+          </el-row>
+          <el-form-item class="notedetail" label="活动内容">
+            <el-input type="textarea" v-model="form.content" prop="content"></el-input>
+          </el-form-item>
+          
+          <el-form-item class="load" label="图片">
+            <el-upload
+              name="file"
+              class="avatar-uploader"
+              action="http://172.16.6.67:8080/Announcement/upload"
+              :show-file-list="false"
+              :on-success="handleSuccess"
+              :before-upload="beforeUpload"
+            >
+              <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
         </el-form>
-        <div class="change" >
-          <el-button type="button" icon="el-icon-edit" @click="edit"
-            >修改</el-button
-          >
+        <div class="change">
+          <el-button type="button" icon="el-icon-edit" @click="edit">修改</el-button>
         </div>
       </div>
     </div>
@@ -96,11 +89,11 @@ export default {
   data() {
     return {
       form: {
-        img:''
+        img: ""
       },
       activeName: "second",
-      imgurl:'',
-      loading:true,
+      imgurl: "",
+      loading: true
     };
   },
   methods: {
@@ -110,10 +103,10 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-      handleSuccess(res, file) {
+    handleSuccess(res, file) {
       console.log(URL.createObjectURL(file.raw));
-      this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
-      this.imgurl=res.data.filePath;
+      this.form.img = "http://172.16.6.67:8080" + "/" + res.data.filePath;
+      this.imgurl = res.data.filePath;
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -134,15 +127,15 @@ export default {
 
       this.axios
         .post("/activity/update", {
-            activityId: str,
-            activityName: this.form.activityName,
-            activityAddress: this.form.activityAddress,
-            endTime: this.form.endTime,
-            startTime:this.form.startTime,
-            content: this.form.content,
-            contactsName:this.form.contactsName,
-            contactsPhone:this.form.contactsPhone,
-            count:this.form.count,
+          activityId: str,
+          activityName: this.form.activityName,
+          activityAddress: this.form.activityAddress,
+          endTime: this.form.endTime,
+          startTime: this.form.startTime,
+          content: this.form.content,
+          contactsName: this.form.contactsName,
+          contactsPhone: this.form.contactsPhone,
+          count: this.form.count
         })
         .then(res => {
           console.log(res.data);
@@ -161,13 +154,13 @@ export default {
     str = Number(str);
     this.axios
       .post("/activity/showOne", {
-          activityId: str
+        activityId: str
       })
       .then(res => {
         this.form = res.data.data.Activity;
-        this.form.img=res.data.data.Activity.img;
+        this.form.img = res.data.data.Activity.img;
         console.log(res.data);
-        this.loading=false
+        this.loading = false;
       })
       .catch(err => {
         console.log(err);
@@ -240,30 +233,28 @@ export default {
   margin-top: 20px;
 }
 
-
 .notedetail {
   .el-input {
     height: 100px;
   }
 }
 .change .el-button {
-
   background-color: @darkGreenColor;
   color: @navChoose;
   margin-left: 80px;
 }
-.avatar{
+.avatar {
   width: 200px;
   height: 200px;
 }
 
-.avatar-uploader-icon{
+.avatar-uploader-icon {
   font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-    border: 1px solid black;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+  border: 1px solid black;
 }
 </style>

@@ -7,12 +7,14 @@
       </div>
     <el-form :inline="true" :model="form" class="demo-form-inline">
       <el-col :span="14">
-        <el-form-item label="活动名称">
-          <el-input v-model="form.title" placeholder="活动名称"></el-input>
+        <el-form-item label="姓名：">
+          <el-input v-model="form.user"></el-input>
         </el-form-item>
-        <el-form-item label="联系人">
-          <el-select v-model="form.contactsName" placeholder="请选择联系人">
-            <el-option v-for="item in options" :key="item.activityId" :label="item.contactsName" :value="item.contactsName"></el-option>
+        <el-form-item label="性别" >
+          <el-select v-model="form.sexs" placeholder="请选择">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="男" value="男"></el-option>
+            <el-option label="女" value="女"></el-option>
           </el-select>
         </el-form-item>
        
@@ -22,23 +24,28 @@
           <el-button type="primary" @click="onSubmit" icon="el-icon-search"
             >查询</el-button
           >
-          <el-button type="primary" icon="el-icon-edit" @click="handleEdit">新建</el-button>
+          <el-button icon="el-icon-upload" class="btn-exclude" @click="exclude">导出报表</el-button>
         </el-row>
       </el-col>
     </el-form>
     <el-table
       ref="multipleTable"
       :data="tableData"
+      border
       v-loading="loading"
       tooltip-effect="dark"
-      style="width: 100%"
+      style="width: 100% ;text-align:center;"
       >
-      <el-table-column prop="id" label="社区" > 易居</el-table-column>
-      <el-table-column prop="contactsName" label="姓名" >
+      <el-table-column prop="inhabitantName" label="姓名" > </el-table-column>
+      <el-table-column prop="inhabitantSex" label="性别" >
       </el-table-column>
-      <el-table-column prop="contactsPhone" label="联系电话">        
+      <el-table-column prop="birthplace" label="籍贯" >
       </el-table-column>
-      <el-table-column prop="activityAddress" label="家庭地址">    
+      <el-table-column prop="telNum" label="联系电话">        
+      </el-table-column>
+      <el-table-column prop="idCardNo" label="身份证号">        
+      </el-table-column>
+      <el-table-column prop="workingUnit" label="家庭地址">    
         </el-table-column>
     </el-table>
       <el-pagination
@@ -61,8 +68,8 @@ export default {
     return {
       form: {
         user: "",
-        region: ""
-
+        region: "",
+        sexs:''
       },
       options:{},
       tableData: [
@@ -123,7 +130,7 @@ export default {
       this.currentPage = val;
       this.axios
       .post("/activity/showAll", {      
-          currentPage:this.currentPage,
+          pageIndex:this.currentPage,
       })
       .then(res => {
         this.tableData = res.data.data.Pays;
@@ -182,28 +189,21 @@ export default {
       console.log(tab, event);
     },
     onSubmit() {
-      if(this.value2){
-         var t = this.value2;
-      var startTime1 =
-        t[0].getFullYear() + "-" + (t[0].getMonth() + 1) + "-" + t[0].getDate();
-      var endTime1 =
-        t[1].getFullYear() + "-" + (t[1].getMonth() + 1) + "-" + t[1].getDate();
-      console.log("开始时间:", startTime1);
-      console.log("结束时间:", endTime1);
-      }
-      if(this.form.contactsName){
-        var contactsName=this.form.contactsName
-      }
-     console.log(this.form.title,this.form.contactsName,this.currentPage)
+      var str = location.href;
+    var num = str.indexOf("=");
+    str = str.substr(num + 1);
+    str = Number(str);
+     console.log(this.form.user,this.form.sexs,this.currentPage)
       this.axios
-        .post("/activity/showAll", {
-            activityName: this.form.title,
+        .post("/activity/showActivityUser", {
+            inhabitantName: this.form.user,
             pageIndex:this.currentPage,
             pageSize:5,
-            contactsName,
+            inhabitantSex:this.form.sexs,
+            activityId: str,
         })
         .then(res => {
-          this.tableData = res.data.data.Activity;
+          this.tableData = res.data.data.userList;
           this.loading = false;
           console.log(res.data)
         })
@@ -221,16 +221,20 @@ export default {
       this.$router.push({
         path: "/home/applydetail?id=" + this.tableData[index].activityId
       });
-    }
+    },
+    exclude() {
+      //导出报表
+ window.location.href = "http://172.16.6.66:8080/activity/userList?activityId=1";
+    },
   },
    created() {
-      var str = location.href;
+    var str = location.href;
     var num = str.indexOf("=");
     str = str.substr(num + 1);
     str = Number(str);
     this.axios
       .post("/activity/showActivityUser", {
-        pageIndex:1,
+        pageIndex:this.currentPage,
         pageSize:5,
         activityId: str,
       })
@@ -321,5 +325,8 @@ body > .el-container {
 .el-form{
   padding-left: 20px;
   padding-top: 20px;
+}
+.el-table{
+  text-align: center;
 }
 </style>

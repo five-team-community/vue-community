@@ -115,7 +115,7 @@ export default {
             startTime:this.form.startTime,
             content: this.form.content,
             description:this.form.description,
-            count:this.form.count,
+            maxCount:this.form.count,
             img:this.imgurl
         })
         .then(res => {

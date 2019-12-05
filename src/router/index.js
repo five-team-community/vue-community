@@ -460,14 +460,6 @@ const routes = [
     meta: {
       auth: true
     }  
-  },
-  {
-    path:'/demo',
-    name:"putnote",
-    component: () => import('../views/demo.vue'),//维修
-    meta: {
-      auth: true
-    }  
   }
 ]
 

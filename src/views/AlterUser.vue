@@ -13,7 +13,6 @@
       </div>
       <!-- 表单内容 -->
       <el-form
-        :inline="true"
         :model="form"
         class="main"
         size="medium"
@@ -21,14 +20,14 @@
         label-width="100px"
         ref="ruleForm"
       >
-      <el-form-item
+        <el-form-item
           label="用户名:"
           prop="name"
           :rules="{ required: true, message: '用户名不能为空', trigger: ['blur','change']}"
         >
           <el-input v-model="form.name" placeholder="请输入用户名" autocomplete="off"></el-input>
         </el-form-item>
-        
+
         <el-form-item
           label="真实姓名:"
           prop="realName"
@@ -46,25 +45,6 @@
         </el-form-item>
 
         <el-form-item
-          label="身份证号码:"
-          prop="idCard"
-          :rules="[{ validator: this.validID, trigger: ['blur','change']},{ required: true, message: '身份证号码不能为空', trigger: ['blur','change']}]"
-        >
-          <el-input v-model="form.idCard" placeholder="请输入身份证号码"></el-input>
-        </el-form-item>
-
-        <el-form-item
-          label="性别:"
-          prop="sex"
-          :rules="{ required: true, message: '性别不能为空', trigger: ['blur','change']}"
-        >
-          <el-radio-group v-model="form.sex" :disabled="true">
-            <el-radio label="男" value="男"></el-radio>
-            <el-radio label="女" value="女"></el-radio>
-          </el-radio-group>
-        </el-form-item>
-
-          <el-form-item
           label="用户类型:"
           prop="role"
           :rules="{ required: true, message: '用户类型不能为空', trigger: ['blur','change']}"
@@ -76,9 +56,14 @@
           </el-radio-group>
         </el-form-item>
 
-
         <el-form-item class="control">
-          <el-button type="primary" size="medium" icon="el-icon-edit" @click="resetPwd" class="resetPwd">重置密码</el-button>
+          <el-button
+            type="primary"
+            size="medium"
+            icon="el-icon-edit"
+            @click="resetPwd"
+            class="resetPwd"
+          >重置密码</el-button>
           <el-button type="danger" icon="el-icon-close" @click="back">取消</el-button>
           <el-button @click="resetForm('ruleForm')" class="reset-btn" icon="el-icon-refresh-left">重置</el-button>
           <el-button type="primary" @click="submitForm('ruleForm')" icon="el-icon-document-add">保存</el-button>
@@ -105,17 +90,8 @@ export default {
     return {
       imageUrl: "",
       fileList: [],
-      form: {
-
-        id: null,
-        name: "",
-        realName:'',
-        sex: "",
-        tel:'',
-        idCard: "",
-        role: "",
-      },
-      phone: { validator: checkPhone, trigger: ["blur", "change"] },
+      form: {},
+      phone: { validator: checkPhone, trigger: ["blur", "change"] }
     };
   },
   methods: {
@@ -136,43 +112,55 @@ export default {
     },
 
     // 实现自动生成生日，性别，年龄
-     go() {
+    go() {
       let iden = this.form.idCard;
       let sex = null;
-        sex = iden.substring(16, 17);
-        sex = iden.substring(13, 14);
+      sex = iden.substring(16, 17);
+      sex = iden.substring(13, 14);
       if (sex % 2 === 0) sex = "女";
       else sex = "男";
       this.form.sex = sex;
     },
-    resetPwd(){
-      this.$confirm('此操作会将密码重置为123456, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-
-
-
-        // ****************************************删除请求**********************************************
-
-
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+    resetPwd() {
+      this.$confirm("此操作会将密码重置为123456, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          // ****************************************重置请求**********************************************
+          this.axios
+            .post("/user/resetPassword", {
+              userId: this.$route.params.id
+            })
+            .then(res => {
+              console.log("重置", res);
+              if (res.data.code == "reset_success") {
+                this.$message({
+                  type: "success",
+                  message: "重置密码成功!"
+                });
+              }
+              // console.log(this.form);
+              // this.loading = false;
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消重置密码"
+          });
         });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });          
-      });
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // ************************************修改***********************************
-            this.axios.post("/staff/modifySingle", {
+          this.axios
+            .post("/staff/modifySingle", {
               staffId: this.form.id,
               photo: this.form.img,
               staffName: this.form.name,
@@ -190,15 +178,14 @@ export default {
               checkInTime: new Date()
             })
             .then(res => {
-              console.log("修改",res.data);
-              if(res.data.code=="200"){
-                this.$router.replace("/home/serve" );
+              console.log("修改", res.data);
+              if (res.data.code == "200") {
+                this.$router.replace("/home/serve");
               }
             })
-            .catch(err=> {
+            .catch(err => {
               console.log(err);
-            })
-
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -208,54 +195,59 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    formateData(item){
+    addZero(v) {
+      return v < 10 ? "0" + v : v;
+    },
+    switchTimeFormat(time) {
+      const dateTime = new Date(time);
+      const year = dateTime.getFullYear();
+      const month = dateTime.getMonth() + 1;
+      const date = dateTime.getDate();
+
+      return `${year}-${this.addZero(month)}-${this.addZero(date)}`;
+    },
+    formateData(item) {
       var data = {};
-      data.id = item.userId;
-      // data.img = item.photo;
-      // data.fullimg = this.$store.state.ip+'/'+data.img;
-      // data.name = item.staffName;
-      // data.sex = item.staffSex;
-      // data.tel = item.telNum;
-      // data.idCard = item.idCardNo;
-      // data.identity = item.staffType;
-      // data.experience = item.workExperience;
-      // data.serve = item.serviceItem;
-      // data.address = item.staffAddr;
-      // data.isEmpty = item.isFree;
-      // data.nation = item.staffNation;
-      // data.education = item.education;
-      // data.work = item.experienceInfo||"无";
-      // data.train = item.trainInfo||"无";
-      // data.link = item.user.userName;
-      // console.log(data);
+      data.name = item.userName;
+      data.realName = item.realName;
+      if (item.userState == 1) {
+        data.state = "正常";
+      } else {
+        data.state = "禁用";
+      }
+      data.tel = item.telNum;
+      data.role = item.roleName;
+      data.registerTime = item.registerTime;
+      data.loginTime = this.switchTimeFormat(item.loginTime);
+      data.logoutTime = this.switchTimeFormat(item.logoutTime) || "无";
       return data;
     }
   },
-  computed: {
-    gettel() {
-      console.log(this.form.link);
-      if (this.form.link == "0" || this.form.link) {
-        console.log(this.userList[this.form.link]);
-        return this.userList[this.form.link].tel;
-      } else {
-        return null;
-      }
-    }
-  },
+  // computed: {
+  //   gettel() {
+  //     console.log(this.form.link);
+  //     if (this.form.link == "0" || this.form.link) {
+  //       console.log(this.userList[this.form.link]);
+  //       return this.userList[this.form.link].tel;
+  //     } else {
+  //       return null;
+  //     }
+  //   }
+  // },
   created() {
-    //创建时获取数据
-    this.axios.post("/user/showSingle", {
-      id:this.$route.params.id
-    })
-    .then(res => {
-      console.log(res.data);
-      this.form = this.formateData(res.data.data.data);
-      this.go();
-      console.log(this.form);
-    })
-    .catch(err=> {
-      console.log(err);
-    })
+    this.axios
+      .post("/user/showSingle", {
+        userId: this.$route.params.id
+      })
+      .then(res => {
+        console.log("查询", res);
+        this.form = this.formateData(res.data.data.data);
+        console.log(this.form);
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>
@@ -269,7 +261,7 @@ export default {
 
   min-height: 500px;
 }
-.resetPwd{
+.resetPwd {
   background: @yellowColor;
   border-color: @yellowColor;
 }
