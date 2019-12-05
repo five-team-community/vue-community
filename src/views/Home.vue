@@ -49,25 +49,21 @@
               <span slot="title">报修管理</span>
               <el-menu-item index="/home/fix">报修部位</el-menu-item>
               <el-menu-item index="/home/fixMsg">报修信息</el-menu-item>
-              <el-menu-item index="/home/fixMoney">收费订单</el-menu-item>
             </el-submenu>
             <el-submenu index="1-3">
               <span slot="title">家政管理</span>
 
               <el-menu-item index="/home/cleanMsg">家政信息</el-menu-item>
-              <el-menu-item index="/home/cleanMoney">收费订单</el-menu-item>
+
             </el-submenu>
             <el-submenu index="1-4">
               <span slot="title">回收管理</span>
 
               <el-menu-item index="/home/recycleMsg">回收信息</el-menu-item>
-              <el-menu-item index="/home/recycleMoney">收费订单</el-menu-item>
             </el-submenu>
             <el-submenu index="1-5">
               <span slot="title">开锁服务</span>
               <el-menu-item index="/home/lockPeople">合作公司</el-menu-item>
-              <el-menu-item index="/home/lockMsg">开锁信息</el-menu-item>
-              <el-menu-item index="/home/lockMoney">收费订单</el-menu-item>
             </el-submenu>
           </el-submenu>
           <el-submenu index="3">
@@ -164,7 +160,7 @@
             <span class="welcome">欢迎您来到易居社区服务平台</span>
             <el-dropdown>
               <i class="el-icon-s-custom" style="margin-left: 15px">{{user.name}}</i>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu >
                 <el-dropdown-item><div @click="mydata">个人中心</div></el-dropdown-item>
                 <el-dropdown-item><div @click="logout">退出登录</div></el-dropdown-item>
               </el-dropdown-menu>
@@ -172,7 +168,7 @@
           </div>
         </el-header>
 
-        <el-main style="background-color: #f3f3f4;">
+        <el-main style="background-color: #f3f3f4; min-height: 680px;">
           <router-view />
         </el-main>
       </el-container>
@@ -212,7 +208,16 @@ export default {
     },
     logout() {
       sessionStorage.clear();
+      this.axios
+      .post("/user/logout", {})
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
       this.$router.replace({ path: "/login" });
+
     }
   },
   created() {
@@ -226,6 +231,9 @@ export default {
 </script>
 <style lang="less" scoped>
 @import "../assets/less/base.less";
+.msg{
+  height: 40px;
+}
 .welcome {
   display: inline-block;
   line-height: 30px;
@@ -249,6 +257,7 @@ export default {
   background: #2f4050;
 }
 .main {
+  
   background: white;
   margin-left: 200px;
   transition: 0.3s ease-in-out;

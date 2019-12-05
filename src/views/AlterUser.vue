@@ -20,20 +20,21 @@
         label-width="100px"
         ref="ruleForm"
       >
-        <el-form-item
+       <el-form-item
           label="用户名:"
           prop="name"
           :rules="{ required: true, message: '用户名不能为空', trigger: ['blur','change']}"
         >
-          <el-input v-model="form.name" placeholder="请输入用户名" autocomplete="off"></el-input>
+          <el-input v-model="form.name" placeholder="真实请输入用户名" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
+        
 
         <el-form-item
           label="真实姓名:"
           prop="realName"
           :rules="{ required: true, message: '真实姓名不能为空', trigger: ['blur','change']}"
         >
-          <el-input v-model="form.name" placeholder="真实请输入真实姓名" autocomplete="off"></el-input>
+          <el-input v-model="form.realName" placeholder="真实请输入真实姓名" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -49,10 +50,11 @@
           prop="role"
           :rules="{ required: true, message: '用户类型不能为空', trigger: ['blur','change']}"
         >
-          <el-radio-group v-model="form.role">
+          <el-radio-group v-model="form.role" :disabled="true">
             <el-radio label="管理员" value="管理员"></el-radio>
             <el-radio label="服务人员" value="服务人员"></el-radio>
-            <el-radio label="普通用户" value="普通用户"></el-radio>
+            <el-radio label="普通住户" value="住户"></el-radio>
+            <el-radio label="业主" value="业主"></el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -73,6 +75,7 @@
   </div>
 </template>
 <script>
+import crypto from 'crypto'
 export default {
   data() {
     var checkPhone = (rule, value, callback) => {
@@ -99,29 +102,10 @@ export default {
       //返回房产信息列表
       this.$router.push({ path: "/home/user" });
     },
-    // 身份证验证
-    async validID(rule, value, callback) {
-      // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
-      let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-      if (reg.test(value)) {
-        await this.go();
-        callback();
-      } else {
-        callback(new Error("身份证号码不正确"));
-      }
-    },
-
-    // 实现自动生成生日，性别，年龄
-    go() {
-      let iden = this.form.idCard;
-      let sex = null;
-      sex = iden.substring(16, 17);
-      sex = iden.substring(13, 14);
-      if (sex % 2 === 0) sex = "女";
-      else sex = "男";
-      this.form.sex = sex;
-    },
     resetPwd() {
+const md5 = crypto.createHash("md5"); // md5 加密，不可逆加密
+      var n= md5.update("123456").digest("hex"); // 加密
+      console.log(n);
       this.$confirm("此操作会将密码重置为123456, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -160,28 +144,15 @@ export default {
         if (valid) {
           // ************************************修改***********************************
           this.axios
-            .post("/staff/modifySingle", {
-              staffId: this.form.id,
-              photo: this.form.img,
-              staffName: this.form.name,
-              telNum: this.form.tel,
-              idCardNo: this.form.idCard,
-              staffSex: this.form.sex,
-              staffNation: this.form.nation,
-              education: this.form.education,
-              staffType: this.form.identity,
-              workExperience: this.form.experience,
-              staffAddr: this.form.address,
-              serviceItem: this.form.serve,
-              experienceInfo: this.form.work,
-              trainInfo: this.form.train,
-              checkInTime: new Date()
+            .post("/user/modifyUser", {
+              userId:this.$route.params.id,
+              realName: this.form.realName,
+              roleName: this.form.role,
+              telNum:this.form.tel,
             })
             .then(res => {
               console.log("修改", res.data);
-              if (res.data.code == "200") {
-                this.$router.replace("/home/serve");
-              }
+             
             })
             .catch(err => {
               console.log(err);
@@ -223,18 +194,9 @@ export default {
       return data;
     }
   },
-  // computed: {
-  //   gettel() {
-  //     console.log(this.form.link);
-  //     if (this.form.link == "0" || this.form.link) {
-  //       console.log(this.userList[this.form.link]);
-  //       return this.userList[this.form.link].tel;
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // },
+
   created() {
+    console.log("aaa");
     this.axios
       .post("/user/showSingle", {
         userId: this.$route.params.id

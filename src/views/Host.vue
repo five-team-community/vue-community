@@ -24,7 +24,6 @@
       <!-- 新增和搜索按钮 -->
       <div class="btn" style="text-align:right;margin-right:30px">
         <el-button icon="el-icon-upload" class="btn-exclude" @click="exclude">导出报表</el-button>
-        <el-button icon="el-icon-plus" class="btn-add" @click="add">新增</el-button>
         <el-button icon="el-icon-search" class="btn-search" @click="searchMsg">搜素</el-button>
       </div>
 
@@ -89,10 +88,10 @@
 export default {
   data() {
     return {
-      loading: true,
+      loading: true,  //加载标识符
       currentPage: 1, //记录当前页
-      pageSize: 5,
-      totalPage: 0,
+      pageSize: 5,  //每页显示数
+      totalPage: 0,  //数据总数
       search: {
         //记录筛选的数据项
         houseNum: "",
@@ -103,14 +102,11 @@ export default {
     };
   },
   methods: {
-    add() {
-      //新增
-      this.$router.push({ path: "/home/addHost" });
-    },
+
     searchMsg() {
       //****************************搜索******************************
       this.loading = true;
-      console.log(this.search);
+      this.currentPage = 1;
       this.axios
         .post("/inhabitant/searchInhabitant", {
           currentPage: this.currentPage,
@@ -120,7 +116,7 @@ export default {
           telNum: this.search.telphone
         })
         .then(res => {
-          console.log("aaa",res);
+          console.log("aaa", res);
           this.hostData = [];
           this.formateData(res.data.data.data);
           this.totalPage = res.data.data.count;
@@ -130,20 +126,19 @@ export default {
           console.log(err);
         });
     },
+
     show(index) {
       //查看
- 
       var id = this.hostData[index].id;
-      console.log(id);
       this.$router.push({ path: "/home/showHost/" + id });
     },
+
     alter(index) {
       //修改
- 
       var id = this.hostData[index].id;
-      console.log(id);
       this.$router.push({ path: "/home/alterHost/" + id });
     },
+
     del(index) {
       //***********************************删除**************************************
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -153,36 +148,45 @@ export default {
       })
         .then(() => {
           var id = this.hostData[index].id;
-          this.axios
-            .post("/inhabitant/removeInhabitant", {
-              id: id
-            })
-            .then(res => {
-              if (res.data.message == "删除成功") {
-                this.$message({
-                  type: "success",
-                  message: "删除成功!"
-                });
-                this.house
-                this.axios
-                  .post("/inhabitant/showInhabitants", {
-                    currentPage: this.currentPage,
-                    pageSize: this.pageSize
-                  })
-                  .then(res => {
-                    console.log(res);
-                    this.hostData = [];
-                    this.formateData(res.data.data.data);
-                    this.loading = false;
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  });
-              }
-            })
-            .catch(err => {
-              console.log(err);
+          this.axios.post("/inhabitant/removeInhabitant", {
+            id: id
+          })
+          .then(res => {
+            if (res.data.message == "删除成功") {
+              this.$message({
+                type: "success",
+                message: "删除成功!"
+              });
+
+              // 删除成功后重新获取数据
+              this.axios.post("/inhabitant/showInhabitants", {
+                currentPage: this.currentPage,
+                pageSize: this.pageSize
+              })
+              .then(res => {
+                console.log(res);
+                this.hostData = [];
+                this.formateData(res.data.data.data);
+                this.loading = false;
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            }
+            else{
+              this.$message({
+                type: "error",
+                message: "删除失败!"
+              });
+            }
+          })
+          .catch(err => {
+            this.$message({
+              type: "error",
+              message: "删除出错!"
             });
+            console.log(err);
+          });
         })
         .catch(() => {
           this.$message({
@@ -194,7 +198,8 @@ export default {
     changePage(val) {
       //改变页码
       this.currentPage = val;
-       this.axios
+      this.loading = true;
+      this.axios
         .post("/inhabitant/searchInhabitant", {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
@@ -215,7 +220,7 @@ export default {
     },
     exclude() {
       //导出报表
-      
+
       window.location.href = "http://172.16.6.43:8080/inhabitant/excludeExcel";
     },
     addZero(v) {
@@ -245,7 +250,6 @@ export default {
     }
   },
   created() {
-   
     this.axios
       .post("/inhabitant/showInhabitants", {
         currentPage: this.currentPage,
@@ -253,7 +257,7 @@ export default {
       })
       .then(res => {
         console.log(res);
-        this.hostData=[];
+        this.hostData = [];
         this.totalPage = res.data.data.count;
         this.formateData(res.data.data.data);
         this.loading = false;
@@ -273,8 +277,7 @@ export default {
 
   background-color: white;
 
-  min-height: 500px;
-
+  height: 100%;
 }
 .content {
   background: white;

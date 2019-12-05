@@ -57,7 +57,7 @@
           prop="idCard"
           :rules="[{ validator: this.validID, trigger: ['blur','change']},{ required: true, message: '身份证号码不能为空', trigger: ['blur','change']}]"
         >
-          <el-input v-model="form.idCard" placeholder="请输入身份证号码"></el-input>
+          <el-input v-model="form.idCard" placeholder="请输入身份证号码" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item
@@ -176,7 +176,7 @@ export default {
     };
   },
   methods: {
-     handleSuccess(res) {
+    handleSuccess(res) {
       console.log(res.data.filePath);
       
       this.form.img = res.data.filePath;
@@ -187,8 +187,8 @@ export default {
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+      if (!(isJPG||isPNG)) {
+        this.$message.error("上传头像图片只能是 JPG和 PNG 格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
@@ -212,7 +212,7 @@ export default {
     },
 
     // 实现自动生成生日，性别，年龄
-     go() {
+    go() {
       let iden = this.form.idCard;
       let sex = null;
         sex = iden.substring(16, 17);
@@ -255,10 +255,24 @@ export default {
             .then(res => {
               console.log("修改",res.data);
               if(res.data.code=="200"){
+                this.$message({
+                  type: "success",
+                  message: "修改成功!"
+                });
                 this.$router.replace("/home/serve" );
+              }
+              else{
+                this.$message({
+                  type: "error",
+                  message: "修改失败!"
+                });
               }
             })
             .catch(err=> {
+              this.$message({
+                type: "error",
+                message: "修改失败!"
+              });
               console.log(err);
             })
 
