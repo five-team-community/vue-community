@@ -226,7 +226,7 @@ export default {
     exclude() {
       //导出报表
       window.location.href =
-        "http://172.16.6.66:8080/pay/leibie?payProject=水费";
+        this.$store.state.ip+"/pay/jiaofeilist?payProject=水费";
     }
   },
   created() {

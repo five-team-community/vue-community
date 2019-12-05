@@ -46,7 +46,7 @@
     <el-upload
             name="photo"
             class="avatar-uploader"        
-            action="http://172.16.6.63:8080/communityInfo/upload"
+            :action="this.$store.state.ip+'/communityInfo/upload'"
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
@@ -65,7 +65,7 @@
   </div>
 </template>
 <script>
-/* action="http://172.16.6.67:8080/Announcement/upload" */
+
 export default {
   data() {
     return {
@@ -85,7 +85,7 @@ export default {
     },
       handleSuccess(res, file) {
       console.log(URL.createObjectURL(file.raw));
-      this.imgurl = 'http://172.16.6.63:8080'+"/"+res.data.filePath;
+      this.imgurl = this.$store.state.ip+"/"+res.data.filePath;
       this.form.img=res.data.filePath;
       console.log(res.data.filePath)
       console.log(this.imgurl)

@@ -65,46 +65,6 @@ export default {
       },
       options: {},
       tableData: [
-        /* {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        },
-        {
-          listname: "物业投诉",
-          date: "2016-05-02",
-          name: "王小虎",
-          phone: 13880888088,
-          address: "上海市普陀区金沙江路 1518 弄",
-          state: "待处理"
-        } */
       ],
       loading: true,
       currentPage: 1,
@@ -181,7 +141,7 @@ export default {
     exclude() {
       //导出报表
       window.location.href =
-        "http://172.16.6.66:8080/activity/userList?activityId=1";
+       this.$store.state.ip+"/activity/userList?activityId=1";
     }
   },
   created() {

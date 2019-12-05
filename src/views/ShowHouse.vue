@@ -8,11 +8,11 @@
         <span>房产信息详情</span>
 
         <!-- 返回按钮 -->
-        <div class="back" v-loading="loading">
+        <div class="back">
           <el-button round size='mini' class="back-btn" icon='el-icon-arrow-left' @click="back">返回</el-button>
         </div>
       </div>
-      <div class="main">
+      <div class="main"  v-loading="loading">
         <el-tabs type="border-card">
 
           <!-- 基本信息 -->
@@ -49,7 +49,7 @@
             <span slot="label"><i class="el-icon-user-solid"></i> 绑定用户</span>
 
             <!-- 每条数据信息的组件 -->
-            <userItem v-for="(item,index) in userList" :key="index" :user="item"></userItem>
+            <userItem v-for="(item,index) in userList" :key="index" :user="item" @delFn="del"></userItem>
 
             <!-- 新增按钮 -->
             <div class="add-btn">
@@ -145,11 +145,40 @@ export default {
         item.id = list[i].inhabitantId;
         item.name= list[i].inhabitantName;
         item.host = this.houseData.host;
+        item.state = list[i].inhabitantType;
         item.tel = list[i].telNum;
         item.idCard = list[i].idCardNo;
         arr.push(item);
       }
       return arr;
+    },
+    del(){
+      this.loading = true;
+      console.log("aaa");
+      this.axios
+    .get("/InhabitantAndHouseProperty/selectById", {params:{
+      housePropertyId: this.$route.params.id
+    }})
+    .then(res => {
+      var no = res.data.data.inhabitantAndHousePropertyVO.housePropertyNo;
+      this.houseData= this.formateData(res.data.data.inhabitantAndHousePropertyVO);
+       this.axios
+    .get("/InhabitantAndHouseProperty/getAllInhabitantWithHouse", {params:{
+      housePropertyNo: no
+    }})
+    .then(res => {
+      console.log("bbb",res.data);
+      this.loading = false;
+      this.userList = this.formateList(res.data.data.list[0].inhabitantList);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+    })
+    .catch(err => {
+      console.log(err);
+    });
     }
   },
   created() {//创建时获取数据
@@ -167,6 +196,7 @@ export default {
     }})
     .then(res => {
       console.log("bbb",res.data);
+      this.loading = false;
       this.userList = this.formateList(res.data.data.list[0].inhabitantList);
     })
     .catch(err => {

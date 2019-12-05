@@ -26,7 +26,7 @@
           <el-upload
             name="photo"
             class="avatar-uploader"
-            action="http://172.16.6.43:8080/user/testFile"
+            :action="this.$store.state.ip+'/user/testFile'"
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
@@ -178,7 +178,6 @@ export default {
   methods: {
     handleSuccess(res) {
       console.log(res.data.filePath);
-      
       this.form.img = res.data.filePath;
       this.form.fullimg=this.$store.state.ip+'/'+this.form.img
       console.log(this.form.fullimg);

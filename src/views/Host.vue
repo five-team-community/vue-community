@@ -40,27 +40,33 @@
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                size="mini"
-                class="btn-show"
-                @click="show(scope.$index)"
-              ></el-button>
-              <el-button
-                type="info"
-                icon="el-icon-edit-outline"
-                size="mini"
-                class="btn-alter"
-                @click="alter(scope.$index)"
-              ></el-button>
-              <el-button
-                type="danger"
-                icon="el-icon-delete"
-                size="mini"
-                class="btn-del"
-                @click="del(scope.$index)"
-              ></el-button>
+              <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+                <el-button
+                  type="primary"
+                  icon="el-icon-search"
+                  size="mini"
+                  class="btn-show"
+                  @click="show(scope.$index)"
+                ></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
+                <el-button
+                  type="info"
+                  icon="el-icon-edit-outline"
+                  size="mini"
+                  class="btn-alter"
+                  @click="alter(scope.$index)"
+                ></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+                <el-button
+                  type="danger"
+                  icon="el-icon-delete"
+                  size="mini"
+                  class="btn-del"
+                  @click="del(scope.$index)"
+                ></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -88,10 +94,10 @@
 export default {
   data() {
     return {
-      loading: true,  //加载标识符
+      loading: true, //加载标识符
       currentPage: 1, //记录当前页
-      pageSize: 5,  //每页显示数
-      totalPage: 0,  //数据总数
+      pageSize: 5, //每页显示数
+      totalPage: 0, //数据总数
       search: {
         //记录筛选的数据项
         houseNum: "",
@@ -102,7 +108,6 @@ export default {
     };
   },
   methods: {
-
     searchMsg() {
       //****************************搜索******************************
       this.loading = true;
@@ -148,45 +153,46 @@ export default {
       })
         .then(() => {
           var id = this.hostData[index].id;
-          this.axios.post("/inhabitant/removeInhabitant", {
-            id: id
-          })
-          .then(res => {
-            if (res.data.message == "删除成功") {
-              this.$message({
-                type: "success",
-                message: "删除成功!"
-              });
+          this.axios
+            .post("/inhabitant/removeInhabitant", {
+              id: id
+            })
+            .then(res => {
+              if (res.data.message == "删除成功") {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
 
-              // 删除成功后重新获取数据
-              this.axios.post("/inhabitant/showInhabitants", {
-                currentPage: this.currentPage,
-                pageSize: this.pageSize
-              })
-              .then(res => {
-                console.log(res);
-                this.hostData = [];
-                this.formateData(res.data.data.data);
-                this.loading = false;
-              })
-              .catch(err => {
-                console.log(err);
-              });
-            }
-            else{
+                // 删除成功后重新获取数据
+                this.axios
+                  .post("/inhabitant/showInhabitants", {
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize
+                  })
+                  .then(res => {
+                    console.log(res);
+                    this.hostData = [];
+                    this.formateData(res.data.data.data);
+                    this.loading = false;
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  });
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "删除失败!"
+                });
+              }
+            })
+            .catch(err => {
               this.$message({
                 type: "error",
-                message: "删除失败!"
+                message: "删除出错!"
               });
-            }
-          })
-          .catch(err => {
-            this.$message({
-              type: "error",
-              message: "删除出错!"
+              console.log(err);
             });
-            console.log(err);
-          });
         })
         .catch(() => {
           this.$message({
@@ -221,7 +227,7 @@ export default {
     exclude() {
       //导出报表
 
-      window.location.href = this.$store.state.ip +"/inhabitant/excludeExcel";
+      window.location.href = this.$store.state.ip + "/inhabitant/excludeExcel";
     },
     addZero(v) {
       return v < 10 ? "0" + v : v;
@@ -235,17 +241,19 @@ export default {
       return `${year}-${this.addZero(month)}-${this.addZero(date)}`;
     },
     formateData(list) {
-      for (var i = 0; i < list.length; i++) {
-        var item = {};
-        item.id = list[i].inhabitantId;
-        item.no = list[i].housePropertyList[0].housePropertyNo;
-        item.name = list[i].inhabitantName;
-        item.idCard = list[i].idCardNo;
-        item.sex = list[i].inhabitantSex;
-        item.tel = list[i].telNum;
-        item.time = this.switchTimeFormat(list[i].checkInTime);
-        item.link = list[i].user.userName;
-        this.hostData.push(item);
+      if (list) {
+        for (var i = 0; i < list.length; i++) {
+          var item = {};
+          item.id = list[i].inhabitantId;
+          item.no = list[i].housePropertyList[0].housePropertyNo;
+          item.name = list[i].inhabitantName;
+          item.idCard = list[i].idCardNo;
+          item.sex = list[i].inhabitantSex;
+          item.tel = list[i].telNum;
+          item.time = this.switchTimeFormat(list[i].checkInTime);
+          item.link = list[i].user.userName;
+          this.hostData.push(item);
+        }
       }
     }
   },
