@@ -9,7 +9,6 @@
             <el-button round size="mini" class="back-btn" icon="el-icon-arrow-left" @click="back">返回</el-button>
           </div>
         </div>
-
         <el-form  ref="form" :model="form" v-loading="loading"  label-width="80px">
           <el-row>
                 <el-col span="12">

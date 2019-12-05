@@ -6,39 +6,54 @@
         <span>水费</span>
       </div>
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-col :span="10">
+        <el-col :span="18">
           <el-form-item label="业主姓名:">
             <el-input v-model="formInline.user" placeholder="业主姓名"></el-input>
           </el-form-item>
-        </el-col>
-        <el-col :span="14">
           <el-form-item label>
             <div class="block">
               <span class="demonstration">选择时间：</span>
-               <el-date-picker
-      v-model="value2"
-      type="daterange"
-      align="right"
-      unlink-panels
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期">
-    </el-date-picker> 
+              <el-date-picker
+                v-model="value2"
+                type="daterange"
+                align="right"
+                unlink-panels
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
             </div>
           </el-form-item>
+        </el-col>
+        <el-col :span="6">
           <el-form-item>
             <el-button type="primary" @click="onSubmit" icon="el-icon-search">查询</el-button>
+            <el-button icon="el-icon-upload" class="btn-exclude" @click="exclude">导出报表</el-button>
           </el-form-item>
         </el-col>
       </el-form>
-      <el-table ref="multipleTable"  :data="tableData" border tooltip-effect="dark" style="width: 100%" v-loading='loading' >
-        <el-table-column align='center' prop="inhabitantAndHousePropertyVO.housePropertyNo" label="房号"></el-table-column>
-        <el-table-column align='center' prop="inhabitantAndHousePropertyVO.inhabitant.inhabitantName" label="业主姓名"></el-table-column>
-        <el-table-column align='center' prop="payMoney" label="剩余金额"></el-table-column>
-        <el-table-column align='center' prop="payOrder" label="缴费订单号"></el-table-column>
-        <el-table-column align='center' prop="payDate" label="缴费时间"></el-table-column>
-        <el-table-column align='center' prop="payProject" label="支付类型">
-        </el-table-column>
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        border
+        tooltip-effect="dark"
+        style="width: 100%"
+        v-loading="loading"
+      >
+        <el-table-column
+          align="center"
+          prop="inhabitantAndHousePropertyVO.housePropertyNo"
+          label="房号"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="inhabitantAndHousePropertyVO.inhabitant.inhabitantName"
+          label="业主姓名"
+        ></el-table-column>
+        <el-table-column align="center" prop="payMoney" label="剩余金额"></el-table-column>
+        <el-table-column align="center" prop="payOrder" label="缴费订单号"></el-table-column>
+        <el-table-column align="center" prop="payDate" label="缴费时间"></el-table-column>
+        <el-table-column align="center" prop="payProject" label="支付类型"></el-table-column>
         <el-table-column label="操作" align="center" width="250">
           <template slot-scope="scope">
             <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
@@ -86,8 +101,8 @@ export default {
       },
       loading: true,
       tableData: [],
-      value2: '',
-      totalCount:0
+      value2: "",
+      totalCount: 0
     };
   },
   methods: {
@@ -116,23 +131,22 @@ export default {
       console.log("跳转", this.tableData[index].payOrder);
     },
     changePage(val) {
-      console.log(this.currentPage)
+      console.log(this.currentPage);
       this.currentPage = val;
       this.axios
-      .post("/pay/leibie", {      
+        .post("/pay/leibie", {
           payProject: "水费",
-          currentPage:this.currentPage,
-      })
-      .then(res => {
-        this.tableData = res.data.data.Pays;
-        this.totalCount=res.data.data.Pays.length;
-        console.log(res.data);
-        this.loading =false;
-      })
-      .catch(err => {
-        console.log(err);
-      });
-      
+          currentPage: this.currentPage
+        })
+        .then(res => {
+          this.tableData = res.data.data.Pays;
+          this.totalCount = res.data.data.Pays.length;
+          console.log(res.data);
+          this.loading = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     handleDelete(index) {
       this.$confirm("此操作将永久删除该条数据, 是否继续?", "提示", {
@@ -147,7 +161,7 @@ export default {
           });
           this.axios
             .post("/pay/delorder", {
-                payOrder: this.tableData[index].payOrder
+              payOrder: this.tableData[index].payOrder
             })
             .then(res => {
               console.log("删除成功", res);
@@ -176,43 +190,56 @@ export default {
         });
     },
     onSubmit() {
-      if(this.value2){
-         var t = this.value2;
-      console.log(this.formInline.user)
-        var startTime1 = t[0].getFullYear()+ "-" + (t[0].getMonth()+1) + "-" +t[0].getDate();
-        var endTime1 = t[1].getFullYear()+ "-" + (t[1].getMonth()+1) + "-" +t[1].getDate();
-        console.log("开始时间:",startTime1);
-        console.log("结束时间:",endTime1); 
+      if (this.value2) {
+        var t = this.value2;
+        console.log(this.formInline.user);
+        var startTime1 =
+          t[0].getFullYear() +
+          "-" +
+          (t[0].getMonth() + 1) +
+          "-" +
+          t[0].getDate();
+        var endTime1 =
+          t[1].getFullYear() +
+          "-" +
+          (t[1].getMonth() + 1) +
+          "-" +
+          t[1].getDate();
       }
-      console.log(this.formInline.user)
+      console.log(this.formInline.user, startTime1, endTime1);
       this.axios
-      .post("/pay/moname", {
-          payProject:'水费',
-          inhabitantName:this.formInline.user,
-          starttime:startTime1,
-          endtime:endTime1,  
-      })
-      .then(res => {
-        this.tableData = res.data.data.pays;
-        console.log(res.data.data);
-        console.log(this.tableData);
-        this.loading =false;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+        .post("/pay/moname", {
+          payProject: "水费",
+          inhabitantName: this.formInline.user,
+          startTime: startTime1,
+          endTime: endTime1
+        })
+        .then(res => {
+          this.tableData = res.data.data.pays;
+          console.log(res.data.data);
+          console.log(this.tableData);
+          this.loading = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    exclude() {
+      //导出报表
+      window.location.href =
+        "http://172.16.6.66:8080/pay/leibie?payProject=水费";
     }
   },
   created() {
     this.axios
-      .post("/pay/leibie", {      
-          payProject: "水费",
-          pageIndex:1,
-
+      .post("/pay/leibie", {
+        payProject: "水费",
+        pageIndex: this.currentPage
       })
       .then(res => {
-        this.tableData = res.data.data.Pays;
-        this.loading =false;
+        this.tableData = res.data.data.pays;
+        this.totalCount = res.data.data.totalCount;
+        this.loading = false;
         console.log(res.data);
       })
       .catch(err => {

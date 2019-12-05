@@ -128,8 +128,8 @@ export default {
                 })
                 .then(res => {
                   //  res.data = tableData;
-                  this.tableData = res.data.data;
-                  this.totalCount=res.data.totalCount;
+                  this.tableData = res.data.data.data;
+                  this.totalCount=res.data.data.totalCount;
                   this.loading = false;
                   console.log('重新渲染',res.data.data)
                 })
@@ -160,14 +160,14 @@ export default {
     changePage(val) {
       this.currentPage=val;
       this.axios
-      .post("/Announcement/showAll", {
+      .post("/communityInfo/showByLike", {
           currentPage: this.currentPage,
+          pageSize:5,
       })
       .then(res => {
         //  res.data = tableData;
         this.tableData = res.data.data.data;
-        this.totalCount=res.data.data.data.totalCount;
-        this.tableData.ciContents=res.data.data.data.ciContent.substring(0,10);
+        this.totalCount=res.data.data.totalCount;
         this.loading = false;
         console.log(res.data);
       })
@@ -186,16 +186,15 @@ export default {
       console.log("开始时间:", startTime1);
       console.log("结束时间:", endTime1);
       }
-     
       this.axios
         .post("/communityInfo/showByLike", {
             ciTitle: this.formInline.user,
             currentPage:this.currentPage,
-            startTime: startTime1,
-            endTime: endTime1
+            pageSize:5,
         })
         .then(res => {
           this.tableData = res.data.data.data;
+          this.totalCount=res.data.data.totalCount;
           this.loading = false;
           console.log(res.data)
         })
@@ -216,8 +215,8 @@ export default {
           pageSize:5
         } ) 
         .then(res => {
-        console.log(res.data.data)
         this.tableData = res.data.data.data; 
+        this.totalCount=res.data.data.totalCount;
         this.loading=false
         })
         .catch(err => {

@@ -18,66 +18,96 @@
         </div>
 
         <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="活动名称">
-            <el-input v-model="form.activityName" prop="activityName"></el-input>
-          </el-form-item>
-          <el-form-item label="活动地址">
-            <el-input v-model="form.activityAddress" prop="activityAddress"></el-input>
-          </el-form-item>
-          <el-form-item label="开始时间">
-            <el-col :span="11">
-              <el-date-picker
-                type="date"
-                placeholder="开始时间"
-                prop="startTime"
-                v-model="form.startTime"
-              ></el-date-picker>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="活动名称">
+                <el-input
+                  v-model="form.activityName"
+                  prop="activityName"
+                ></el-input>
+              </el-form-item>
             </el-col>
-            <el-form-item label="结束时间">
-            <el-col :span="11">
-              <el-date-picker
-                type="date"
-                placeholder="结束时间"
-                prop="endtime"
-                v-model="form.endTime"
-              ></el-date-picker>
+            <el-col :span="12">
+              <el-form-item label="活动地址">
+                <el-input
+                  v-model="form.activityAddress"
+                  prop="activityAddress"
+                ></el-input>
+              </el-form-item>
             </el-col>
-          </el-form-item>
-          </el-form-item>
-          <el-form-item label="活动描述">
-            <el-input v-model="form.description" prop="description"></el-input>
-          </el-form-item>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="开始时间">
+                <el-date-picker
+                  type="date"
+                  placeholder="开始时间"
+                  prop="startTime"
+                  v-model="form.startTime"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="结束时间">
+                <el-date-picker
+                  type="date"
+                  placeholder="结束时间"
+                  prop="endtime"
+                  v-model="form.endTime"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="联系人">
+                <el-input
+                  v-model="form.contactsName"
+                  prop="contactsName"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="联系方式">
+                <el-input
+                  v-model="form.contactsPhone"
+                  prop="contactsPhone"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="活动描述">
+                <el-input v-model="form.description" prop="description"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="报名人数">
+                <el-input v-model="form.count" prop="count" ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-form-item class="notedetail" label="活动内容">
-            <el-input
-              type="textarea"
-              v-model="form.content"
-              prop="content"
-            ></el-input>
+            <el-input type="textarea"  v-model="form.content" prop="content"></el-input>
           </el-form-item>
-          <el-form-item label="可报名数">
-            <el-input v-model="form.count" prop="count"  ></el-input>
+
+          <el-form-item class="load" label="图片">
+            <el-upload
+              name="file"
+              class="avatar-uploader"
+              action="http://172.16.6.67:8080/Announcement/upload"
+              :show-file-list="false"
+              :on-success="handleSuccess"
+              :before-upload="beforeUpload">
+              <img v-if="this.form.img" :src="this.form.img" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
           </el-form-item>
-          <el-form-item class="load" label="上传图片">
-    <el-upload
-            name="file"
-            class="avatar-uploader"
-            action="http://172.16.6.67:8080/Announcement/upload"
-            :show-file-list="false"
-            :on-success="handleSuccess"
-            :before-upload="beforeUpload"
-          >
-            <img v-if="this.form.img" :src="this.form.img" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-    </el-form-item>
         </el-form>
-        <div class="change" >
-            <el-button type="button" icon="el-icon-edit" @click="back"
-            >取消</el-button
-          >
-          <el-button type="button" icon="el-icon-edit" @click="edit"
-            >确定</el-button
-          >
+        <div class="change">
+          <el-button type="button" icon="el-icon-edit" @click="back">取消</el-button>
+          <el-button type="button" icon="el-icon-edit" @click="edit">确定</el-button>
         </div>
       </div>
     </div>
@@ -88,10 +118,10 @@ export default {
   data() {
     return {
       form: {
-        img:''
+        img: ""
       },
       activeName: "second",
-      imgurl:''
+      imgurl: ""
     };
   },
   methods: {
@@ -109,14 +139,14 @@ export default {
 
       this.axios
         .post("/activity/addActivity", {
-            activityName: this.form.activityName,
-            activityAddress: this.form.activityAddress,
-            endTime: this.form.endTime,
-            startTime:this.form.startTime,
-            content: this.form.content,
-            description:this.form.description,
-            maxCount:this.form.count,
-            img:this.imgurl
+          activityName: this.form.activityName,
+          activityAddress: this.form.activityAddress,
+          endTime: this.form.endTime,
+          startTime: this.form.startTime,
+          content: this.form.content,
+          description: this.form.description,
+          maxCount: this.form.count,
+          img: this.imgurl
         })
         .then(res => {
           console.log(res.data);
@@ -129,8 +159,8 @@ export default {
     },
     handleSuccess(res, file) {
       console.log(URL.createObjectURL(file.raw));
-      this.form.img = 'http://172.16.6.67:8080'+"/"+res.data.filePath;
-      this.imgurl=res.data.filePath;
+      this.form.img = "http://172.16.6.67:8080" + "/" + res.data.filePath;
+      this.imgurl = res.data.filePath;
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -142,11 +172,9 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
-    },
+    }
   },
-  created() {
-   
-  }
+  created() {}
 };
 </script>
 
@@ -222,24 +250,23 @@ export default {
   }
 }
 .change .el-button {
-  
   margin: 20px;
   background-color: @darkGreenColor;
   color: @navChoose;
   margin-left: 100px;
 }
-.avatar{
+.avatar {
   width: 200px;
   height: 200px;
 }
 
-.avatar-uploader-icon{
+.avatar-uploader-icon {
   font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-    border: 1px solid black;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+  border: 1px solid black;
 }
 </style>
