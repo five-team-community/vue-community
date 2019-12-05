@@ -70,6 +70,13 @@ export default {
         console.log(res.data.data.inhabitantAndStaffVO);
         this.tableData = res.data.data.inhabitantAndStaffVO;
         this.loading =false;
+        console.log(this.tableData.state);
+        if(this.tableData.state == 0) {
+          this.tableData.state = "未处理";
+        } else {
+          this.tableData.state = "已处理";
+        }
+          
       })
       .catch((err)=> {
         console.log(err);

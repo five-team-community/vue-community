@@ -36,7 +36,7 @@
         </el-table>
         <div class="block">
           <el-pagination
-            layout="total, prev, pager, next"
+            layout="prev, pager, next"
             :page-size="5"
             :total="totalCount"
             :pager-count="5"
