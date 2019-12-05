@@ -42,7 +42,6 @@ http.interceptors.response.use(function (response) {
         path: '/login',
         query: {redirect: router.currentRoute.fullPath}
       })
-    
   }
 
   return Promise.reject(error);

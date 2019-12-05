@@ -261,7 +261,7 @@ export default {
 #house {
   color: @fontColor;
   background-color: white;
-  min-height: 500px;
+  height: 100%;
 }
 .title {
   padding: 15px 20px;
