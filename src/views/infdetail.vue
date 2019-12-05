@@ -17,7 +17,7 @@
           </div>
         </div>
 
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" :model="form" v-loading='loading' label-width="80px">
           <el-form-item label="资讯标题">
             <el-input v-model="form.ciTitle" prop="ciTitle"></el-input>
           </el-form-item>
@@ -76,7 +76,8 @@ export default {
         img:''
       },
       activeName: "second",
-      imgurl:''
+      imgurl:'',
+      loading:true
     };
   },
   methods: {

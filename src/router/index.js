@@ -449,14 +449,9 @@ const routes = [
     ]
   },
   {
-    path: '/tablenote',
-    name: 'tablenote',
-    component: () => import('../views/note.vue')
-  },
-  {
     path:'/putnote',
     name:"putnote",
-    component: () => import('../views/putnote.vue'),//维修
+    component: () => import('../views/putnote.vue'),//发布公告
     meta: {
       auth: true
     }  
