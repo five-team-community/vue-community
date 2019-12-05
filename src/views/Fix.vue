@@ -40,7 +40,7 @@
           <el-divider></el-divider>
           <el-form :model="form" style="margin:10px 0">
             <el-form-item label="名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
+              <el-input clearable v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
           <el-divider></el-divider>
@@ -55,7 +55,7 @@
           <el-divider></el-divider>
           <el-form :model="form2" style="margin:10px 0">
             <el-form-item label="名称" :label-width="formLabelWidth">
-              <el-input v-model="form2.name" autocomplete="off"></el-input>
+              <el-input clearable v-model="form2.name" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
           <el-divider></el-divider>
