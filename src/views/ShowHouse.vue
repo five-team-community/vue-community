@@ -20,27 +20,27 @@
             <span slot="label"><i class="el-icon-s-management"></i> 基本信息</span>
             <el-row :gutter="10">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">房号:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.housePropertyNo}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.no}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">名称:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.houseName}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.name}}</div></el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">房产性质:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.houseNature}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.nature}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">建筑面积:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.houseArea}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.area}}</div></el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">户型:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.houseStyle}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.style}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">业主名称:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.ownerName}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.host}}</div></el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">预留电话:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.ownerPhone}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.tel}}</div></el-col>
               <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="item-title">交房时间:</div></el-col>
-              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.ownerTime}}</div></el-col>
+              <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="msg">{{houseData.time}}</div></el-col>
             </el-row>
           </el-tab-pane>
 
@@ -49,7 +49,7 @@
             <span slot="label"><i class="el-icon-user-solid"></i> 绑定用户</span>
 
             <!-- 每条数据信息的组件 -->
-            <userItem v-for="item in userList" :key="item.id" :user="item"></userItem>
+            <userItem v-for="(item,index) in userList" :key="index" :user="item"></userItem>
 
             <!-- 新增按钮 -->
             <div class="add-btn">
@@ -57,18 +57,8 @@
               <!-- <el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button> -->
                 <el-dialog title="新增绑定" :visible.sync="dialogFormVisible" :center="true" width="400px">
                   <el-form :model="form" :inline="true">
-                    <el-form-item>
+                    <el-form-item label="输入你要绑定的用户电话：">
                       <el-input v-model="form.tel" aria-placeholder="请输入手机号查找注册用户"></el-input>
-                    </el-form-item>
-                    <el-form-item >
-                      <el-button type="primary" class="searchTel-btn" @click="searchUserTel">查询</el-button>
-                    </el-form-item>
-                    <el-form-item v-if="usermsg.state==200">
-                      用户名:{{usermsg.data.name}}<br>
-                      联系电话:{{usermsg.data.tel}}
-                    </el-form-item>
-                    <el-form-item v-else>
-                      {{usermsg.msg}}
                     </el-form-item>
                   </el-form>
                   <div slot="footer" class="dialog-footer">
@@ -115,33 +105,91 @@ export default {
       console.log(this.usermsg.data);
     },
     addBind(){
-      if(!this.usermsg.state){
-        this.$message.error("请输入要绑定的用户手机号");
-      }
-      else if(this.usermsg.state==200){
-        console.log(this.usermsg.data.id);
-        this.usermsg={};
-        this.form.tel="";
-        this.dialogFormVisible = false;
+      // if(!this.usermsg.state){
+      //   this.$message.error("请输入要绑定的用户手机号");
+      // }
+      // else if(this.usermsg.state==200){
+      //   console.log(this.usermsg.data.id);
+      //   this.usermsg={};
+      //   this.form.tel="";
+      //   this.dialogFormVisible = false;
+      // }
+      // else{
+      //   this.$message.error(this.usermsg.msg);
+      // }
+       this.axios
+    .get("/InhabitantAndHouseProperty/addInhabitantToHouseProperty", {params:{
+      housePropertyId: this.$route.params.id,
+      telNum:this.form.tel
+    }})
+    .then(res => {
+      console.log("uuu",res.data);
+      if(res.data.code=="200"){
+        this.$message.success(res.data.msg);
       }
       else{
-        this.$message.error(this.usermsg.msg);
+        this.$message.error(res.data.message);
       }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+    },
+    formateData(item){
+      console.log(item);
+      var data={};
+      data.id = item.housePropertyId;
+      data.no = item.housePropertyNo;
+      data.name = item.houseName;
+      data.nature = item.houseNature;
+      data.area = Number(item.houseArea);
+      data.style = item.houseStyle;
+      data.host = item.inhabitant.inhabitantName;
+      data.tel = item.inhabitant.telNum;
+      data.time = item.ownerTime;
+      return data;
+    },
+    formateList(list){
+      var arr=[];
+      for(var i=0;i<list.length;i++){
+        var item = {};
+        item.id = list[i].inhabitantId;
+        item.name= list[i].inhabitantName;
+        item.host = this.houseData.host;
+        item.tel = list[i].telNum;
+        item.idCard = list[i].idCardNo;
+        arr.push(item);
+      }
+      return arr;
     }
   },
   created() {//创建时获取数据
   console.log(this.$route.params.id);
     this.axios
-        .get("/InhabitantAndHouseProperty/selectById", {params:{
-         housePropertyId: this.$route.params.id
-        }})
-        .then(res => {
-          console.log("aaa",res.data.data);
+    .get("/InhabitantAndHouseProperty/selectById", {params:{
+      housePropertyId: this.$route.params.id
+    }})
+    .then(res => {
+      var no = res.data.data.inhabitantAndHousePropertyVO.housePropertyNo;
+      this.houseData= this.formateData(res.data.data.inhabitantAndHousePropertyVO);
+       this.axios
+    .get("/InhabitantAndHouseProperty/getAllInhabitantWithHouse", {params:{
+      housePropertyNo: no
+    }})
+    .then(res => {
+      console.log("bbb",res.data);
+      this.userList = this.formateList(res.data.data.list[0].inhabitantList);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+    
   },
   computed: {}
 };

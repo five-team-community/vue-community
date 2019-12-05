@@ -141,7 +141,8 @@ export default {
                   type: "success",
                   message: "删除成功!"
                 });
-                this.house
+                
+                // 删除成功之后重新渲染数据
                 this.axios
                   .post("/staff/showStaffList", {
                     currentPage: this.currentPage,
@@ -156,8 +157,18 @@ export default {
                     console.log(err);
                   });
               }
+              else{
+                this.$message({
+                  type: "error",
+                  message: "删除失败!"
+                });
+              }
             })
             .catch(err => {
+              this.$message({
+                type: "error",
+                message: "删除失败!"
+              });
               console.log(err);
             });
         })
@@ -218,9 +229,8 @@ export default {
 @import "../assets/less/base.less";
 #host {
   color: @fontColor;
-  background-color: #f3f3f4;
-
-  
+  background-color: white;
+  height: 100%;
 }
 .content {
   background: white;

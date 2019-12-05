@@ -108,15 +108,39 @@ export default {
   methods: {
     exclude() {
       //导出报表
-      window.location.href = this.$store.state.ip + "/staff/excludeExcel";
+      window.location.href = this.$store.state.ip + "/user/excludeExcel";
     },
     lock(index) {
+      this.userData[index].state="禁用";
       var id = this.userData[index].id;
       console.log("禁用", id);
+      this.axios
+        .post("/user/changeState", {
+          userId : id,
+          userState:"0"
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     unlock(index) {
+      this.userData[index].state="正常";
       var id = this.userData[index].id;
       console.log("解除", id);
+      this.axios
+        .post("/user/changeState", {
+          userId : id,
+          userState:"1"
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     searchMsg() {
       //**********************搜索**************************
@@ -232,7 +256,7 @@ export default {
 #user {
   color: @fontColor;
   background-color: white;
-  min-height: 500px;
+  height: 100%;
 }
 .title {
   padding: 15px 20px;

@@ -84,8 +84,6 @@ export default {
   data() {
     return {  
       loading: true,
-      houseData: {},//房产信息
-      userList:[],//绑定用户
       dialogFormVisible: false,
       form: {
         tel:''
