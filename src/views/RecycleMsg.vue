@@ -110,6 +110,24 @@ export default {
         this.currentPage=val;
         console.log(val);
 
+        this.axios
+        .get("/InhabitantAndRecycle/getAllUnionInfo",{
+          params: {
+            pageSize: 5,
+            currentPage: this.currentPage
+          }
+        })
+        .then((res) => {
+          console.log(res.data.data.list);
+          console.log("总数",res.data.data.page.totalCount);
+          this.tableData = res.data.data.list;
+          this.totalCount = res.data.data.page.totalCount;
+          this.loading = false;
+        })
+        .catch(err=> {
+          console.log(err)
+        }) 
+
 
       },
       showDetail(index) { // 查看详情
@@ -118,7 +136,8 @@ export default {
         this.$router.push({path:'/home/recycleMsgDetail?id='+showId});
       },
       exportBtn() { //导出
-        window.location.href=this.$store.state.ip+"/InhabitantAndRecycle/";
+        window.location.href = "http://172.16.6.59:8080/InhabitantAndRecycle/exportInfo";
+        /* window.location.href=this.$store.state.ip+"/InhabitantAndRecycle/exportInfo"; */
       },
       searchBtn() { // 查询 请求数据
         console.log("查询的电话：",this.search.telphone);

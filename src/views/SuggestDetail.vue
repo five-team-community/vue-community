@@ -50,18 +50,16 @@ export default {
         console.log(this.tableData[0].sugId);
         var nowStatus = this.tableData[0].sugState;
         var nowId = this.tableData[0].sugId;
-        console.log(typeof nowStatus);
-        if(nowStatus == 0) {
+        console.log(nowStatus);
+        if(nowStatus == "未读") {
           console.log("改变状态");
           nowStatus = 1;
         }
         this.axios
           .post("/suggestion/updateState",
           {
-         
               id: nowId,
               sugState: nowStatus
-        
           })
           .then((res)=> {
             console.log(res);
@@ -113,7 +111,6 @@ export default {
           }
 
           this.tableData.map((item)=> {
-            console.log(item.sugState);
             if(item.sugState == 0) {
               item.sugState = "未读"
             } else {

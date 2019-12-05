@@ -16,7 +16,7 @@
       <div class="btn" >
         <div>
           <el-button icon="el-icon-plus" class="btn-add" @click="addBtn">添加开锁公司</el-button>
-          <!-- <el-button icon="el-icon-tickets" class="btn-daochu" @click="exportBtn">导出</el-button> -->
+          <el-button icon="el-icon-tickets" class="btn-daochu" @click="exportBtn">导出</el-button>
           <el-button icon="el-icon-search" class="btn-search" @click="searchBtn">查询</el-button>
         </div>
       </div>
@@ -143,9 +143,9 @@ export default {
       console.log("进入添加页面!");
       this.$router.push({path:"/home/LockPeopleAdd"})
     },
-    /* exportBtn() { // 导出
-      window.location.href=this.$store.state.ip+"/repairInfo/exportUnlockInfo";
-    }, */
+    exportBtn() { // 导出
+      window.location.href = "http://172.16.6.65:8080/repairInfo/exportUnlockInfo";
+    },
     searchBtn() { // 查询
       console.log("查询结果：",this.search.companyName);
       this.axios

@@ -140,7 +140,8 @@ export default {
         this.$router.push({path:'/home/cleanMsgDetail?id='+ showId});
       },
       exportBtn() { //导出报表
-        window.location.href=this.$store.state.ip+"/InhabitantAndStaff/";
+        window.location.href = "http://172.16.6.59:8080/InhabitantAndStaff/exportInfo";
+        /* window.location.href=this.$store.state.ip+"/InhabitantAndStaff/exportInfo"; */
       },
       searchBtn() { // 查询 发送请求数据
         // 请求
