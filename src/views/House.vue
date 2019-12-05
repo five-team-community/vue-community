@@ -26,12 +26,12 @@
           </el-form-item>
         </el-form>
       </div>
+
       <!-- 新增和搜索按钮 -->
-      <div class="btn">
-        <div>
-          <el-button icon="el-icon-plus" class="btn-add" @click="add">新增</el-button>
-          <el-button icon="el-icon-search" class="btn-search" @click="searchMsg">搜素</el-button>
-        </div>
+      <div class="btn" style="text-align:right;margin-right:30px">
+        <el-button icon="el-icon-upload" class="btn-exclude" @click="exclude">导出报表</el-button>
+        <el-button icon="el-icon-plus" class="btn-add" @click="add">新增</el-button>
+        <el-button icon="el-icon-search" class="btn-search" @click="searchMsg">搜素</el-button>
       </div>
 
       <!-- 表格数据 -->
@@ -101,6 +101,9 @@ export default {
   methods: {
     add(){//新增
       this.$router.push({path:'/home/addHouse'});
+    },
+    exclude(){//导出报表
+      window.location.href=this.$store.state.ip+"/InhabitantAndHouseProperty/exportInfo";
     },
     searchMsg(){//************************搜索****************************
       console.log("搜索",this.search);
@@ -309,13 +312,17 @@ export default {
 .myinput .el-input {
   width: 90%;
 }
-.btn {
-  height: 40px;
-}
-.btn > div {
-  float: right;
-  margin-right: 30px;
+.btn{
+  margin-left: 30px;
   color: white;
+  .btn-exclude{
+    color:@yellowColor;
+    border-color: @yellowColor;
+    &:hover{
+      color: white;
+      background: @yellowColor;
+    }
+  }
   .btn-add {
     background: @greenColor;
     color: white;

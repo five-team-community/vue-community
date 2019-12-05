@@ -179,7 +179,6 @@ export default {
     changePage(val) {
       //改变页码
       this.currentPage = val;
-      console.log(val);
       this.loading = true;
       this.axios
         .post("/user/showBySearch", {

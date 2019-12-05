@@ -54,7 +54,7 @@
 export default {
   data() {
     return {  
-      loading: true,  //加载标识符
+      
       houseData: {},//房产信息
       dialogFormVisible: false,
       form: {

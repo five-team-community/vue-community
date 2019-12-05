@@ -308,14 +308,6 @@ const routes = [
         }
       },
       {
-        path:'addUser',
-        name:"AddUser",
-        component: () => import('../views/AddUser.vue'),//用户管理
-        meta: {
-          auth: true
-        }
-      },
-      {
         path:'alterUser/:id',
         name:"AlterUser",
         component: () => import('../views/AlterUser.vue'),//用户管理

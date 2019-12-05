@@ -118,6 +118,15 @@ export default {
         })
         .then(res => {
           console.log(res.data);
+          if (res.data.code == "200") {
+            this.$message({
+              message: "操作成功！",
+              type: "success"
+            });
+            this.$router.push({ path: "/home/Info" });
+          } else {
+            this.$message.error("操作失败");
+          }
         })
         .catch(err => {
           console.log(err);
