@@ -2,10 +2,10 @@
   <div class="user-item">
     <div class="line"></div>
     <div class="content clearfix">
-      <div class="name">用户名:{{user.inhabitantName}}</div>
-      <div class="host">关联业主:{{user.ownerName}}</div>
-      <div class="tel">手机号:{{user.telNum}}</div>
-      <div class="time">绑定时间:<i class="el-icon-date"></i> {{user.checkInTime}}</div>
+      <div class="name">用户名:{{user.name}}</div>
+      <div class="host">关联业主:{{user.host}}</div>
+      <div class="tel">手机号:{{user.tel}}</div>
+      <div class="time">身份证号:{{user.idCard}}</div>
       <div class="del">
       <el-button type="danger" plain round size="medium" @click="del" icon="el-icon-link">解绑用户</el-button>
     </div>
@@ -25,8 +25,19 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        var id=this.user.inhabitantId;
+        var id=this.user.id;
         console.log("删除",id);
+        this.axios
+        .get("/InhabitantAndHouseProperty/deleteRelationship", {params:{
+          inhabitantId:id
+        }})
+        .then(res => {
+          console.log("aaa",res.data.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
         this.$message({
           type: 'success',
           message: '删除成功!'

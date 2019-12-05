@@ -4,7 +4,7 @@
       <el-col :span="12">
         <div class="grid-content bg-purple userTotal">
           <div class="grid-content-item userCount">
-            <div>
+            <div class="toUser">
               <div class="el-icon-s-custom userIcon"></div>
               <div class="userNum">
                 <span>{{userTotal}}</span>
@@ -13,12 +13,16 @@
             </div>
           </div>
           <div class="grid-content-item" style="width: 30%;padding:20px">
-            <el-card class="box-card fix" style="height: 68px" shadow="hover">
-              <i class="el-icon-thumb">登记报修</i>
+            <div  @click="toFix">
+              <el-card class="box-card fix" style="height: 68px" shadow="hover">
+              <i class="el-icon-s-order">查看资讯</i>
             </el-card>
-            <el-card class="box-card recycle" style="height:68px; margin-top:20px" shadow="hover">
-              <i class="el-icon-box">登记回收</i>
+            </div>
+            <div @click="toRecycle">
+              <el-card class="box-card recycle" style="height:68px; margin-top:20px" shadow="hover">
+              <i class="el-icon-s-claim">查看公告</i>
             </el-card>
+            </div>
           </div>
           <div class="grid-content-item userEcharts">
             <v-chart :options="userOption" style="width:100%" />
@@ -54,26 +58,47 @@
           <div class="title">
             <i class="el-icon-thumb"></i>
             <span>报修统计</span>
+            <div class="right-btn">
+              <router-link to="/home/fixMsg">
+                查看更多
+                <i class="el-icon-arrow-right"></i>
+              </router-link>
+            </div>
           </div>
           <el-row class="fix-row">
-            <el-col :span='8'>
-            <div class="num">
-              <span style="color:#8E8E8E">{{fixNum.total}}</span>
-              <br />
-              <label>总数</label>
-            </div></el-col>
-            <el-col :span='16'><v-chart :options="fix" style="width:100%" /></el-col>
+            <el-col :span="8">
+              <div class="num">
+                <span style="color:#8E8E8E">{{fixNum.total}}</span>
+                <br />
+                <label>总数</label>
+              </div>
+            </el-col>
+            <el-col :span="16">
+              <v-chart :options="fix" style="width:100%" />
+            </el-col>
           </el-row>
           <el-row class="fix-row">
-            <el-col :span='8'><div class="num">
-              <span style="color:#EE5F6E">{{fixNum.state1}}</span><br /><label>总数</label>
-            </div></el-col>
-            <el-col :span='8'><div class="num">
-              <span style="color:#1E85C6">{{fixNum.state2}}</span><br /><label>总数</label>
-            </div></el-col>
-            <el-col :span='8'><div class="num">
-              <span style="color:#F8AF5F">{{fixNum.state3}}</span><br /><label>总数</label>
-            </div></el-col>
+            <el-col :span="8">
+              <div class="num">
+                <span style="color:#EE5F6E">{{fixNum.state1}}</span>
+                <br />
+                <label>未受理</label>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="num">
+                <span style="color:#1E85C6">{{fixNum.state2}}</span>
+                <br />
+                <label>待处理</label>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="num">
+                <span style="color:#F8AF5F">{{fixNum.state3}}</span>
+                <br />
+                <label>已完成</label>
+              </div>
+            </el-col>
           </el-row>
         </div>
       </el-col>
@@ -83,26 +108,47 @@
           <div class="title">
             <i class="el-icon-box"></i>
             <span>回收统计</span>
+            <div class="right-btn">
+              <router-link to="/home/recycleMsg">
+                查看更多
+                <i class="el-icon-arrow-right"></i>
+              </router-link>
+            </div>
           </div>
           <el-row class="recycle-row">
-            <el-col :span='8'>
-            <div class="num">
-              <span style="color:#8E8E8E">{{recycleNum.total}}</span>
-              <br />
-              <label>总数</label>
-            </div></el-col>
-            <el-col :span='16'><v-chart :options="recycle" style="width:100%" /></el-col>
+            <el-col :span="8">
+              <div class="num">
+                <span style="color:#8E8E8E">{{recycleNum.total}}</span>
+                <br />
+                <label>总数</label>
+              </div>
+            </el-col>
+            <el-col :span="16">
+              <v-chart :options="recycle" style="width:100%" />
+            </el-col>
           </el-row>
           <el-row class="recycle-row">
-          <el-col :span='8'><div class="num">
-            <span style="color:#EE5F6E">{{recycleNum.state1}}</span><br /><label>总数</label>
-          </div></el-col>
-          <el-col :span='8'><div class="num">
-            <span style="color:#1E85C6">{{recycleNum.state2}}</span><br /><label>总数</label>
-          </div></el-col>
-          <el-col :span='8'><div class="num">
-            <span style="color:#F8AF5F">{{recycleNum.state3}}</span><br /><label>总数</label>
-          </div></el-col>
+            <el-col :span="8">
+              <div class="num">
+                <span style="color:#EE5F6E">{{recycleNum.state1}}</span>
+                <br />
+                <label>总数</label>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="num">
+                <span style="color:#1E85C6">{{recycleNum.state2}}</span>
+                <br />
+                <label>总数</label>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="num">
+                <span style="color:#F8AF5F">{{recycleNum.state3}}</span>
+                <br />
+                <label>总数</label>
+              </div>
+            </el-col>
           </el-row>
         </div>
       </el-col>
@@ -123,18 +169,23 @@
 </style>
 <style lang="less" scoped>
 @import "../assets/less/base.less";
-
+.right-btn {
+  float: right;
+  a {
+    color: #8e8e8e;
+  }
+}
 .userTotal {
   height: 200px;
 }
-.fix-row{
-  border-bottom: 1px solid #F3F3F4;
+.fix-row {
+  border-bottom: 1px solid #f3f3f4;
   padding: 20px;
   height: 138px;
   overflow: hidden;
 }
-.recycle-row{
-  border-bottom: 1px solid #F3F3F4;
+.recycle-row {
+  border-bottom: 1px solid #f3f3f4;
   padding: 20px;
   height: 138px;
   overflow: hidden;
@@ -149,19 +200,20 @@
     margin-right: 2px;
   }
 }
-.num{
+.num {
   padding: 0 20px;
   span {
     display: inline-block;
     line-height: 60px;
     font-size: 34px;
   }
-  label{
+  label {
     font-size: 14px;
-    color: #8E8E8E;
+    color: #8e8e8e;
   }
 }
-.commentItem{
+
+.commentItem {
   float: left;
   width: 50%;
   height: 145px;
@@ -204,9 +256,13 @@
   }
 }
 .box-card {
+  cursor: pointer;
   text-align: center;
   color: white;
   i {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
     line-height: 28px;
   }
 }
@@ -278,63 +334,46 @@ export default {
     "v-chart": ECharts
   },
   data() {
-    var date = new Date();
-    var year = date.getFullYear(); //获取完整的年份(4位)
-    var month = date.getMonth() + 1; //获取当前月份(0-11,0代表1月)
-    // var year = 2019;
-    // var month = 3;
-    var timeData = [];
-    for (var i = 0; i < 7; i++) {
-      var time = year + "-" + month;
-
-      month = month - 1;
-      if (month < 1) {
-        year = year - 1;
-        month = 12;
-      }
-      timeData.unshift(time);
-    }
-
     return {
       userTotal: 0,
       communityNum: 0,
       commentNum: 0,
-      fixNum:{
-        total:0,
-        state1:0,
-        state2:0,
-        state3:0,
+      fixNum: {
+        total: 0,
+        state1: 0,
+        state2: 0,
+        state3: 0
       },
-      recycleNum:{
-        total:0,
-        state1:0,
-        state2:0,
-        state3:0,
+      recycleNum: {
+        total: 15,
+        state1: 2,
+        state2: 5,
+        state3: 8
       },
+      userNum: {},
       fix: {
         title: {
-           text: "半年趋势" ,
-           left: 'center',
-           textStyle:{
-             fontSize: 14,
-           }
-           },
+          text: "半年趋势",
+          left: "center",
+          textStyle: {
+            fontSize: 14
+          }
+        },
         tooltip: {
-          trigger: "axis",
+          trigger: "axis"
         },
         grid: {
-          top:0,
+          top: 0,
           x: 0,
           y: 0,
           x2: 0,
-          y2: 340,
+          y2: 340
         },
         xAxis: [
           {
             show: false,
             type: "category",
-            boundaryGap: false,
-            data: timeData
+            boundaryGap: false
           }
         ],
         yAxis: [
@@ -360,28 +399,27 @@ export default {
       },
       recycle: {
         title: {
-           text: "半年趋势" ,
-           left: 'center',
-           textStyle:{
-             fontSize: 14,
-           }
-           },
+          text: "半年趋势",
+          left: "center",
+          textStyle: {
+            fontSize: 14
+          }
+        },
         tooltip: {
-          trigger: "axis",
+          trigger: "axis"
         },
         grid: {
-          top:0,
+          top: 0,
           x: 0,
           y: 0,
           x2: 0,
-          y2: 340,
+          y2: 340
         },
         xAxis: [
           {
             show: false,
             type: "category",
-            boundaryGap: false,
-            data: timeData
+            boundaryGap: false
           }
         ],
         yAxis: [
@@ -405,61 +443,123 @@ export default {
           }
         }
       },
-      userOption: {
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b}: {c} ({d}%)"
-        },
-        series: [
-          {
-            name: "用户组成",
-            type: "pie",
-            radius: ["50%", "70%"],
-            center: ["50%", "25%"],
-            avoidLabelOverlap: false,
-            legend: {
-              orient: "vertical",
-              x: "left",
-              data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
-            },
-            label: {
-              normal: {
-                show: false,
-                position: "center"
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: "18",
-                  fontWeight: "bold"
-                }
-              }
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: [
-              { value: 335, name: "直接访问" },
-              { value: 310, name: "邮件营销" },
-              { value: 234, name: "联盟广告" },
-              { value: 135, name: "视频广告" },
-              { value: 1548, name: "搜索引擎" }
-            ]
-          }
-        ]
-      }
+      userOption: {}
     };
   },
+  methods:{
+    toFix(){
+      console.log("aaa");
+      this.$router.push({ path: "/home/info" });
+    },
+    toRecycle(){
+this.$router.push({ path: "/home/Notice" });
+    },
+    toUser(){
+this.$router.push({ path: "/home/user" });
+    }
+  },
   created() {
+    // 获取社区数据
     this.axios
-      .post("/dynamic//lastMonthTotalCount", {
-      })
+      .post("/dynamic/lastMonthTotalCount", {})
       .then(res => {
         console.log(res);
         this.communityNum = res.data.data.dynamicTotalCount;
         this.commentNum = res.data.data.discussesTotalCount;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    // 报修数据
+    this.axios
+      .post("/repairInfo/getAllStaCount", {})
+      .then(res => {
+        console.log(res);
+        this.fixNum.state1 = res.data.data.count1;
+        this.fixNum.state2 = res.data.data.count2;
+        this.fixNum.state3 = res.data.data.count3;
+        this.fixNum.total =
+          res.data.data.count1 + res.data.data.count2 + res.data.data.count3;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    // 用户数据
+    this.axios
+      .post("/user/countList", {})
+      .then(res => {
+        console.log(res);
+
+        this.userNum = [
+          { value: res.data.data.godCount, name: "住户" },
+          { value: res.data.data.inhabitantCount, name: "业主" },
+          { value: res.data.data.staffCount, name: "服务人员" },
+          { value: res.data.data.adminCount, name: "管理员" }
+        ];
+        this.userTotal =
+          res.data.data.godCount +
+          res.data.data.adminCount +
+          res.data.data.inhabitantCount +
+          res.data.data.staffCount;
+        this.userOption = {
+          tooltip: {
+            trigger: "item",
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
+          series: [
+            {
+              name: "用户组成",
+              type: "pie",
+              radius: ["50%", "70%"],
+              center: ["50%", "25%"],
+              avoidLabelOverlap: false,
+              legend: {
+                orient: "vertical",
+                x: "left"
+              },
+              label: {
+                normal: {
+                  show: false,
+                  position: "center"
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    fontSize: "18",
+                    fontWeight: "bold"
+                  }
+                }
+              },
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data: this.userNum,
+              itemStyle: {
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)"
+                },
+                normal: {
+                  color: function(params) {
+                    //自定义颜色
+                    var colorList = [
+                      "#4DD3D8",
+                      "#F8AF5F",
+                      "#FCB5A0",
+                      "#FFD205",
+                    ];
+                    return colorList[params.dataIndex];
+                  }
+                }
+              }
+            }
+          ]
+        };
       })
       .catch(err => {
         console.log(err);

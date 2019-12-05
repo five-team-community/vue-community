@@ -7,7 +7,7 @@
           <i class="el-icon-s-order"></i>
           <span>基本信息</span>
         </div>
-        <div class="main">
+        <div class="main" v-loading="loading">
           <el-row :gutter="10">
             <el-col :xs="24" :sm="6" :md="3" :lg="2">
               <div class="item-title">用户名:</div>
@@ -24,98 +24,65 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :xs="24" :sm="6" :md="3" :lg="2">
-              <div class="item-title">性别:</div>
-            </el-col>
-            <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.sex}}</div>
-            </el-col>
-            <el-col :xs="24" :sm="6" :md="3" :lg="2">
               <div class="item-title">电话:</div>
             </el-col>
             <el-col :xs="24" :sm="18" :md="9" :lg="10">
               <div class="msg">{{userData.tel}}</div>
             </el-col>
-          </el-row>
-          <el-row :gutter="10">
             <el-col :xs="24" :sm="6" :md="3" :lg="2">
-              <div class="item-title">身份证:</div>
+              <div class="item-title">状态:</div>
             </el-col>
             <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.idCard}}</div>
+              <div class="msg">{{userData.state}}</div>
             </el-col>
+          </el-row>
+          <el-row :gutter="10">
             <el-col :xs="24" :sm="6" :md="3" :lg="2">
               <div class="item-title">用户类型:</div>
             </el-col>
             <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.type}}</div>
-            </el-col>
-          </el-row>
-           <div class="part2">
-
-          <el-row :gutter="10">
-            <el-col :xs="24" :sm="6" :md="3" :lg="2">
-              <div class="item-title">用户名:</div>
-            </el-col>
-            <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.name}}</div>
+              <div class="msg">{{userData.role}}</div>
             </el-col>
             <el-col :xs="24" :sm="6" :md="3" :lg="2">
-              <div class="item-title">真实姓名:</div>
+              <div class="item-title">注册时间:</div>
             </el-col>
             <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.realName}}</div>
+              <div class="msg">{{userData.registerTime}}</div>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :xs="24" :sm="6" :md="3" :lg="2">
-              <div class="item-title">性别:</div>
+              <div class="item-title">上次登录时间:</div>
             </el-col>
             <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.sex}}</div>
+              <div class="msg">{{userData.loginTime}}</div>
             </el-col>
             <el-col :xs="24" :sm="6" :md="3" :lg="2">
-              <div class="item-title">电话:</div>
+              <div class="item-title">上次退出时间:</div>
             </el-col>
             <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.tel}}</div>
+              <div class="msg">{{userData.logoutTime}}</div>
             </el-col>
           </el-row>
-          <el-row :gutter="10">
-            <el-col :xs="24" :sm="6" :md="3" :lg="2">
-              <div class="item-title">身份证:</div>
-            </el-col>
-            <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.idCard}}</div>
-            </el-col>
-            <el-col :xs="24" :sm="6" :md="3" :lg="2">
-              <div class="item-title">用户类型:</div>
-            </el-col>
-            <el-col :xs="24" :sm="18" :md="9" :lg="10">
-              <div class="msg">{{userData.type}}</div>
-            </el-col>
-          </el-row>
-      </div>
           <el-row :gutter="10">
             <el-col :xs="24" :sm="12">
               <el-button type="primary" size="medium" icon="el-icon-edit" @click="altermsg">修改信息</el-button>
             </el-col>
             <el-col :xs="24" :sm="12">
-              <el-button
-                type="danger"
-                size="medium"
-                icon="el-icon-key"
-                @click="openDialog"
-              >修改密码</el-button>
+              <el-button type="danger" size="medium" icon="el-icon-key" @click="openDialog">修改密码</el-button>
             </el-col>
           </el-row>
           <el-dialog title="修改密码" :visible.sync="dialogFormVisible" :center="true" width="400px">
             <el-form :model="ruleForm" label-width="80px" :rules="rules" ref="ruleForm" status-icon>
+              <el-form-item label="原密码" prop="oldpass">
+                <el-input type="password" v-model="ruleForm.oldPass" autocomplete="off"></el-input>
+              </el-form-item>
               <el-form-item label="密码" prop="pass">
-              <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="checkPass">
-              <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-            </el-form-item>
+                <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码" prop="checkPass">
+                <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+              </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="conclePwd">取 消</el-button>
@@ -128,104 +95,173 @@
   </div>
 </template>
 <script>
-
-// 模拟数据
-var userData = {
-  id: 1,
-  name: "111",
-  realName: "222",
-  type: "管理员",
-  sex: "nan",
-  tel: "1321",
-  idCard: "2423432423423"
-};
-
+import crypto from 'crypto'
 export default {
+  
   data() {
-     var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if (this.ruleForm.checkPass !== '') {
-            this.$refs.ruleForm.validateField('checkPass');
-          }
-          callback();
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.ruleForm.checkPass !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
         }
-      };
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.ruleForm.pass) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.ruleForm.pass) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
-      role:'',
+      loading: true,
+      role: "",
       ruleForm: {
-        pass: '',
-        checkPass: ''
+        oldPass:'',
+        pass: "",
+        checkPass: ""
       },
       userData: {},
       dialogFormVisible: false,
       rules: {
-        pass: [
-          { validator: validatePass, trigger: 'blur' }
-        ],
-        checkPass: [
-          { validator: validatePass2, trigger: 'blur' }
-        ]
+        pass: [{ validator: validatePass, trigger: "blur" }],
+        checkPass: [{ validator: validatePass2, trigger: "blur" }]
       }
     };
   },
   methods: {
+    mdPwd(pwd){
+      const md5 = crypto.createHash("md5"); // md5 加密，不可逆加密
+      return md5.update(pwd).digest("hex"); // 加密
+    },
     altermsg() {
       console.log("aaa");
-      this.$router.push({ path: "/home/alterUser" });
+      var id=sessionStorage.getItem("userId");
+      id=21;
+      this.$router.push({ path: "/home/alterUser/"+id });
     },
-    alterPwd(){
-      this.$refs["ruleForm"].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
+    alterPwd() {
+      console.log("bbb",this.mdPwd(this.ruleForm.oldPass),this.mdPwd(this.ruleForm.pass));
+      this.$refs["ruleForm"].validate(valid => {
+        if (valid) {
+           this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.axios
+            .post("/user/changePassword", {
+              // userId: sessionStorage.getItem("userId"),
+              userId:21,
+              oldPassword:this.mdPwd(this.ruleForm.oldPass),
+              newPassword:this.mdPwd(this.ruleForm.pass)
+            })
+            .then(res => {
+              console.log(res);
+              if(res.data.code=="validate_error"){
+                this.$message({
+            type: "error",
+            message: res.data.message
+          });
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
+
+
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
-    openDialog(){
-      if(this.$refs["ruleForm"]){
-        this.$refs["ruleForm"].resetFields();  
+    openDialog() {
+      if (this.$refs["ruleForm"]) {
+        this.$refs["ruleForm"].resetFields();
       }
       this.dialogFormVisible = true;
     },
-    conclePwd(){
+    conclePwd() {
       this.dialogFormVisible = false;
+    },
+    addZero(v) {
+      return v < 10 ? "0" + v : v;
+    },
+    switchTimeFormat(time) {
+      const dateTime = new Date(time);
+      const year = dateTime.getFullYear();
+      const month = dateTime.getMonth() + 1;
+      const date = dateTime.getDate();
 
+      return `${year}-${this.addZero(month)}-${this.addZero(date)}`;
+    },
+    formateData(item){
+      var data={};
+      data.name=item.userName;
+      data.realName = item.realName;
+      if (item.userState == 1) {
+          data.state = "正常";
+        } else {
+          data.state = "禁用";
+        }
+
+      data.tel = item.telNum;
+      data.role = item.roleName;
+      data.registerTime = item.registerTime;
+      data.loginTime = this.switchTimeFormat(item.loginTime);
+      data.logoutTime = this.switchTimeFormat(item.logoutTime)||"无";
+      return data;
     }
   },
   created() {
     //创建时获取数据
-    this.userData = userData;
-
+    this.axios
+      .post("/user/showSingle", {
+        // userId:sessionStorage.getItem("userId")
+        userId:21
+      })
+      .then(res => {
+        console.log("查询", res);
+        this.userData = this.formateData(res.data.data.data);
+        this.loading = false;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   computed: {}
 };
 </script>
 <style lang="less" scoped>
 @import "../assets/less/base.less";
+.msg{
+  height: 40px;
+}
 .el-button--medium {
   padding: 10px 100px;
   margin-left: 20px;
 }
-#MyData {
+#myData {
   color: @fontColor;
-  background-color: #f3f3f4;
-  padding: 20px 10px;
-  min-height: 500px;
+  background-color: white;
+  height: 100%;
 }
-.part1,.part2{
+.part1,
+.part2 {
   background: white;
 }
 .title {

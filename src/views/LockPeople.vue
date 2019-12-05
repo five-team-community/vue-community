@@ -144,7 +144,7 @@ export default {
       this.$router.push({path:"/home/LockPeopleAdd"})
     },
     exportBtn() { // 导出
-      console.log("导出成功!");
+      window.location.href = "http://172.16.6.65:8080/repairInfo/exportUnlockInfo";
     },
     searchBtn() { // 查询
       console.log("查询结果：",this.search.companyName);

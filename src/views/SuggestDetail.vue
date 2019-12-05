@@ -9,7 +9,7 @@
         </a>
       </div>
       <el-divider style="margin:0"></el-divider>
-      <div class="contentBox" >
+      <div class="contentBox" v-loading="loading">
         <el-row :gutter="10" v-if="tableData[0]">
           <el-col :xs="24" :sm="6" :md="3" :lg="2" ><div class="CBtitle">房号:</div></el-col>
           <el-col :xs="24" :sm="18" :md="9" :lg="10" ><div class="CBmsg">{{tableData[0].housePropertyNo}}</div></el-col>
@@ -39,6 +39,7 @@
 export default {
   data() {
     return {
+      loading:true,
       isShow:false,
       tableData:[]
     }
@@ -49,18 +50,16 @@ export default {
         console.log(this.tableData[0].sugId);
         var nowStatus = this.tableData[0].sugState;
         var nowId = this.tableData[0].sugId;
-        console.log(typeof nowStatus);
-        if(nowStatus == 0) {
+        console.log(nowStatus);
+        if(nowStatus == "未读") {
           console.log("改变状态");
           nowStatus = 1;
         }
         this.axios
           .post("/suggestion/updateState",
           {
-         
               id: nowId,
               sugState: nowStatus
-        
           })
           .then((res)=> {
             console.log(res);
@@ -75,7 +74,7 @@ export default {
           callback: action => {
             this.$message({
               type: 'info',
-              message: `添加成功: ${ action }`
+              message: `修改成功: ${ action }`
             });
           }
         });
@@ -105,13 +104,13 @@ export default {
           console.log(res.data);
           console.log("得到的数据",res.data.data.data);
           this.tableData.push(res.data.data.data);
+          this.loading = false;
 
           if(this.tableData[0].sugState == 1) {
             this.isShow = true;
           }
 
           this.tableData.map((item)=> {
-            console.log(item.sugState);
             if(item.sugState == 0) {
               item.sugState = "未读"
             } else {

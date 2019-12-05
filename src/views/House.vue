@@ -19,8 +19,9 @@
           </el-form-item>
           <el-form-item label="是否闲置">
             <el-select v-model="search.houseState" placeholder="是否闲置">
-              <el-option label="是" value="true"></el-option>
-              <el-option label="否" value="false"></el-option>
+              <el-option label="" value="全部"></el-option>
+              <el-option label="是" value="是"></el-option>
+              <el-option label="否" value="否"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -35,7 +36,7 @@
 
       <!-- 表格数据 -->
       <div class="mytable">
-        <el-table :data="getData" border style="width: 100%" v-loading="loading">
+        <el-table :data="houseData" border style="width: 100%" v-loading="loading">
           <el-table-column prop="no" label="房号"></el-table-column>
           <el-table-column prop="name" label="业主姓名"></el-table-column>
           <el-table-column prop="tel" label="预留手机号"></el-table-column>
@@ -44,7 +45,6 @@
           <el-table-column prop="isFree" label="是否计费"></el-table-column>
           <el-table-column prop="blindNum" label="绑定数"></el-table-column>
           <el-table-column prop="blindMax" label="限制绑定数"></el-table-column>
-          <el-table-column prop="state" label="用户状态"></el-table-column>
 
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
@@ -120,7 +120,6 @@ export default {
           this.houseData = this.fomateData(res.data.data.list);
           this.totalPage = res.data.data.page.totalCount;
           this.loading = false;
-          
         })
         .catch(err => {
           console.log(err);
@@ -162,6 +161,7 @@ export default {
         .then(res => {
           console.log("aaa",res.data.data);
           this.houseData = this.fomateData(res.data.data.list);
+          
           this.totalPage = res.data.data.page.totalCount;
           this.loading = false;
         })
@@ -192,6 +192,27 @@ export default {
     changePage(val){//改变页码
       this.currentPage=val;
       console.log(val);
+      this.loading =true;
+      this.axios
+        .post("/InhabitantAndHouseProperty/selectAllLike", {
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          housePropertyNo: this.search.houseNum,
+          inhabitantName: this.search.ownerName,
+          telNum: this.search.ownerPhone,
+          houseState: this.search.houseState
+        })
+        .then(res => {
+          console.log("模糊查询",res.data.data);
+          this.houseData = this.fomateData(res.data.data.list);
+          console.log(this.houseData);
+          this.totalPage = res.data.data.page.totalCount;
+          this.loading = false;
+          
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     fomateData(list){
       var arr=[];
@@ -229,12 +250,6 @@ export default {
         .catch(err => {
           console.log(err);
         });
-  },
-  computed: {
-    getData(){//计算当前页的数据，table绑定该值
-      var start=5*(this.currentPage-1);
-      return this.houseData.slice(start,start+5);
-   }
   }
 };
 </script>

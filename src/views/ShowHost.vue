@@ -1,6 +1,6 @@
 <template>
   <div id="show-house">
-    <div class="content">
+    <div class="content" v-loading="loading">
 
       <!-- 标题 -->
       <div class="title">
@@ -12,6 +12,8 @@
           <el-button round size='mini' class="back-btn" icon='el-icon-arrow-left' @click="back">返回</el-button>
         </div>
       </div>
+
+      <!-- 显示信息 -->
       <div class="main" v-show="houseData" v-loading="!houseData">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="3" ><div class="item-title">绑定用户:</div></el-col>
@@ -52,38 +54,18 @@
 export default {
   data() {
     return {  
+      loading: true,  //加载标识符
       houseData: {},//房产信息
-      userList:[],//绑定用户
       dialogFormVisible: false,
       form: {
         tel:''
       },
-      usermsg: {}
-    };
-  },
-  components: {
 
+    };
   },
   methods: {
     back(){//返回房产信息列表
       this.$router.push({path:'/home/host'});
-    },
-    searchUserTel(){
-      console.log(this.usermsg.data);
-    },
-    addBind(){
-      if(!this.usermsg.state){
-        this.$message.error("请输入要绑定的用户手机号");
-      }
-      else if(this.usermsg.state==200){
-        console.log(this.usermsg.data.id);
-        this.usermsg={};
-        this.form.tel="";
-        this.dialogFormVisible = false;
-      }
-      else{
-        this.$message.error(this.usermsg.msg);
-      }
     },
     addZero (v) {
       return v < 10 ? '0' + v : v
@@ -100,6 +82,7 @@ export default {
       getBirth(iden) {
         return iden.substring(6,10)+"-"+iden.substring(10,12)+"-"+iden.substring(12,14);
       },
+      // 格式化数据
     formateData(item){
       var houseData={};
       houseData.id=item.inhabitantId;
@@ -129,6 +112,7 @@ export default {
     .then((res) => {
       console.log(res);
       this.houseData=this.formateData(res.data.data.data);
+      this.loading = false;
     })
     .catch(err=> {
       console.log(err)
@@ -140,8 +124,11 @@ export default {
 @import "../assets/less/base.less";
 #show-house {
   color: @fontColor;
-  background-color: #f3f3f4;
-  min-height: 500px;
+  background-color: white;
+  height: 100%;
+}
+.msg{
+  height: 40px;
 }
 .content {
   background: white;
