@@ -79,7 +79,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :page-size="1"
+        :page-size="5"
         :total="totalCount"
         :pager-count="5"
         :current-page="currentPage"
@@ -102,7 +102,7 @@ export default {
       loading: true,
       tableData: [],
       value2: "",
-      totalCount: 0
+      totalCount: 3
     };
   },
   methods: {
@@ -136,10 +136,10 @@ export default {
       this.axios
         .post("/pay/leibie", {
           payProject: "气费",
-          currentPage: this.currentPage
+          pageIndex: this.currentPage
         })
         .then(res => {
-          this.tableData = res.data.data.Pays;
+          this.tableData = res.data.data.pays;
           this.totalCount = res.data.data.totalCount;
           console.log(res.data);
           this.loading = false;
@@ -161,17 +161,20 @@ export default {
           });
           this.axios
             .post("/pay/delorder", {
-              payOrder: this.tableData[index].payOrder
+              payOrder: this.tableData[index].payOrder,
+              pageIndex:this.currentPage,
             })
             .then(res => {
               console.log("删除成功", res);
               this.axios
                 .post("/pay/leibie", {
-                  payProject: "气费"
+                  payProject: "气费",
+                  pageIndex:this.currentPage
                 })
                 .then(res => {
                   //  res.data = tableData;
-                  this.tableData = res.data.data.Pays;
+                  this.tableData = res.data.data.pays;
+                  this.totalCount = res.data.data.totalCount; 
                   this.loading = false;
                 })
                 .catch(err => {
@@ -218,6 +221,7 @@ export default {
         })
         .then(res => {
           this.tableData = res.data.data.pays;
+          this.totalCount = res.data.data.totalCount; 
           console.log(res.data.data);
           console.log(this.tableData);
           this.loading = false;
@@ -239,9 +243,10 @@ export default {
         pageIndex: 1
       })
       .then(res => {
-        this.tableData = res.data.data.Pays;
+        this.tableData = res.data.data.pays;
+        this.totalCount = res.data.data.totalCount; 
         this.loading = false;
-        console.log(res.data.data);
+        console.log(res.data.data.totalCount);
       })
       .catch(err => {
         console.log(err);

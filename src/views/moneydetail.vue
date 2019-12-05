@@ -10,13 +10,13 @@
           </div>
         </div>
 
-        <el-tabs v-model="activeName" v-loading='loading' @tab-click="handleClick">
+        <el-tabs v-model="activeName"  boder v-loading='loading' @tab-click="handleClick">
             <el-row>
               <el-col :span="12">
                 <div class="grid-content bg-purple">社区：易居社区</div>
               </el-col>
               <el-col :span="12">
-                <div class="grid-content bg-purple-light">房号：{{tableData.inhabitantAndHousePropertyVO.housePropertyNo}}</div>
+                <div class="grid-content bg-purple-light"  >房号：{{tableData.inhabitantAndHousePropertyVO.housePropertyNo}}</div>
               </el-col>
             </el-row>
             <el-row>
@@ -85,7 +85,7 @@ export default {
             payId:str,
         }) 
         .then(res => {
-          this.tableData = res.data.data.pays; 
+          this.tableData = res.data.data.Pays; 
           console.log(res.data)
           this.loading=false
         })

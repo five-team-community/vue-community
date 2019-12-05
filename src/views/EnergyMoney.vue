@@ -171,7 +171,6 @@ export default {
                   pageIndex: this.currentPage
                 })
                 .then(res => {
-                  //  res.data = tableData;
                   this.tableData = res.data.data.pays;
                   this.loading = false;
                 })

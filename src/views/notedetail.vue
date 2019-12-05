@@ -96,7 +96,16 @@ export default {
             content: this.content,
             imgs:this.imgurl
         })
-        .then(() => {
+        .then(res => {
+          if (res.data.code == "200") {
+            this.$message({
+              message: "操作成功！",
+              type: "success"
+            });
+            this.$router.push({ path: "/home/Notice" });
+          } else {
+            this.$message.error("操作失败");
+          }
         })
         .catch(err => {
           return err;

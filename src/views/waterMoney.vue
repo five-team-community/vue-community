@@ -79,7 +79,6 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :page-size="1"
         :total="totalCount"
         :pager-count="5"
         :current-page="currentPage"
@@ -136,11 +135,11 @@ export default {
       this.axios
         .post("/pay/leibie", {
           payProject: "水费",
-          currentPage: this.currentPage
+          pageIndex: this.currentPage
         })
         .then(res => {
-          this.tableData = res.data.data.Pays;
-          this.totalCount = res.data.data.Pays.length;
+          this.tableData = res.data.data.pays;
+          this.totalCount = res.data.data.pays.totalCount;
           console.log(res.data);
           this.loading = false;
         })
@@ -171,7 +170,7 @@ export default {
                 })
                 .then(res => {
                   //  res.data = tableData;
-                  this.tableData = res.data.data.Pays;
+                  this.tableData = res.data.data.pays;
                   this.loading = false;
                 })
                 .catch(err => {
@@ -238,7 +237,7 @@ export default {
       })
       .then(res => {
         this.tableData = res.data.data.pays;
-        this.totalCount = res.data.data.length;
+        this.totalCount = res.data.data.totalCount; 
         this.loading = false;
         console.log(res.data);
       })

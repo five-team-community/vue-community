@@ -249,23 +249,6 @@ export default {
         console.log(err);
       });
   },
-  /* this.axios
-      .post("/pay/jiemian", {
-
-          inhabitantId:1,
-          payUnitId:4,
-        
-      })
-      .then(res => {
-        this.tableData = res.data.data.Pays;
-        console.log("第一个数据", res.data);
-        console.log(res.data.data);
-        console.log(this.tableData);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, */
   computed: {
     getData() {
       var start = 5 * (this.currentPage - 1);
