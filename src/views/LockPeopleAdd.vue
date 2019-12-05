@@ -12,19 +12,19 @@
       <div class="contentBox">
         <el-form ref="form" :model="form" label-width="180px">
         
-        <el-form-item label="公司名称">
+        <el-form-item label="公司名称" prop="companyName" :rules="[{ required: true, message: '名称不能为空', trigger: ['blur','change']}]">
           <el-input v-model="form.companyName" placeholder="请输入公司名称"></el-input>
         </el-form-item>
-        <el-form-item label="联系人">
+        <el-form-item label="联系人" prop="personName" :rules="[{ required: true, message: '联系人不能为空', trigger: ['blur','change']}]">
           <el-input v-model="form.personName" placeholder="请输入联系人"></el-input>
         </el-form-item>
-        <el-form-item label="电话号码">
+        <el-form-item label="电话号码" prop="telphone" :rules="[phone,{ required: true, message: '手机号不能为空', trigger: ['blur','change']}]">
           <el-input v-model="form.telphone" placeholder="请输入联系电话"></el-input>
         </el-form-item>
-        <el-form-item label="地址">
+        <el-form-item label="地址" prop="value" :rules="[{ required: true, message: '地址不能为空', trigger: ['blur','change']}]">
           <el-cascader v-model="form.value" :options="options"  @change="handleChange"></el-cascader>
         </el-form-item>
-        <el-form-item label="详细地址">
+        <el-form-item label="详细地址" prop="detailAddress" :rules="[{ required: true, message: '详细地址不能为空', trigger: ['blur','change']}]">
           <el-input v-model="form.detailAddress" placeholder="请输入详细地址"></el-input>
         </el-form-item>
         <el-form-item>
@@ -60,7 +60,20 @@
 <script>
 export default {
   data() {
+    var checkPhone = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('手机号不能为空'));
+        } else {
+          const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+          if (reg.test(value)) {
+            callback();
+          } else {
+            return callback(new Error('请输入正确的手机号'));
+          }
+        }
+      };
     return {
+      phone:{validator: checkPhone, trigger: ['blur','change']},
       form: {
           companyName: '',
           personName: '',
@@ -349,27 +362,10 @@ export default {
     handleChange(value) {
       console.log(value);
     },
-    /* upPic() {
-      console.log("图片",this.imgurl);
-      this.axios
-        .post("/unlock/loadHeadImg",
-        {
-            file:this.imgurl
-        })
-        .then((res)=> {
-          console.log(res);
-        })
-        .catch((err)=> {
-          console.log(err);
-        })
-    }, */
     onSubmit() { //确认
       console.log('公司!',this.form.companyName);
       console.log('联系人',this.form.personName);
       console.log('电话',this.form.telphone);
-      console.log('详细地址',this.form.detailAddress);
-      console.log('submit!',this.form.value[0]);
-      console.log('submit!',this.form.value[1]);
       if(this.form.value[2]) {
         console.log('submit!',this.form.value[2]);
         var address = this.form.value[0] + "" + this.form.value[1] + "" + this.form.value[2] + "" + this.form.detailAddress;
@@ -377,8 +373,6 @@ export default {
         address = this.form.value[0] + "" + this.form.value[1] + "" + this.form.detailAddress;
       }
       console.log("地址：",address);
-
-      console.log("ssssssss",this.imgurl)
 
       this.axios
         .post("/unlock/addUnlock",
