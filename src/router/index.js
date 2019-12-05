@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Dash from '../views/Dash.vue'
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -453,6 +454,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
+  // base:'/dist/',
   routes
 })
 

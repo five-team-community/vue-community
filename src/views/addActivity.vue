@@ -143,6 +143,8 @@ export default {
           activityAddress: this.form.activityAddress,
           endTime: this.form.endTime,
           startTime: this.form.startTime,
+             contactsPhone:this.form.contactsPhone,
+          content: this.form.content,
           content: this.form.content,
           description: this.form.description,
           maxCount: this.form.count,

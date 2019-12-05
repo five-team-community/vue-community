@@ -85,16 +85,11 @@ export default {
       return isJPG && isLt2M;
     },
     onSubmit() {
-      if (this.form.data1) {
-        var t = this.form.date1;
-        var startTime1 =
-          t.getFullYear() + "-" + (t.getMonth() + 1) + "-" + t.getDate();
-      }
 
       this.axios
         .post("/Announcement/addAnnouncement", {
           title: this.form.name,
-          expirydDate: startTime1,
+          expirydDate: this.form.date1,
           content: this.form.desc,
           push: this.form.delivery,
           imgs: this.imgurl
