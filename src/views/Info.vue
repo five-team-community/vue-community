@@ -131,7 +131,7 @@ export default {
                   this.tableData = res.data.data;
                   this.totalCount=res.data.totalCount;
                   this.loading = false;
-                  console.log(res.data.data)
+                  console.log('重新渲染',res.data.data)
                 })
                 .catch(err => {
                   console.log(err);

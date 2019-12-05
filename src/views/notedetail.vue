@@ -96,11 +96,9 @@ export default {
             content: this.content,
             imgs:this.imgurl
         })
-        .then(res => {
-          console.log(res.data);
+        .then(() => {
         })
         .catch(err => {
-          console.log(err);
           return err;
         });
       this.$router.push({ path: "/home/Notice" });
