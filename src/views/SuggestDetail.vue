@@ -74,7 +74,7 @@ export default {
           callback: action => {
             this.$message({
               type: 'info',
-              message: `添加成功: ${ action }`
+              message: `修改成功: ${ action }`
             });
           }
         });
