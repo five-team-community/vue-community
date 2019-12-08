@@ -135,9 +135,6 @@ export default {
             message: '已取消删除'
           });          
         });
-
-      
-      
     },
     addBtn() { // 添加信息
       console.log("进入添加页面!");
