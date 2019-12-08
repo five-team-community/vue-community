@@ -25,8 +25,9 @@
           <el-avatar shape="square" :size="100" :src="form.fullimg" class="serve-img" style="float:left"></el-avatar>
           <el-upload
             name="photo"
+            :headers="headers"
             class="avatar-uploader"
-            :action="this.$store.state.ip+'/user/testFile'"
+            action='/api/user/testFile'
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
@@ -320,6 +321,12 @@ export default {
         return this.userList[this.form.link].tel;
       } else {
         return null;
+      }
+    },
+    headers() {
+      return{
+        "Authorization": sessionStorage.getItem('token'), // 直接从本地获取token就行
+        "validateId": sessionStorage.getItem('validateId')
       }
     }
   },

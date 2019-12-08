@@ -69,6 +69,7 @@
     </div>
 </template>
 <script>
+// import http from '../utils/http';
 export default {
   data() {
     return {
@@ -89,8 +90,20 @@ export default {
     add(){//新增
       this.$router.push({path:'/home/addHouse'});
     },
-    exclude(){//导出报表
-      window.location.href=this.$store.state.ip+"/InhabitantAndHouseProperty/exportInfo";
+    exclude: async function (){//导出报表
+      //  try {
+      //   let res = await this.axios.post('/InhabitantAndHouseProperty/exportInfo',
+      //   {headers:
+      //     {
+      //       "Authorization": sessionStorage.getItem('token'), // 直接从本地获取token就行
+      //       "validateId": sessionStorage.getItem('validateId')
+      //     }
+      //   })
+      //   console.log(res);
+      // } catch (err) {
+      //   console.log(err)
+      // }
+      window.location.href="/api/InhabitantAndHouseProperty/exportInfo";
     },
     searchMsg(){//************************搜索****************************
       console.log("搜索",this.search);
@@ -242,7 +255,15 @@ export default {
         .catch(err => {
           console.log(err);
         });
-  }
+  },
+  // computed: {
+  //   headers() {
+  //     return{
+  //       "Authorization": sessionStorage.getItem('token'), // 直接从本地获取token就行
+  //       "validateId": sessionStorage.getItem('validateId')
+  //     }
+  //   }
+  // }
 };
 </script>
 <style lang="less" scoped>

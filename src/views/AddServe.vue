@@ -24,8 +24,9 @@
         <el-form-item label="员工头像:" prop="link">
           <el-upload
             name="photo"
+            :headers="headers"
             class="avatar-uploader"
-            :action="this.$store.state.ip+'/user/testFile'"
+            action='/api/user/testFile'
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
@@ -193,13 +194,14 @@ export default {
   },
   methods: {
     handleSuccess(res, file) {
-      console.log(res.data.filePath);
+      console.log(res);
       console.log(URL.createObjectURL(file.raw));
       this.form.img = res.data.filePath;
     },
     beforeUpload(file) {
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
+
 
       if (!isJPG) {
         this.$message.error("上传头像图片只能是 JPG 格式!");
@@ -298,6 +300,14 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    }
+  },
+  computed: {
+    headers() {
+      return{
+        "Authorization": sessionStorage.getItem('token'), // 直接从本地获取token就行
+        "validateId": sessionStorage.getItem('validateId')
+      }
     }
   }
 };

@@ -39,8 +39,9 @@
         <el-form-item label="头像" class="load">
           <el-upload
             name="file"
+            :headers="headers"
             class="avatar-uploader"
-            :action="this.$store.state.ip+'/unlock/loadHeadImg'"
+            action='/api/unlock/loadHeadImg'
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
@@ -405,6 +406,14 @@ export default {
     },
     returnBtn() {
       this.$router.push({path:"/home/LockPeople"});
+    }
+  },
+  computed: {
+    headers() {
+      return{
+        "Authorization": sessionStorage.getItem('token'), // 直接从本地获取token就行
+        "validateId": sessionStorage.getItem('validateId')
+      }
     }
   }
 }

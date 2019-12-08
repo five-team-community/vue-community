@@ -13,12 +13,16 @@ import ECharts from 'vue-echarts/components/ECharts' // refers to components/ECh
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
+import axios from 'axios';
+
 
 
 Vue.component('v-chart', ECharts)
 
 Vue.use(ElementUI);
 Vue.use(vueAxios, http);
+
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false
 

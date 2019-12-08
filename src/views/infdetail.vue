@@ -45,8 +45,9 @@
            <el-form-item class="load" label="上传图片">
     <el-upload
             name="file"
+            :headers="headers"
             class="avatar-uploader"
-            :action="this.$store.state.ip+'/Announcement/upload'"
+            action='/api/Announcement/upload'
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
@@ -133,6 +134,14 @@ export default {
           return err;
         });
       this.$router.push({ path: "/home/Info" });
+    }
+  },
+  computed: {
+    headers() {
+      return{
+        "Authorization": sessionStorage.getItem('token'), // 直接从本地获取token就行
+        "validateId": sessionStorage.getItem('validateId')
+      }
     }
   },
   created() {
