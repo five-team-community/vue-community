@@ -96,8 +96,9 @@ export default {
     add() {
       this.dialogFormVisible = true;
       this.axios 
-        .get("/staff/getRepairPersonList")
+        .post("/staff/getRepairPersonList")
         .then((res)=>{
+          console.log("维修人员列表：",res.data.data);
           this.options = res.data.data.data;
         })
         .catch((err)=> {
@@ -153,6 +154,7 @@ export default {
           infoId:str
       })
       .then((res)=> {
+        console.log(res.data.data.data);
         this.tabledata = res.data.data.data;
         this.loading = false;
         
