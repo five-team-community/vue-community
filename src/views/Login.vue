@@ -37,7 +37,7 @@ export default {
 
       this.axios.post("/user/login", {
         userName: this.username,
-        userPasswd: this.password
+        userPasswd: newPass
       })
       .then((res) => {
         console.log(res)
