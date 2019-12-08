@@ -79,7 +79,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :page-size="1"
+        :page-size="5"
         :total="totalCount"
         :pager-count="5"
         :current-page="currentPage"
@@ -229,7 +229,7 @@ export default {
     exclude() {
       //导出报表
       window.location.href =
-        "http://172.16.6.66:8080/pay/leibie?payProject=物业费";
+        this.$store.state.ip+"/pay/jiaofeilist?payProject=物业费";
     }
   },
   created() {

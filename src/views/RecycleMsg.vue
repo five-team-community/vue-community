@@ -145,8 +145,9 @@ export default {
         this.$router.push({path:'/home/recycleMsgDetail?id='+showId});
       },
       exportBtn() { //导出
-        /* window.location.href = "http://172.16.6.59:8080/InhabitantAndRecycle/exportInfo"; */
-        window.location.href=this.$store.state.ip+"/InhabitantAndRecycle/exportInfo";
+        window.location.href = this.$store.state.ip+"/InhabitantAndRecycle/exportInfo"; 
+        // window.location.href=
+        //   this.$store.state.ip+"/InhabitantAndRecycle/exportInfo";
       },
       searchBtn() { // 查询 请求数据
         console.log("查询的电话：",this.search.telphone);

@@ -40,7 +40,7 @@
           <el-upload
             name="file"
             class="avatar-uploader"
-            action="http://172.16.6.65:8080/unlock/loadHeadImg"
+            :action="this.$store.state.ip+'/unlock/loadHeadImg'"
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"
@@ -344,7 +344,7 @@ export default {
   methods: {
     handleSuccess(res,file) {  // 图片上传
       console.log(URL.createObjectURL(file.raw));
-      this.form.img = 'http://172.16.6.65:8080' + "/" + res.data.filePath;
+      this.form.img = this.$store.state.ip + "/" + res.data.filePath;
       this.imgurl = res.data.filePath;
       console.log(res.data);
     },

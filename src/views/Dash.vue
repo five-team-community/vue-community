@@ -464,8 +464,8 @@ this.$router.push({ path: "/home/user" });
       .post("/dynamic/lastMonthTotalCount", {})
       .then(res => {
         console.log(res);
-        this.communityNum = res.data.data.dynamicTotalCount;
-        this.commentNum = res.data.data.discussesTotalCount;
+        this.communityNum = res.data.data.dynamicTotalCount||0;
+        this.commentNum = res.data.data.discussesTotalCount||0;
       })
       .catch(err => {
         console.log(err);
@@ -476,9 +476,9 @@ this.$router.push({ path: "/home/user" });
       .post("/repairInfo/getAllStaCount", {})
       .then(res => {
         console.log(res);
-        this.fixNum.state1 = res.data.data.count1;
-        this.fixNum.state2 = res.data.data.count2;
-        this.fixNum.state3 = res.data.data.count3;
+        this.fixNum.state1 = res.data.data.count1||0;
+        this.fixNum.state2 = res.data.data.count2||0;
+        this.fixNum.state3 = res.data.data.count3||0;
         this.fixNum.total =
           res.data.data.count1 + res.data.data.count2 + res.data.data.count3;
       })
@@ -493,10 +493,10 @@ this.$router.push({ path: "/home/user" });
         console.log(res);
 
         this.userNum = [
-          { value: res.data.data.godCount, name: "住户" },
-          { value: res.data.data.inhabitantCount, name: "业主" },
-          { value: res.data.data.staffCount, name: "服务人员" },
-          { value: res.data.data.adminCount, name: "管理员" }
+          { value: res.data.data.godCount||0, name: "住户" },
+          { value: res.data.data.inhabitantCount||0, name: "业主" },
+          { value: res.data.data.staffCount||0, name: "服务人员" },
+          { value: res.data.data.adminCount||0, name: "管理员" }
         ];
         this.userTotal =
           res.data.data.godCount +

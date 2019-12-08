@@ -44,28 +44,18 @@
         <!-- 相关操作按钮 -->
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="show(scope.$index)"></el-button>
-            <el-button
-              type="info"
-              icon="el-icon-edit-outline"
-              size="mini"
-              class="btn-alter"
-              @click="alter(scope.$index)"
-            ></el-button>
-            <el-button
-              type="primary"
-              icon="el-icon-unlock"
-              size="mini"
-              @click="lock(scope.$index)"
-              v-show="userData[scope.$index].state=='正常'"
-            ></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-lock"
-              size="mini"
-              @click="unlock(scope.$index)"
-              v-show="userData[scope.$index].state=='禁用'"
-            ></el-button>
+            <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+              <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
+                <el-button type="info" icon="el-icon-edit-outline" size="mini" class="btn-alter" @click="alter(scope.$index)"></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="解除" placement="bottom">
+                 <el-button type="danger" icon="el-icon-lock" size="mini" @click="unlock(scope.$index)" v-show="userData[scope.$index].state=='禁用'"></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="禁用" placement="bottom">
+                 <el-button type="primary" icon="el-icon-unlock" size="mini" @click="lock(scope.$index)" v-show="userData[scope.$index].state=='正常'"></el-button>
+              </el-tooltip>
           </template>
         </el-table-column>
       </el-table>

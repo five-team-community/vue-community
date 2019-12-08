@@ -91,15 +91,15 @@
 
         <el-form-item label="是否空置:">
           <el-radio-group v-model="form.isEmpty">
-            <el-radio label="是"></el-radio>
-            <el-radio label="否"></el-radio>
+            <el-radio label="是" value="是"></el-radio>
+            <el-radio label="否" value="否"></el-radio>
           </el-radio-group>
         </el-form-item>
 
         <el-form-item label="是否计费:">
           <el-radio-group v-model="form.isCount">
-            <el-radio label="计费"></el-radio>
-            <el-radio label="暂停计费"></el-radio>
+            <el-radio label="计费" value="是"></el-radio>
+            <el-radio label="暂停计费" value="否"></el-radio>
           </el-radio-group>
         </el-form-item>
 

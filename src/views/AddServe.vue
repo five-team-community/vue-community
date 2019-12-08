@@ -25,7 +25,7 @@
           <el-upload
             name="photo"
             class="avatar-uploader"
-            action="http://172.16.6.43:8080/user/testFile"
+            :action="this.$store.state.ip+'/user/testFile'"
             :show-file-list="false"
             :on-success="handleSuccess"
             :before-upload="beforeUpload"

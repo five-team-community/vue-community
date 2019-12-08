@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label="是否闲置">
             <el-select v-model="search.houseState" placeholder="是否闲置">
-              <el-option label="" value="全部"></el-option>
+              <el-option label="全部" value=""></el-option>
               <el-option label="是" value="是"></el-option>
               <el-option label="否" value="否"></el-option>
             </el-select>
@@ -49,28 +49,15 @@
           <!-- 相关操作按钮 -->
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                size="mini"
-                class="btn-show"
-                @click="show(scope.$index)"
-              ></el-button>
-              <el-button
-                type="info"
-                icon="el-icon-edit-outline"
-                size="mini"
-                class="btn-alter"
-                @click="alter(scope.$index)"
-              ></el-button>
-              <el-button
-                type="danger"
-                icon="el-icon-delete"
-                size="mini"
-                class="btn-del"
-                @click="del(scope.$index)"
-              ></el-button>
-             
+              <el-tooltip class="item" effect="dark" content="查看详情" placement="bottom">
+              <el-button type="primary" icon="el-icon-search" size="mini" class="btn-show" @click="show(scope.$index)"></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="编辑" placement="bottom">
+                <el-button type="info" icon="el-icon-edit-outline" size="mini" class="btn-alter" @click="alter(scope.$index)"></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+                <el-button type="danger" icon="el-icon-delete" size="mini" class="btn-del" @click="del(scope.$index)"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -219,7 +206,8 @@ export default {
     },
     fomateData(list){
       var arr=[];
-      for(var i= 0;i<list.length;i++){
+      if(list){
+        for(var i= 0;i<list.length;i++){
         var item={};
         item.id=list[i].housePropertyId;
         item.no=list[i].housePropertyNo;
@@ -232,6 +220,7 @@ export default {
         item.blindMax = list[i].maxCount;
         
         arr.push(item);
+      }
       }
       return arr;
     }
@@ -261,7 +250,7 @@ export default {
 #house {
   color: @fontColor;
   background-color: white;
-  min-height: 500px;
+  height: 100%;
 }
 .title {
   padding: 15px 20px;

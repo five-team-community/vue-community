@@ -11,7 +11,7 @@
           <el-button round size="mini" class="back-btn" icon="el-icon-arrow-left" @click="back">返回</el-button>
         </div>
       </div>
-      <div class="main" v-loading="!houseData">
+      <div class="main" v-loading="loading">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="6" :md="3" :lg="2">
             <div class="item-title">头像:</div>
@@ -181,13 +181,11 @@ export default {
   },
   created() {
     //************************获取数据**********************
-
      this.axios.post("/staff/showSingle", {
       id:this.$route.params.id
     })
     .then(res => {
       console.log(res.data);
-      
       this.serveData = this.formateData(res.data.data.data)
       this.loading=false;
     })

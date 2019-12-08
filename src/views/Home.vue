@@ -40,11 +40,6 @@
               <i class="el-icon-brush"></i>
               <span slot="title">物业管理</span>
             </template>
-            <el-submenu index="1-1">
-              <span slot="title">客服工单</span>
-              <el-menu-item index="/home/needDo">我的待办</el-menu-item>
-              <el-menu-item index="/home/hadDo">我的已办</el-menu-item>
-            </el-submenu>
             <el-submenu index="1-2">
               <span slot="title">报修管理</span>
               <el-menu-item index="/home/fix">报修部位</el-menu-item>

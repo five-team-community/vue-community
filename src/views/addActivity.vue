@@ -96,7 +96,7 @@
             <el-upload
               name="file"
               class="avatar-uploader"
-              action="http://172.16.6.67:8080/Announcement/upload"
+              :action="this.$store.state.ip+'/Announcement/upload'"
               :show-file-list="false"
               :on-success="handleSuccess"
               :before-upload="beforeUpload">
@@ -143,6 +143,8 @@ export default {
           activityAddress: this.form.activityAddress,
           endTime: this.form.endTime,
           startTime: this.form.startTime,
+             contactsPhone:this.form.contactsPhone,
+          content: this.form.content,
           content: this.form.content,
           description: this.form.description,
           maxCount: this.form.count,
@@ -168,7 +170,7 @@ export default {
     },
     handleSuccess(res, file) {
       console.log(URL.createObjectURL(file.raw));
-      this.form.img = "http://172.16.6.67:8080" + "/" + res.data.filePath;
+      this.form.img = this.$store.state.ip+"/" + res.data.filePath;
       this.imgurl = res.data.filePath;
     },
     beforeUpload(file) {

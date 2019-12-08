@@ -1,10 +1,11 @@
 
 // vue.config.js
 module.exports = {
+  // publicPath: './',
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://172.16.6.59:8080', // 服务器地址
+        target: 'http://39.106.28.24:8080', // 服务器地址
         pathRewrite: {
           '^/api': ''
         },
