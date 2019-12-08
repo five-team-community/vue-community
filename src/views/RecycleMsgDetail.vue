@@ -54,19 +54,35 @@ export default {
       this.$router.push({path:'/home/recycleMsg'});
     },
     add() {
-      this.axios
-        .get("/InhabitantAndRecycle/updateState",
-        {
-          params:{
-            regenerantId:this.tableData.regenerantId
-          }
-        })
-        .then((res)=>{
-          console.log(res);
-        })
-        .catch((err)=> {
-          console.log(err);
-        })
+      this.$confirm('确认派工', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '派工成功!'
+          });
+          this.axios
+            .get("/InhabitantAndRecycle/updateState",
+            {
+              params:{
+                regenerantId:this.tableData.regenerantId
+              }
+            })
+            .then((res)=>{
+              console.log(res);
+            })
+            .catch((err)=> {
+              console.log(err);
+            })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      
     }
   },
   created() {
@@ -87,9 +103,14 @@ export default {
         console.log(res.data.data.inhabitantAndRecycleVO);
         this.tableData = res.data.data.inhabitantAndRecycleVO;
         this.loading = false;
-        if(this.tableData.recycleState != "已回收") {
+        if(this.tableData.recycleState != 1) {
           console.log("需要改变状态");
           this.isShow = false;
+        }
+        if(this.tableData.recycleState == 1) {
+          this.tableData.recycleState = "已回收";
+        } else {
+          this.tableData.recycleState = "未回收";
         }
       })
       .catch((err)=> {

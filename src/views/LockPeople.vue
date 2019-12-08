@@ -76,6 +76,7 @@ export default {
           currentPage:this.currentPage
       })
       .then((res)=> {
+        console.log("数据",res.data);
         this.testData = res.data.data.data;
         console.log("换页后",this.testData);
         this.totalCount = res.data.data.totalCount;
@@ -146,16 +147,14 @@ export default {
     searchBtn() { // 查询
       console.log("查询结果：",this.search.companyName);
       this.axios
-        .get("/unlock/getAllByParam",
+        .post("/unlock/getAllByParam",
         {
-          params:{
             companyName:this.search.companyName,
-          pageSize:5,
-          currentPage:this.currentPage
-          }
+            pageSize:5,
+            currentPage:this.currentPage
         })
         .then((res)=> {
-          console.log(res.data);
+          console.log("查询：",res.data);
           this.testData = res.data.data.data;
           this.totalCount = res.data.data.totalCount;
           this.loading= false;

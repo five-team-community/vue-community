@@ -123,6 +123,15 @@ export default {
           this.tableData = res.data.data.list;
           this.totalCount = res.data.data.page.totalCount;
           this.loading = false;
+
+          if(this.tableData.map((item)=> {
+            console.log(item);
+            if(item.recycleState == 0) {
+              item.recycleState = "未回收";
+            } else {
+              item.recycleState = "已回收";
+            }
+          }));
         })
         .catch(err=> {
           console.log(err)
@@ -154,6 +163,15 @@ export default {
             this.tableData = res.data.data.list;
             this.totalCount = res.data.data.page.totalCount;
             this.loading = false;
+
+            if(this.tableData.map((item)=> {
+            console.log(item);
+            if(item.recycleState == 0) {
+              item.recycleState = "未回收";
+            } else {
+              item.recycleState = "已回收";
+            }
+          }));
           })
           .catch(err=> {
             console.log(err)
@@ -195,6 +213,15 @@ export default {
                   this.tableData = res.data.data.list;
                   this.totalCount = res.data.data.page.totalCount;
                   this.loading = false;
+
+                  if(this.tableData.map((item)=> {
+                    console.log(item);
+                    if(item.recycleState == 0) {
+                      item.recycleState = "未回收";
+                    } else {
+                      item.recycleState = "已回收";
+                    }
+                  }));
                 })
                 .catch(err=> {
                   console.log(err)
@@ -225,18 +252,21 @@ export default {
           this.tableData = res.data.data.list;
           this.totalCount = res.data.data.page.totalCount;
           this.loading = false;
+
+          if(this.tableData.map((item)=> {
+            console.log(item);
+            if(item.recycleState == 0) {
+              item.recycleState = "未回收";
+            } else {
+              item.recycleState = "已回收";
+            }
+          }));
         })
         .catch(err=> {
           console.log(err)
         }) 
   },
   computed: {
-    showData() {
-      console.log(this.pagesize);
-      console.log(this.currentPage);
-      var start = (this.pagesize)*(this.currentPage-1);
-      return this.tableData.slice(start,start+(this.pagesize));
-    }
   }
 };
 </script>
